@@ -1,0 +1,34 @@
+version: "3"
+services:
+  client:
+    image: benhunter/sir-client:latest
+    ports:
+      # Expose the client publicly on port 3000.
+      - "0.0.0.0:80:3000"
+    depends_on:
+      - server
+    # TODO: We will need to set the public IP address (or domain name) of server as an environment variable so the client can reach the server with fetch() or axios().
+    # environment:
+      # - SERVER_ADDRESS=${ENV_SERVER_ADDRESS}
+
+  server:
+    image: benhunter/sir-server:latest
+    environment:
+      # Setup the datasource. Variables are used on application.properties.
+      # The database name here must match the setting in database: MYSQL_DATABASE.
+      - DB_URL=jdbc:mysql://database:3306/sir_db?serverTimezone=UTC
+      - DB_USER=root
+      - DB_PASS=${ENV_DB_PASS}
+    ports:
+      # Expose the server publicly on port 3001.
+      - "0.0.0.0:3001:3001"
+    depends_on:
+      - database
+
+  database:
+    image: mysql:latest
+    environment:
+      - MYSQL_ROOT_PASSWORD=${ENV_DB_PASS}
+      - MYSQL_DATABASE=sir_db
+    ports:
+      - "127.0.0.1:3306:3306"

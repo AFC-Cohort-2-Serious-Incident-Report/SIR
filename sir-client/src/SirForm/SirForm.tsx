@@ -25,7 +25,7 @@ const SirForm = function SirForm(): ReactElement {
       <div>
         <Formik
           initialValues={{ incidentLocation: '', incidentDescription: '', preventativeAction: '' }}
-          onSubmit={(values) => handleSubmitClick(values)}
+          onSubmit={handleSubmitClick}
         >
           <Form>
             <label htmlFor="incidentLocation">Incident Location</label>

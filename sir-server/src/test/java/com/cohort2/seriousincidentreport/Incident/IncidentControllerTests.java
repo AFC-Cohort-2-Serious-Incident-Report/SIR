@@ -1,6 +1,5 @@
 package com.cohort2.seriousincidentreport.Incident;
 
-import com.cohort2.seriousincidentreport.Incident.IncidentRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -32,7 +31,7 @@ class IncidentControllerTests {
     @Transactional
     @Rollback
     @Test
-    public void sampleTest() throws Exception {
+    public void testPostLocation() throws Exception {
         //Setup
         String contentString = """
                 {

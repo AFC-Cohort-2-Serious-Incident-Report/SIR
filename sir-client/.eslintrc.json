@@ -33,7 +33,12 @@
             }
         ],
         "no-shadow": "off",
-        "@typescript-eslint/no-shadow": ["error"]
+        "@typescript-eslint/no-shadow": ["error"],
+        "jsx-a11y/label-has-associated-control": [2,
+            {
+                "labelAttributes": ["label"]
+            }
+        ]
     },
     "settings": {
         "import/resolver": {

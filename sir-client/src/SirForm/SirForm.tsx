@@ -1,12 +1,18 @@
 import React, { ReactElement, useState } from 'react';
 import axios from 'axios';
+import { Formik, Field, Form } from 'formik';
+
+interface Values {
+    incidentLocation: string;
+    incidentDescription: string;
+    preventativeAction: string;
+}
 
 const SirForm = function SirForm(): ReactElement {
-  const [location, setLocation] = useState('');
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
-  const handleSubmitClick = () => {
-    axios.post('/api/incidents', { location })
+  const handleSubmitClick = (values: Values) => {
+    axios.post('/api/incidents', values)
       .then(() => setReportSubmitted(true));
   };
 
@@ -17,14 +23,24 @@ const SirForm = function SirForm(): ReactElement {
           ? 'Incident Report Submitted' : null}
       </div>
       <div>
-        <label htmlFor="incident-location">Incident Location</label>
-        <input type="text" id="incident-location" onChange={(event) => setLocation(event.target.value)} />
-        <button
-          type="button"
-          onClick={handleSubmitClick}
+        <Formik
+          initialValues={{ incidentLocation: '', incidentDescription: '', preventativeAction: '' }}
+          onSubmit={(values) => handleSubmitClick(values)}
         >
-          Submit
-        </button>
+          <Form>
+            <label htmlFor="incidentLocation">Incident Location</label>
+            <Field type="text" id="incidentLocation" name="incidentLocation" />
+            <label htmlFor="incidentDescription">Incident Description</label>
+            <Field type="test" id="incidentDescription" name="incidentDescription" />
+            <label htmlFor="preventativeAction">Preventative Action</label>
+            <Field type="test" id="preventativeAction" name="preventativeAction" />
+            <button
+              type="submit"
+            >
+              Submit
+            </button>
+          </Form>
+        </Formik>
       </div>
     </div>
   );

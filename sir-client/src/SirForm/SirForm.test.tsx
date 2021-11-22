@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  getByRole, render, screen, waitFor,
+  render, screen, waitFor,
 } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 // eslint-disable-next-line import/no-extraneous-dependencies
@@ -28,9 +28,19 @@ describe('SirForm', () => {
     expect(screen.queryByText('Incident Report Submitted')).not.toBeInTheDocument();
   });
 
-  it('accepts location text', () => {
+  it('accepts incidentLocation string', () => {
     userEvent.type(screen.getByRole('textbox', { name: /incident location/i }), 'Test text');
     expect(screen.getByRole('textbox', { name: /incident location/i })).toHaveValue('Test text');
+  });
+
+  it('accepts incidentDescription string', () => {
+    userEvent.type(screen.getByRole('textbox', { name: /incident description/i }), 'Test text');
+    expect(screen.getByRole('textbox', { name: /incident description/i })).toHaveValue('Test text');
+  });
+
+  it('accepts preventativeAction string', () => {
+    userEvent.type(screen.getByRole('textbox', { name: /preventative action/i }), 'Test text');
+    expect(screen.getByRole('textbox', { name: /preventative action/i })).toHaveValue('Test text');
   });
 
   it('button submits location', async () => {

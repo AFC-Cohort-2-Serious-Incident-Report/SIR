@@ -128,7 +128,7 @@ body {
 
 label {
     display: block;
-    position: relative
+    position: relative;
     font-size: 1rem;
     font-weight: 600;
     color: rgb(var(--color-muted));

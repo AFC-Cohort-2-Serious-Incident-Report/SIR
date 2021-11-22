@@ -19,23 +19,70 @@
 </div>
 
 <div class="container">
+    <div class="group split">
+        <div class="group">
+            <label>Date of Event</label>
+            <input type="date" />
+        </div>
+        <div class="group">
+            <label>Time of Event</label>
+            <input type="time" />
+        </div>
+    </div>
     <div class="group">
-        <label>First Name or w/e idc</label>
+        <label>Location of Event</label>
         <input type="text" />
     </div>
     <div class="group split">
         <div class="group">
-            <label>First label</label>
-            <input type="text" />
+            <label>Event Type</label>
+            <select>
+                <option value="volvo">Actual Event/Incident</option>
+                <option value="saab">Trevor 23</option>
+                <option value="mercedes">Trevor 5</option>
+                <option value="audi">Chris</option>
+            </select>
         </div>
         <div class="group">
-            <label>Second label</label>
-            <input type="text" />
+            <label>Harm or Potential Harm</label>
+            <select>
+                <option value="volvo">Yes</option>
+                <option value="saab">No</option>
+            </select>
         </div>
     </div>
-    <label>Click me</label>
-    <button class="primary">Test</button>
-    <!-- Regular code here -->
+    <div class="group split">
+        <div class="group">
+            <label>Individuals Involved</label>
+            <custom-checkbox>Patient</custom-checkbox>
+            <custom-checkbox id="family-member">Family Member</custom-checkbox>
+            <custom-checkbox parent="family-member">Adult</custom-checkbox>
+            <custom-checkbox parent="family-member">Child &#60; 18 Years old</custom-checkbox>
+        </div>
+        <div class="group">
+            <custom-checkbox>Staff Member</custom-checkbox>
+            <custom-checkbox>Visitor</custom-checkbox>
+            <custom-checkbox>Volunteer</custom-checkbox>
+            <custom-checkbox>Other</custom-checkbox>
+        </div>
+    </div>
+    <div class="group">
+        <label>Type of Event</label>
+        <custom-chip></custom-chip>
+    </div>
+    <div class="group">
+        <label>Effect of the Incident on Individual(s) Involved</label>
+        <select>
+            <option value="volvo">Harm Sustained</option>
+            <option value="saab">No Harm Sustained</option>
+        </select>
+    </div>
+    <div class="group">
+        <label>Description of Incident</label>
+        <textarea></textarea>
+    </div>
+    <button class="primary">Submit</button>
 </div>
+<script type="text/js" src="./Styles.js" />
 </body>
 </html>

@@ -1,4 +1,4 @@
-package com.cohort2.seriousincidentreport;
+package com.cohort2.seriousincidentreport.Incident;
 
 import com.cohort2.seriousincidentreport.Incident.IncidentRepository;
 import org.junit.jupiter.api.Test;

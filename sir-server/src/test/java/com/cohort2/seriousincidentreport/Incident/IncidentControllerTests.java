@@ -1,6 +1,6 @@
 package com.cohort2.seriousincidentreport.Incident;
 
-import com.cohort2.seriousincidentreport.Incident.IncidentRepository;
+import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -9,11 +9,14 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.http.MediaType;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import javax.transaction.Transactional;
 
-import static org.hamcrest.core.Is.is;
+import java.util.Optional;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -32,22 +35,35 @@ class IncidentControllerTests {
     @Transactional
     @Rollback
     @Test
-    public void sampleTest() throws Exception {
+    public void testPostSeriousIncidentReportObject() throws Exception {
         //Setup
         String contentString = """
                 {
-                "location": "Test Location"
+                "incidentLocation": "Test location",
+                "incidentDescription": "Test description",
+                "preventativeAction": "Test action"
                 }
                 """;
 
         //Execution
-        this.mvc.perform(post("/api/incidents")
+        MvcResult result = this.mvc.perform(post("/api/incidents")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(contentString))
 
                 //Assertion
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.location", is("Test Location")))
-                .andExpect(jsonPath("$.id").isNumber());
+                .andExpect(jsonPath("$.id").isNumber())
+                .andReturn();
+
+        var responseBody = result.getResponse().getContentAsString();
+        int newEntryID = JsonPath.parse(responseBody).read("$.id");
+        Optional<Incident> newEntry = repository.findById(Long.valueOf(newEntryID));
+        assertTrue(newEntry.isPresent());
+
+        final var savedIncident = newEntry.get();
+        assertEquals("Test location", savedIncident.getIncidentLocation());
+        assertEquals("Test description", savedIncident.getIncidentDescription());
+        assertEquals("Test action", savedIncident.getPreventativeAction());
     }
+
 }

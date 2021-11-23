@@ -11,12 +11,14 @@
     "@types/react": "^17.0.35",
     "@types/react-dom": "^17.0.11",
     "axios": "^0.24.0",
+    "formik": "^2.2.9",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "typescript": "^4.5.2",
-    "web-vitals": "^1.1.2"
+    "web-vitals": "^1.1.2",
+    "yup": "^0.32.11"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -51,5 +53,5 @@
     "eslint-plugin-react-hooks": "^4.3.0",
     "msw": "^0.35.0"
   },
-  "proxy": "http://localhost:3000"
+  "proxy": "http://localhost:3001"
 }

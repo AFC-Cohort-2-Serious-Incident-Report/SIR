@@ -4,8 +4,9 @@
         "es2021": true
     },
     "extends": [
-        "plugin:react/recommended",
         "airbnb",
+        "plugin:react/recommended",
+        "plugin:react/jsx-runtime",
         "plugin:@typescript-eslint/recommended"
     ],
     "parser": "@typescript-eslint/parser",
@@ -33,7 +34,17 @@
             }
         ],
         "no-shadow": "off",
-        "@typescript-eslint/no-shadow": ["error"]
+        "@typescript-eslint/no-shadow": ["error"],
+        "jsx-a11y/label-has-associated-control": [2,
+            {
+                "labelAttributes": ["label"]
+            }
+        ],
+        "react/function-component-definition": [2, {
+            "namedComponents": "arrow-function",
+            "unnamedComponents": "arrow-function"
+        }],
+        "import/no-extraneous-dependencies": ["error", {"devDependencies": true}]
     },
     "settings": {
         "import/resolver": {

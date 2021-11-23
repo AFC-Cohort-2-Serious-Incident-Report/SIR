@@ -1,6 +1,6 @@
 import React, { ReactElement, useState } from 'react';
 import axios from 'axios';
-import { Link, NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const SirForm = function SirForm(): ReactElement {
   const [location, setLocation] = useState('');
@@ -13,7 +13,6 @@ const SirForm = function SirForm(): ReactElement {
 
   return (
     <div>
-      <Link to="/responder">Responder</Link>
       <div>
         {reportSubmitted
           ? 'Incident Report Submitted' : null}

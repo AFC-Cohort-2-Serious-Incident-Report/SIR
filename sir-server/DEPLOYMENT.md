@@ -30,14 +30,6 @@
   - `docker push benhunter/sir-client:0.0.1`
   - `docker push benhunter/sir-client:latest`
   
-8. (TODO: Docker-Compose to setup the full stack app.)
-9. (TODO: set environment variable ENV_DB_PASS on production server)
-
-## Run locally
-
-Run the client locally (for testing):
-
-`docker run -it --rm -p 80:3000 benhunter/sir-client:0.0.1`
 
 ## Production server setup
 
@@ -73,7 +65,11 @@ docker-compose version
 wget -v
 ```
 
-6. Download the docker-compose file.
+6. Set ENV_DB_PASS to a random password (make up a long one, 20 characters is plenty). Put this line in `~/.bashrc` to make it persistent.
+ 
+`export ENV_DB_PASS=********`
+
+7. Download the docker-compose file.
 
 ```bash
 #  Get the docker-compose file.
@@ -81,7 +77,7 @@ wget https://raw.githubusercontent.com/AFC-Cohort-2-Serious-Incident-Report/SIR/
 ls  # Look for docker-compose.yml
 ```
 
-7. Run it!
+8. Run it!
 
 ```bash
 docker-compose up
@@ -95,8 +91,17 @@ docker-compose pull
 docker-compose up
 ```
 
+## Run locally
+
+Run the client locally (for testing):
+
+`docker run -it --rm -p 80:3000 benhunter/sir-client:latest`
+
+Run the server locally (for testing): 
+TODO: Pass in the environment variables (see docker-compose.yml).
+`docker run -it --rm -p 3001:3001 benhunter/sir-server:latest`
+
 ## Notes
 
 - The server docker image will have a build date of "41 years ago". This is intentional for creating "Reproducible Builds". For more information see:
   - https://buildpacks.io/docs/features/reproducibility/ (search for "timestamps")
-- The production server must have the environment variable `ENV_DB_PASS`: `export ENV_DB_PASS=********`

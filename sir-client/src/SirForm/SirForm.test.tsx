@@ -14,6 +14,8 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 function fillAllFields() {
+  userEvent.type(screen.getByLabelText(/date of event/i), '1958-08-08');
+  userEvent.type(screen.getByLabelText(/time of event/i), '09:15 PM');
   userEvent.type(screen.getByRole('textbox', { name: /incident location/i }), 'Test text');
   userEvent.type(screen.getByRole('textbox', { name: /incident description/i }), 'Test text');
   userEvent.type(screen.getByRole('textbox', { name: /preventative action/i }), 'Test text');
@@ -25,10 +27,24 @@ describe('SirForm', () => {
   });
 
   it('renders components correctly', () => {
+    expect(screen.getByLabelText(/date of event/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/time of event/i)).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: /incident location/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /incident description/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /preventative action/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
     expect(screen.queryByText('Incident Report Submitted')).not.toBeInTheDocument();
+  });
+
+  it('accepts date entry', () => {
+    userEvent.type(screen.getByLabelText(/date of event/i), '1958-08-08');
+    expect(screen.getByLabelText(/date of event/i)).toHaveValue('1958-08-08');
+  });
+
+  it('accepts time entry', () => {
+    userEvent.type(screen.getByLabelText(/time of event/i), '09:15 PM');
+    expect(screen.getByLabelText(/time of event/i)).toHaveValue('09:15');
   });
 
   it('accepts incidentLocation string', () => {

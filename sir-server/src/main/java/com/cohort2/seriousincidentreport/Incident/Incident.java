@@ -17,5 +17,7 @@ public class Incident {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
-    private String location;
+    private String incidentLocation;
+    private String incidentDescription;
+    private String preventativeAction;
 }

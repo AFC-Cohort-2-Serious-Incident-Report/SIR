@@ -1,32 +1,64 @@
-import React, { ReactElement, useState } from 'react';
+import React, { isValidElement, useState } from 'react';
 import axios from 'axios';
-import { Link, NavLink } from 'react-router-dom';
+import { Formik, Field, Form } from 'formik';
+import * as Yup from 'yup';
 
-const SirForm = function SirForm(): ReactElement {
-  const [location, setLocation] = useState('');
+interface Values {
+    incidentLocation: string;
+    incidentDescription: string;
+    preventativeAction: string;
+}
+
+const incidentSchema = Yup.object().shape({
+  incidentLocation: Yup.string()
+    .required('Required'),
+  incidentDescription: Yup.string()
+    .required('Required'),
+  preventativeAction: Yup.string()
+    .required('Required'),
+});
+
+const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
-  const handleSubmitClick = () => {
-    axios.post('/api/incidents', { location })
+  const handleSubmitClick = (values: Values) => {
+    axios.post('/api/incidents', values)
       .then(() => setReportSubmitted(true));
   };
 
   return (
     <div>
-      <Link to="/responder">Responder</Link>
       <div>
         {reportSubmitted
           ? 'Incident Report Submitted' : null}
       </div>
       <div>
-        <label htmlFor="incident-location">Incident Location</label>
-        <input type="text" id="incident-location" onChange={(event) => setLocation(event.target.value)} />
-        <button
-          type="button"
-          onClick={handleSubmitClick}
+        <Formik
+          initialValues={{ incidentLocation: '', incidentDescription: '', preventativeAction: '' }}
+          validationSchema={incidentSchema}
+          onSubmit={handleSubmitClick}
         >
-          Submit
-        </button>
+          {(formik) => {
+            const { isValid, dirty } = formik;
+            return (
+              <Form>
+                <label htmlFor="incidentLocation">Incident Location</label>
+                <Field type="text" id="incidentLocation" name="incidentLocation" />
+                <label htmlFor="incidentDescription">Incident Description</label>
+                <Field type="text" as="textarea" id="incidentDescription" name="incidentDescription" />
+                <label htmlFor="preventativeAction">Preventative Action</label>
+                <Field type="text" as="textarea" id="preventativeAction" name="preventativeAction" />
+                <button
+                  type="submit"
+                  className="primary"
+                  disabled={!(dirty && isValid)}
+                >
+                  Submit
+                </button>
+              </Form>
+            );
+          }}
+        </Formik>
       </div>
     </div>
   );

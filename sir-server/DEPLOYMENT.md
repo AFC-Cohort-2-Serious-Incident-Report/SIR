@@ -39,6 +39,62 @@ Run the client locally (for testing):
 
 `docker run -it --rm -p 80:3000 benhunter/sir-client:0.0.1`
 
+## Production server setup
+
+1. Create instance on AWS Lightsail using Platform: "Linux/Unix", Blueprint: "OS Only" and "Amazon Linux 2".
+2. Assign static IP address.
+3. Add firewall rule to allow TCP 3001. Add ICMP Ping if you want to be able to ping the server.
+4. SSH into the server console.
+5. Install docker, docker-compose, and tmux.
+ 
+```bash
+sudo yum update -y  # Update everything. On a new server, the packages will already be up to date.
+
+# Install docker
+sudo amazon-linux-extras install docker
+sudo service docker start  # start docker
+sudo usermod -a -G docker ec2-user  # Add your user account to the group called 'docker'
+
+# Install docker-compose
+sudo curl -L https://github.com/docker/compose/releases/latest/download/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose  # Set docker-compose as executable.
+
+# Install tmux
+sudo yum install tmux
+
+exit  # Exit and reconnect to gain the docker group on your account.
+
+tmux  # Start tmux so you can detach and re-attach to your terminal sessions.
+# Tmux Guide: https://www.hamvocke.com/blog/a-quick-and-easy-guide-to-tmux/
+
+# Check that docker, docker-compose, and wget are installed.
+docker info
+docker-compose version
+wget -v
+```
+
+6. Download the docker-compose file.
+
+```bash
+#  Get the docker-compose file.
+wget https://raw.githubusercontent.com/AFC-Cohort-2-Serious-Incident-Report/SIR/development/sir-server/docker-compose.yml
+ls  # Look for docker-compose.yml
+```
+
+7. Run it!
+
+```bash
+docker-compose up
+``` 
+
+## Upgrade the containers on the production server
+
+```bash
+docker-compose down
+docker-compose pull
+docker-compose up
+```
+
 ## Notes
 
 - The server docker image will have a build date of "41 years ago". This is intentional for creating "Reproducible Builds". For more information see:

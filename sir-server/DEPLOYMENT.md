@@ -43,3 +43,4 @@ Run the client locally (for testing):
 
 - The server docker image will have a build date of "41 years ago". This is intentional for creating "Reproducible Builds". For more information see:
   - https://buildpacks.io/docs/features/reproducibility/ (search for "timestamps")
+- The production server must have the environment variable `ENV_DB_PASS`: `export ENV_DB_PASS=********`

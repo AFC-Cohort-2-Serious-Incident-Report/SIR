@@ -10,8 +10,6 @@ services:
     # TODO: We will need to set the public IP address (or domain name) of server as an environment variable so the client can reach the server with fetch() or axios().
     # environment:
       # - SERVER_ADDRESS=${ENV_SERVER_ADDRESS}
-#    networks:
-#      prod_network:
 
   server:
     image: benhunter/sir-server:latest
@@ -24,12 +22,8 @@ services:
     ports:
       # Expose the server publicly on port 3001.
       - "0.0.0.0:3001:3001"
-#    expose:
-#      - "3001"
     depends_on:
       - database
-#    networks:
-#      prod_network:
     networks:
       database_network:
     restart: on-failure
@@ -40,11 +34,6 @@ services:
       - "MYSQL_ROOT_PASSWORD=${ENV_DB_PASS}"
 #      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
       - MYSQL_DATABASE=sir_db
-#    ports:
-#      - "127.0.0.1:3306:3306"
-#    expose:
-       # Exposes internally.
-#      - "3306"
     command: mysqld --lower_case_table_names=1 --skip-ssl --character_set_server=utf8mb4 --explicit_defaults_for_timestamp
     networks:
       database_network:

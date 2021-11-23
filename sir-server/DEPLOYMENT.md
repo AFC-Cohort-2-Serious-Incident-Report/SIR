@@ -11,6 +11,7 @@
 3. Build the server docker image (update the tag to the correct version number ex: 0.1, 0.2...):
 
 `./gradlew bootBuildImage --imageName=benhunter/sir-server:0.0.1`
+`docker tag benhunter/sir-server:0.0.1 benhunter/sir-server:latest`
 
 3. Verify the docker image was created: `docker images`
 4. (TODO: add command to push image to Docker Hub)

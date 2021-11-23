@@ -1,20 +1,21 @@
 import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-
-export enum FocusLink {
-    REPORTER,
-    RESPONDER
-}
+import '../Styles/Styles.css';
+import SWFlogo from '../SWFlogo.png';
 
 type NavBarProps = {
-    focusLink: FocusLink
+    isResponder: boolean
 }
 
-const NavBar = function ({ focusLink }: NavBarProps): ReactElement {
-  return (focusLink === FocusLink.RESPONDER) ? (
-    <Link to="/reporter">Reporter</Link>
-  ) : (
-    <Link to="/responder">Responder</Link>
+const NavBar = function ({ isResponder }: NavBarProps): ReactElement {
+  return (
+    <div className="navbar">
+      <div className="logo" />
+      <div className="links">
+        <Link to="/reporter" className={isResponder ? 'unfocused' : 'focused'}>Reporter</Link>
+        <Link to="/responder" className={isResponder ? 'focused' : 'unfocused'}>Responder</Link>
+      </div>
+    </div>
   );
 };
 

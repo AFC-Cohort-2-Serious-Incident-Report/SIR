@@ -4,7 +4,7 @@ import {
   BrowserRouter, Routes, Route,
 } from 'react-router-dom';
 import SirForm from './SirForm/SirForm';
-import NavBar, { FocusLink } from './NavBar/NavBar';
+import NavBar from './NavBar/NavBar';
 
 const App: React.FC = function App() {
   return (
@@ -16,7 +16,7 @@ const App: React.FC = function App() {
               path="/"
               element={(
                 <div>
-                  <header><NavBar focusLink={FocusLink.REPORTER} /></header>
+                  <header><NavBar isResponder={false} /></header>
                   <SirForm />
                 </div>
             )}
@@ -25,7 +25,7 @@ const App: React.FC = function App() {
               path="/reporter"
               element={(
                 <div>
-                  <header><NavBar focusLink={FocusLink.REPORTER} /></header>
+                  <header><NavBar isResponder={false} /></header>
                   <SirForm />
                 </div>
                   )}
@@ -34,7 +34,7 @@ const App: React.FC = function App() {
               path="/responder"
               element={(
                 <div>
-                  <header><NavBar focusLink={FocusLink.RESPONDER} /></header>
+                  <header><NavBar isResponder /></header>
                   <div>This is a responder div.</div>
                 </div>
               )}

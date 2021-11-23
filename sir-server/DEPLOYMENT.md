@@ -10,17 +10,26 @@
 2. Change directory to server: `cd sir-server`
 3. Build the server docker image (update the tag to the correct version number ex: 0.1, 0.2...):
 
-`./gradlew bootBuildImage --imageName=benhunter/sir-server:0.0.1`
-`docker tag benhunter/sir-server:0.0.1 benhunter/sir-server:latest`
+  - `./gradlew bootBuildImage --imageName=benhunter/sir-server:0.0.1`
+  - `docker tag benhunter/sir-server:0.0.1 benhunter/sir-server:latest`
 
 3. Verify the docker image was created: `docker images`
-4. (TODO: add command to push image to Docker Hub)
+4. Push the server image to Docker Hub:
+
+- `docker push benhunter/sir-server:0.0.1`
+- `docker push benhunter/sir-server:latest`
+
 5. Change directory to the client: `cd sir-client`
 6. Build the client docker image from the Dockerfile in `sir-client` (update the tag to the correct version number ex: 0.1, 0.2...):
 
-`docker build -t benhunter/sir-client:0.0.1 .`
+  - `docker build -t benhunter/sir-client:0.0.1 .`
+  - `docker tag benhunter/sir-client:0.0.1 benhunter/sir-client:latest`
 
-7. (TODO: Push images to Docker Hub)
+7. Push the client image to Docker Hub:
+ 
+  - `docker push benhunter/sir-client:0.0.1`
+  - `docker push benhunter/sir-client:latest`
+  
 8. (TODO: Docker-Compose to setup the full stack app.)
 9. (TODO: set environment variable ENV_DB_PASS on production server)
 

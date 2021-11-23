@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 
@@ -8,7 +8,7 @@ interface Values {
     preventativeAction: string;
 }
 
-const SirForm = function SirForm(): ReactElement {
+const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
   const handleSubmitClick = (values: Values) => {

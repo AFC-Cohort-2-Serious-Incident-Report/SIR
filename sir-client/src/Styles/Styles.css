@@ -76,8 +76,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    focus: bold;
-    text: bold;
+    font-weight: bold;
     color: black;
     text-align: center;
     margin-left: 15px;

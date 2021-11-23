@@ -10,37 +10,34 @@ const App: React.FC = function App() {
   return (
     <div className="App">
       <BrowserRouter>
-        <body>
-          <Routes>
-            <Route
-              path="/"
-              element={(
-                <div>
-                  <header><NavBar isResponder={false} /></header>
-                  <SirForm />
-                </div>
+        <Routes>
+          <Route
+            path="/"
+            element={(
+              <div>
+                <header><NavBar isResponder={false} /></header>
+                <SirForm />
+              </div>
             )}
-            />
-            <Route
-              path="/reporter"
-              element={(
-                <div>
-                  <header><NavBar isResponder={false} /></header>
-                  <SirForm />
-                </div>
+          />
+          <Route
+            path="/reporter"
+            element={(
+              <div>
+                <header><NavBar isResponder={false} /></header>
+                <SirForm />
+              </div>
                   )}
-            />
-            <Route
-              path="/responder"
-              element={(
-                <div>
-                  <header><NavBar isResponder /></header>
-                  <div>This is a responder div.</div>
-                </div>
+          />
+          <Route
+            path="/responder"
+            element={(
+              <div>
+                <header><NavBar isResponder /></header>
+              </div>
               )}
-            />
-          </Routes>
-        </body>
+          />
+        </Routes>
       </BrowserRouter>
     </div>
   );

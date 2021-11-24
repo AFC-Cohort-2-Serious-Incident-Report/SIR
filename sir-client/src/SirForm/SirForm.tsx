@@ -27,7 +27,7 @@ const SirForm: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="view-container">
       <div>
         {reportSubmitted
           ? 'Incident Report Submitted' : null}

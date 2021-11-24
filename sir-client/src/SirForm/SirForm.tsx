@@ -1,4 +1,4 @@
-import React, { isValidElement, useState } from 'react';
+import React from 'react';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
@@ -19,7 +19,7 @@ const incidentSchema = Yup.object().shape({
 });
 
 const SirForm: React.FC = () => {
-  const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [reportSubmitted, setReportSubmitted] = React.useState(false);
 
   const handleSubmitClick = (values: Values) => {
     axios.post('/api/incidents', values)

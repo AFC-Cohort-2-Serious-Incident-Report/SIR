@@ -89,6 +89,11 @@ h1{
     margin: 0;
 }
 
+.group.flex {
+    display: flex;
+    flex-direction: row-reverse;
+}
+
 .alert {
     display: flex;
     flex-direction: row;
@@ -256,6 +261,10 @@ button {
     cursor: pointer;
     color: rgb(var(--color-accent));
     background-color: transparent;
+}
+
+button.right {
+    float: right;
 }
 
 button.primary {

@@ -42,8 +42,10 @@ class IncidentControllerTests {
                 "incidentLocation": "Test location",
                 "incidentDescription": "Test description",
                 "preventativeAction": "Test action",
-                "incidentDate": "08/18/2014",
-                "incidentTime": "09:11 PM"
+                "incidentDate": "2014-08-18",
+                "incidentTime": "21:11",
+                "eventType": "Actual Event / Incident",
+                "harmOrPotentialHarm": true
                 }
                 """;
 
@@ -55,8 +57,8 @@ class IncidentControllerTests {
                 //Assertion
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.incidentDate").value("08/18/2014"))
-                .andExpect(jsonPath("$.incidentTime").value("09:11 PM"))
+                .andExpect(jsonPath("$.incidentDate").value("2014-08-18"))
+                .andExpect(jsonPath("$.incidentTime").value("21:11"))
                 .andReturn();
 
         var responseBody = result.getResponse().getContentAsString();
@@ -70,6 +72,8 @@ class IncidentControllerTests {
         assertEquals("Test action", savedIncident.getPreventativeAction());
         assertEquals("2014-08-18", savedIncident.getIncidentDate().toString());
         assertEquals("21:11", savedIncident.getIncidentTime().toString());
+        assertEquals("Actual Event / Incident", savedIncident.getEventType());
+        assertTrue(savedIncident.isHarmOrPotentialHarm());
     }
 
 }

@@ -23,6 +23,8 @@ public class Incident {
     private String incidentLocation;
     private String incidentDescription;
     private String preventativeAction;
+    private String eventType;
+    private boolean isHarmOrPotentialHarm;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDate incidentDate;

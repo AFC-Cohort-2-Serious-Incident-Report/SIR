@@ -6,6 +6,7 @@ import * as Yup from 'yup';
 interface Values {
     incidentDate: string;
     incidentTime: string;
+    eventType: string;
     incidentLocation: string;
     incidentDescription: string;
     preventativeAction: string;
@@ -15,6 +16,8 @@ const incidentSchema = Yup.object().shape({
   incidentDate: Yup.string()
     .required('Required'),
   incidentTime: Yup.string()
+    .required('Required'),
+  eventType: Yup.string()
     .required('Required'),
   incidentLocation: Yup.string()
     .required('Required'),
@@ -47,6 +50,7 @@ const SirForm: React.FC = () => {
           initialValues={{
             incidentDate: convertDate(new Date()),
             incidentTime: '',
+            eventType: '',
             incidentLocation: '',
             incidentDescription: '',
             preventativeAction: '',
@@ -64,6 +68,8 @@ const SirForm: React.FC = () => {
                 <Field type="date" id="incidentDate" name="incidentDate" />
                 <label htmlFor="incidentTime">Time of Event</label>
                 <Field type="time" id="incidentTime" name="incidentTime" />
+                <label htmlFor="eventType">Event Type</label>
+                <Field type="selectbox" id="eventType" name="eventType" />
                 <label htmlFor="incidentLocation">Incident Location</label>
                 <Field type="text" id="incidentLocation" name="incidentLocation" />
                 <label htmlFor="incidentDescription">Incident Description</label>

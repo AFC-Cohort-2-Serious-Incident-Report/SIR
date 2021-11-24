@@ -69,7 +69,7 @@ const SirForm: React.FC = () => {
                 <label htmlFor="incidentTime">Time of Event</label>
                 <Field type="time" id="incidentTime" name="incidentTime" />
                 <label htmlFor="eventType">Event Type</label>
-                <Field type="selectbox" id="eventType" name="eventType" />
+                <Field type="select" id="eventType" name="eventType" />
                 <label htmlFor="incidentLocation">Incident Location</label>
                 <Field type="text" id="incidentLocation" name="incidentLocation" />
                 <label htmlFor="incidentDescription">Incident Description</label>

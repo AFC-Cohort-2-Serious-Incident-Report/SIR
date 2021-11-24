@@ -51,7 +51,7 @@ describe('SirForm', () => {
 
   it('accepts event type string', () => {
     userEvent.type(screen.getByRole('selectbox', { name: /event type/i }), 'Actual Event / Incident');
-    expect(screen.getByRole('selectbox', { name: /event type/i })).toHaveValue('Test text');
+    expect(screen.getByRole('selectbox', { name: /event type/i })).toHaveValue('Actual Event / Incident');
   });
 
   it('accepts incidentLocation string', () => {

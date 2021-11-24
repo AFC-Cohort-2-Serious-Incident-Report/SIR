@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
 import '../Styles/Styles.css';
 
-const NavBar: React.FC = (isResponder) => (
+type NavBarProps = {
+    isResponder: boolean
+}
+
+const NavBar = ({ isResponder }: NavBarProps): ReactElement => (
   <div className="navbar">
     <div className="logo" data-testid="swfLogo" />
     <div className="links">

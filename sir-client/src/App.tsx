@@ -14,7 +14,7 @@ const App: React.FC = () => (
           path="/"
           element={(
             <div>
-              <header><NavBar /></header>
+              <header><NavBar isResponder={false} /></header>
               <SirForm />
             </div>
             )}
@@ -23,7 +23,7 @@ const App: React.FC = () => (
           path="/reporter"
           element={(
             <div>
-              <header><NavBar /></header>
+              <header><NavBar isResponder={false} /></header>
               <SirForm />
             </div>
                   )}
@@ -32,7 +32,7 @@ const App: React.FC = () => (
           path="/responder"
           element={(
             <div>
-              <header><NavBar /></header>
+              <header><NavBar isResponder /></header>
             </div>
               )}
         />

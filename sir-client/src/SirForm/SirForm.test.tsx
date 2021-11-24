@@ -14,6 +14,10 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 function fillAllFields() {
+  userEvent.type(screen.getByLabelText(/date of event/i), '1958-08-08');
+  userEvent.type(screen.getByLabelText(/time of event/i), '09:15 PM');
+  userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
+  userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'Yes');
   userEvent.type(screen.getByRole('textbox', { name: /incident location/i }), 'Test text');
   userEvent.type(screen.getByRole('textbox', { name: /incident description/i }), 'Test text');
   userEvent.type(screen.getByRole('textbox', { name: /preventative action/i }), 'Test text');
@@ -25,11 +29,37 @@ describe('SirForm', () => {
   });
 
   it('renders components correctly', () => {
+    expect(screen.getByLabelText(/date of event/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/time of event/i)).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /event type/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /harm or potential harm/i })).toHaveValue('false');
     expect(screen.getByRole('textbox', { name: /incident location/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /incident description/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /preventative action/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
     expect(screen.queryByText('Incident Report Submitted')).not.toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /Incident Report Form/i }));
+  });
+
+  it('accepts date entry', () => {
+    userEvent.type(screen.getByLabelText(/date of event/i), '1958-08-08');
+    expect(screen.getByLabelText(/date of event/i)).toHaveValue('1958-08-08');
+  });
+
+  it('accepts time entry', () => {
+    userEvent.type(screen.getByLabelText(/time of event/i), '09:15 PM');
+    expect(screen.getByLabelText(/time of event/i)).toHaveValue('09:15');
+  });
+
+  it('accepts event type selection', () => {
+    userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
+    expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event');
+  });
+
+  it('accepts harm or potential harm selection', () => {
+    userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'Yes');
+    expect(screen.getByRole('combobox', { name: /harm or potential harm/i })).toHaveValue('true');
   });
 
   it('accepts incidentLocation string', () => {

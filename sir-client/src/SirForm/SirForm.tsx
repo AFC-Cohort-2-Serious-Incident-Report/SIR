@@ -32,6 +32,7 @@ const SirForm: React.FC = () => {
         {reportSubmitted
           ? 'Incident Report Submitted' : null}
       </div>
+      <h2>Incident Report Form</h2>
       <div>
         <Formik
           initialValues={{ incidentLocation: '', incidentDescription: '', preventativeAction: '' }}

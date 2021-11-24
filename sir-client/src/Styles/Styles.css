@@ -26,6 +26,15 @@
     --color-primary: var(--color-white);
 }
 
+:root h2 {
+    font-family: Public Sans, serif;
+    font-size: 40px;
+    letter-spacing: -1.5px;
+    font-style: normal;
+    font-weight: 100;
+    line-height: 112px;
+}
+
 body {
     display: block;
     position: relative;

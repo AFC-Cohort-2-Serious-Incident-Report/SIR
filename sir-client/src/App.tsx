@@ -33,6 +33,7 @@ const App: React.FC = () => (
           element={(
             <div>
               <header><NavBar isResponder /></header>
+              <h2>Incident Reports</h2>
             </div>
               )}
         />

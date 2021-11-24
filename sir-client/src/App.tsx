@@ -1,25 +1,44 @@
 import React from 'react';
 import './App.css';
 import {
-  BrowserRouter, Link, Routes, Route,
+  BrowserRouter, Routes, Route,
 } from 'react-router-dom';
-import './Styles/Styles.css';
-
 import SirForm from './SirForm/SirForm';
+import NavBar from './NavBar/NavBar';
 
 const App: React.FC = () => (
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<SirForm />} />
-      <Route path="/reporter" element={<SirForm />} />
-      <Route
-        path="/responder"
-        element={
-          <Link to="/reporter">Reporter</Link>
-                    }
-      />
-    </Routes>
-  </BrowserRouter>
+  <div className="App">
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={(
+            <div>
+              <header><NavBar /></header>
+              <SirForm />
+            </div>
+            )}
+        />
+        <Route
+          path="/reporter"
+          element={(
+            <div>
+              <header><NavBar /></header>
+              <SirForm />
+            </div>
+                  )}
+        />
+        <Route
+          path="/responder"
+          element={(
+            <div>
+              <header><NavBar /></header>
+            </div>
+              )}
+        />
+      </Routes>
+    </BrowserRouter>
+  </div>
 );
 
 export default App;

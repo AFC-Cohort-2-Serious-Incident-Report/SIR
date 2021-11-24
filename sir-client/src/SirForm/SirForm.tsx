@@ -47,7 +47,7 @@ const SirForm: React.FC = () => {
         </div>
       </nav>
       {
-        !reportSubmitted && (
+        reportSubmitted && (
           <CustomAlert
             text="Incident Report Submitted"
             onClick={() => {
@@ -117,8 +117,8 @@ const SirForm: React.FC = () => {
                     <div className="group">
                       <label htmlFor="harmOrPotentialHarm">Harm or Potential Harm</label>
                       <Field as="select" id="harmOrPotentialHarm" name="harmOrPotentialHarm">
-                        <option value="Yes">Yes</option>
-                        <option value="No">No</option>
+                        <option value="false">No</option>
+                        <option value="true">Yes</option>
                       </Field>
                     </div>
                   </div>

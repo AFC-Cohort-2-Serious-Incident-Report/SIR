@@ -7,6 +7,7 @@ interface Values {
     incidentDate: string;
     incidentTime: string;
     eventType: string;
+    harmOrPotentialHarm: boolean,
     incidentLocation: string;
     incidentDescription: string;
     preventativeAction: string;
@@ -18,6 +19,8 @@ const incidentSchema = Yup.object().shape({
   incidentTime: Yup.string()
     .required('Required'),
   eventType: Yup.string()
+    .required('Required'),
+  harmOrPotentialHarm: Yup.boolean()
     .required('Required'),
   incidentLocation: Yup.string()
     .required('Required'),
@@ -51,6 +54,7 @@ const SirForm: React.FC = () => {
             incidentDate: convertDate(new Date()),
             incidentTime: '',
             eventType: '',
+            harmOrPotentialHarm: false,
             incidentLocation: '',
             incidentDescription: '',
             preventativeAction: '',
@@ -69,7 +73,16 @@ const SirForm: React.FC = () => {
                 <label htmlFor="incidentTime">Time of Event</label>
                 <Field type="time" id="incidentTime" name="incidentTime" />
                 <label htmlFor="eventType">Event Type</label>
-                <Field type="select" id="eventType" name="eventType" />
+                <Field type="select" as="select" id="eventType" name="eventType">
+                  <option value="Actual Event">Actual Event / Incident</option>
+                  <option value="Not Actual Event">Not Actual Event / Incident</option>
+                  <option value="Training Event">Training Event / Not Real</option>
+                </Field>
+                <label htmlFor="harmOrPotentialHarm">Harm or Potential Harm</label>
+                <Field type="select" as="select" id="harmOrPotentialHarm" name="harmOrPotentialHarm">
+                  <option value="false">No</option>
+                  <option value="true">Yes</option>
+                </Field>
                 <label htmlFor="incidentLocation">Incident Location</label>
                 <Field type="text" id="incidentLocation" name="incidentLocation" />
                 <label htmlFor="incidentDescription">Incident Description</label>

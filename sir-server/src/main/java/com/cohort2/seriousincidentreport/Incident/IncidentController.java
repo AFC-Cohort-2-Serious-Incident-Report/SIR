@@ -13,4 +13,9 @@ public class IncidentController {
     public Incident postSingleIncident(@RequestBody Incident incident) {
         return this.repository.save(incident);
     }
+
+    @GetMapping
+    public Iterable<Incident> getAllIncidents() {
+        return this.repository.findAll();
+    }
 }

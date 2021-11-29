@@ -37,9 +37,15 @@ function convertDate(date: Date): string {
 const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
+  // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
+  // otherwise, use the proxy settings in package.json.
+  // Example value: REACT_APP_API_HOST="http://3.134.135.195:3001"
+  const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
+
   const handleSubmitClick = (values: Values) => {
-    axios.post('/api/incidents', values)
-      .then(() => setReportSubmitted(true));
+    axios.post(`${API_HOST}/api/incidents`, values)
+      .then(() => setReportSubmitted(true))
+      .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
   };
 
   return (

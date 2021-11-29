@@ -44,66 +44,73 @@ const SirForm: React.FC = () => {
   };
 
   return (
-    <div className="view-container">
-      <div>
-        {reportSubmitted
-          ? 'Incident Report Submitted' : null}
+    <>
+      <div className="alert-container">
+        {reportSubmitted && (
+          <CustomAlert
+            onClose={() => setReportSubmitted(false)}
+            alertType={AlertType.SUCCESS}
+            text="Incident Report Submitted"
+          />
+        )}
       </div>
-      <h2>Incident Report Form</h2>
-      <div>
-        <Formik
-          initialValues={{
-            incidentDate: convertDate(new Date()),
-            incidentTime: '',
-            eventType: '',
-            harmOrPotentialHarm: false,
-            incidentLocation: '',
-            incidentDescription: '',
-            preventativeAction: '',
-          }}
-          validationSchema={incidentSchema}
-          onSubmit={handleSubmitClick}
-        >
-          {(formik) => {
-            const {
-              isValid, dirty,
-            } = formik;
-            return (
-              <Form>
-                <label htmlFor="incidentDate">Date of Event</label>
-                <Field type="date" id="incidentDate" name="incidentDate" />
-                <label htmlFor="incidentTime">Time of Event</label>
-                <Field type="time" id="incidentTime" name="incidentTime" />
-                <label htmlFor="eventType">Event Type</label>
-                <Field type="select" as="select" id="eventType" name="eventType">
-                  <option value="Actual Event">Actual Event / Incident</option>
-                  <option value="Not Actual Event">Not Actual Event / Incident</option>
-                  <option value="Training Event">Training Event / Not Real</option>
-                </Field>
-                <label htmlFor="harmOrPotentialHarm">Harm or Potential Harm</label>
-                <Field type="select" as="select" id="harmOrPotentialHarm" name="harmOrPotentialHarm">
-                  <option value="false">No</option>
-                  <option value="true">Yes</option>
-                </Field>
-                <label htmlFor="incidentLocation">Incident Location</label>
-                <Field type="text" id="incidentLocation" name="incidentLocation" />
-                <label htmlFor="incidentDescription">Incident Description</label>
-                <Field type="text" as="textarea" id="incidentDescription" name="incidentDescription" />
-                <label htmlFor="preventativeAction">Preventative Action</label>
-                <Field type="text" as="textarea" id="preventativeAction" name="preventativeAction" />
-                <button
-                  type="submit"
-                  className="primary"
-                  disabled={!(dirty && isValid)}
-                >
-                  Submit
-                </button>
-              </Form>
-            );
-          }}
-        </Formik>
+      <div className="container">
+        <h2>Incident Report Form</h2>
+        <div>
+          <Formik
+            initialValues={{
+              incidentDate: convertDate(new Date()),
+              incidentTime: '',
+              eventType: '',
+              harmOrPotentialHarm: false,
+              incidentLocation: '',
+              incidentDescription: '',
+              preventativeAction: '',
+            }}
+            validationSchema={incidentSchema}
+            onSubmit={handleSubmitClick}
+          >
+            {(formik) => {
+              const {
+                isValid, dirty,
+              } = formik;
+              return (
+                <Form>
+                  <label htmlFor="incidentDate">Date of Event</label>
+                  <Field type="date" id="incidentDate" name="incidentDate" />
+                  <label htmlFor="incidentTime">Time of Event</label>
+                  <Field type="time" id="incidentTime" name="incidentTime" />
+                  <label htmlFor="eventType">Event Type</label>
+                  <Field type="select" as="select" id="eventType" name="eventType">
+                    <option value="Actual Event">Actual Event / Incident</option>
+                    <option value="Not Actual Event">Not Actual Event / Incident</option>
+                    <option value="Training Event">Training Event / Not Real</option>
+                  </Field>
+                  <label htmlFor="harmOrPotentialHarm">Harm or Potential Harm</label>
+                  <Field type="select" as="select" id="harmOrPotentialHarm" name="harmOrPotentialHarm">
+                    <option value="false">No</option>
+                    <option value="true">Yes</option>
+                  </Field>
+                  <label htmlFor="incidentLocation">Incident Location</label>
+                  <Field type="text" id="incidentLocation" name="incidentLocation" />
+                  <label htmlFor="incidentDescription">Incident Description</label>
+                  <Field type="text" as="textarea" id="incidentDescription" name="incidentDescription" />
+                  <label htmlFor="preventativeAction">Preventative Action</label>
+                  <Field type="text" as="textarea" id="preventativeAction" name="preventativeAction" />
+                  <button
+                    type="submit"
+                    className="primary"
+                    disabled={!(dirty && isValid)}
+                  >
+                    Submit
+                  </button>
+                </Form>
+              );
+            }}
+          </Formik>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

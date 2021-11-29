@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
-import CustomAlert from '../StyledComponents/CustomAlert';
+import CustomAlert, { AlertType } from '../Components/CustomAlert';
 
 interface Values {
     incidentDate: string;

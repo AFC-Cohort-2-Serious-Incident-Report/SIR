@@ -17,7 +17,7 @@ const App: React.FC = () => (
               <header><NavBar isResponder={false} /></header>
               <SirForm />
             </div>
-            )}
+              )}
         />
         <Route
           path="/reporter"
@@ -26,7 +26,7 @@ const App: React.FC = () => (
               <header><NavBar isResponder={false} /></header>
               <SirForm />
             </div>
-                  )}
+              )}
         />
         <Route
           path="/responder"
@@ -37,7 +37,7 @@ const App: React.FC = () => (
                 <h2>Incident Reports</h2>
               </div>
             </div>
-              )}
+                )}
         />
       </Routes>
     </BrowserRouter>

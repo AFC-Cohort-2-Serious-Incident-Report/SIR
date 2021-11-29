@@ -1,5 +1,5 @@
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap');
 @import url('https://unpkg.com/css.gg/icons/all.css');
+@import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@100&display=swap');
 
 :root {
     --color-white: 245, 245, 245;
@@ -37,14 +37,25 @@ body {
     margin: 0;
     width: 100%;
     height: 100%;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Public Sans', sans-serif;
     -webkit-font-smoothing: antialiased;
     -webkit-text-size-adjust: 100%;
 }
-h1{
-    font-family: 'Roboto', sans-serif;
+
+h1 {
     font-size: 2.5rem;
     font-weight: 100;
+}
+
+h2 {
+    font-size: 40px;
+    letter-spacing: -1.5px;
+    font-style: normal;
+    font-weight: 100;
+    text-align: left;
+    margin-top: 64px;
+    margin-bottom: 0;
+    padding: 0;
 }
 
 .navbar {
@@ -57,6 +68,7 @@ h1{
     background-color: rgb(var(--background-color-2));
     padding: 0px 1rem;
     align-items: center;
+    box-shadow: 0px 3px 1px -2px rgba(0, 0, 0, 0.2), 0px 2px 2px rgba(0, 0, 0, 0.14), 0px 1px 5px rgba(0, 0, 0, 0.12);
 }
 
 .navbar > .logo {
@@ -74,6 +86,29 @@ h1{
     display: flex;
     flex-direction: row;
     position: relative;
+}
+
+.navbar > .links > .focused {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    color: black;
+    text-align: center;
+    margin-left: 15px;
+}
+
+.navbar > .links > .unfocused {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: dimgrey;
+    padding-left: 15px;
+    text-decoration: none;
+}
+
+.view-container {
+    margin: 0 256px;
 }
 
 .group {
@@ -136,6 +171,10 @@ h1{
     cursor: pointer;
 }
 
+.alert > .group button {
+    color: rgb(var(--color-accent-2));
+}
+
 .container {
     display: block;
     position: relative;
@@ -154,6 +193,7 @@ label {
     font-weight: 600;
     color: rgb(var(--color-muted));
     height: 25px;
+    padding-top: 1em;
 }
 
 input[type='text'] {
@@ -276,11 +316,3 @@ button.muted {
     color: rgb(var(--color-muted));
     background-color: rgba(var(--background-color-2), 0.4);
 }
-
-.alert > .group button {
-    color: rgb(var(--color-accent-2));
-}
-
-/*
-https://res.cloudinary.com/uplusion23/image/upload/v1637358607/SFLogo.png
-*/

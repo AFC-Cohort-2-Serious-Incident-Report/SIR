@@ -43,11 +43,12 @@ const SirForm: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className="view-container">
       <div>
         {reportSubmitted
           ? 'Incident Report Submitted' : null}
       </div>
+      <h2>Incident Report Form</h2>
       <div>
         <Formik
           initialValues={{

@@ -1,11 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import ResponderView from './ResponderView';
-import data from '../Responder_Test_Data_50.json';
+import dataWithOne from '../Responder_Test_Data_1.json';
 
 const server = setupServer(
-  rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(data))),
+  rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
 );
 
 beforeAll(() => server.listen());
@@ -32,9 +32,10 @@ describe('ResponderView', () => {
     expect(screen.getByText(/^Event Type/i)).toBeInTheDocument();
     expect(screen.getByText(/^details/i)).toBeInTheDocument();
   });
-  it('should render json for responder', () => {
-    expect(screen.getByText('03/27/2021')).toBeInTheDocument();
-    expect(screen.getByText('03/27/2021')).toBeInTheDocument();
+  it('should render json for responder', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getByText('Shouxihu')).toBeInTheDocument();
+    expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('visa')).toBeInTheDocument();
   });
 });

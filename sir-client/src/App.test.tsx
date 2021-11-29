@@ -1,5 +1,7 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import {
+  getByRole, getByText, render, screen,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
@@ -21,6 +23,7 @@ test('renders reporter and responder links with reporter focused', async () => {
   // click secondLink
   await userEvent.click(secondLink);
   // assert secondLink is focused
+  expect(screen.getByRole('heading', { name: /incident reports/i })).toBeInTheDocument();
   expect(firstLink).toHaveClass('unfocused');
   expect(secondLink).toHaveClass('focused');
   // click firstLink

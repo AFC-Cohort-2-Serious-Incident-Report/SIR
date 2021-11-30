@@ -107,6 +107,7 @@ describe('SirForm', () => {
     expect(screen.getByRole('button', { name: /submit/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /submit/i })).toBeDisabled();
     expect(screen.queryByText('Incident Report Submitted')).not.toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /Incident Report Form/i }));
   });
 
   // Individual field tests

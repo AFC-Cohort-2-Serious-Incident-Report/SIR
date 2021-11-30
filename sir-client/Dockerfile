@@ -10,6 +10,9 @@ WORKDIR /app
 # Best practice to run Node in production mode. May not be needed by the npm serve package.
 ENV NODE_ENV="production"
 
+# Set the production back end address for use at build time.
+ENV REACT_APP_API_HOST="http://3.134.135.195:3001"
+
 # Install the client dependencies.
 COPY package.json ./
 RUN npm install

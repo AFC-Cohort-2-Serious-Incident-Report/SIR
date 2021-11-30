@@ -1,5 +1,5 @@
 import React from 'react';
-import './App.css';
+import './Styles/Styles.css';
 import {
   BrowserRouter, Routes, Route,
 } from 'react-router-dom';
@@ -17,7 +17,7 @@ const App: React.FC = () => (
               <header><NavBar isResponder={false} /></header>
               <SirForm />
             </div>
-            )}
+              )}
         />
         <Route
           path="/reporter"
@@ -26,15 +26,18 @@ const App: React.FC = () => (
               <header><NavBar isResponder={false} /></header>
               <SirForm />
             </div>
-                  )}
+              )}
         />
         <Route
           path="/responder"
           element={(
             <div>
               <header><NavBar isResponder /></header>
+              <div className="view-container">
+                <h2>Incident Reports</h2>
+              </div>
             </div>
-              )}
+                )}
         />
       </Routes>
     </BrowserRouter>

@@ -1,6 +1,5 @@
 import { ReactElement } from 'react';
 import { Link } from 'react-router-dom';
-import '../Styles/Styles.css';
 
 type NavBarProps = {
     isResponder: boolean

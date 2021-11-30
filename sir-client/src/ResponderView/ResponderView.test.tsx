@@ -34,6 +34,7 @@ describe('ResponderView', () => {
   });
   it('should render json for responder', async () => {
     await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
     expect(screen.getByText('Shouxihu')).toBeInTheDocument();
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('visa')).toBeInTheDocument();

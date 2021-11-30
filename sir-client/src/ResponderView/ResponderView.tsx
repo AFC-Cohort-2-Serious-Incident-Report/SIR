@@ -5,7 +5,9 @@ interface IncidentData {
     id: number,
     incidentDate: string,
     incidentLocation: string,
+    incidentType: string,
     harmOrPotentialHarm: boolean,
+    incidentDescription: string,
     eventType: string
 }
 
@@ -18,30 +20,44 @@ const ResponderView = () => {
   }, []);
 
   const renderIncidentRow = reports.map((report: IncidentData) => (
-    <div key={report.id}>
-      <div>{report.incidentDate}</div>
-      <div>{report.incidentLocation}</div>
-      <div>{report.harmOrPotentialHarm ? 'Yes' : 'No'}</div>
-      <div>{report.eventType}</div>
-    </div>
+    <tr key={report.id}>
+      <td><input type="checkbox" name="selectRow" /></td>
+      <td>{report.incidentDate}</td>
+      <td>{report.incidentLocation}</td>
+      {/* <td>{report.incidentDescription}</td> */}
+      <td>{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
+      {/* <td>{report.incidentDescription}</td> */}
+      <td>{report.eventType}</td>
+      {/* <td>View</td> */}
+    </tr>
   ));
 
   return (
-    <div>
-      <h1>Incident Reports</h1>
-      <h3>Reports</h3>
-      <div>
-        <div><input type="checkbox" /></div>
-        <div>Event Date</div>
-        <div>Location</div>
-        {/* <div>Incident Type</div> */}
-        <div>Harm</div>
-        {/* <div>Individual(s) Involved</div> */}
-        <div>Event Type</div>
-        <div>Details</div>
+    <div className="responder-view">
+      <div className="table-left-align">
+        <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
+        <h3>Reports</h3>
+        <table>
+          <thead>
+            <tr>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <th><input type="checkbox" name="selectAll" /></th>
+              <th>Event Date</th>
+              <th>Location</th>
+              {/* <th>Incident Type</th> */}
+              <th>Harm</th>
+              {/* <th>Individual(s) Involved</th> */}
+              <th>Event Type</th>
+              {/* <th>Details</th> */}
+            </tr>
+          </thead>
+          <tbody>
+            {renderIncidentRow}
+          </tbody>
+        </table>
       </div>
-      {renderIncidentRow}
     </div>
+
   );
 };
 

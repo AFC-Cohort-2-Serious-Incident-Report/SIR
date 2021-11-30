@@ -84,6 +84,21 @@ class IncidentControllerTests {
 
     }
 
+    @Test
+    @Transactional
+    @Rollback
+    void shouldReturnNumberOfEntriesInPagination() throws Exception {
+        final var request = get("/api/incidents?size=2&page=1");
+
+        mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.length()").value(1))
+                .andExpect(jsonPath("$[0].id", equalTo(incident3.getId().intValue())))
+                .andExpect(jsonPath("$[0].incidentLocation", equalTo(incident3.getIncidentLocation())))
+                .andExpect(jsonPath("$[0].incidentDescription", equalTo(incident3.getIncidentDescription())))
+                .andExpect(jsonPath("$[0].preventativeAction", equalTo(incident3.getPreventativeAction())));
+    }
+
     @Transactional
     @Rollback
     @Test

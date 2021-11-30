@@ -5,8 +5,8 @@ plugins {
 }
 
 group = 'com.cohort2'
-version = '0.0.3'
-sourceCompatibility = "16"
+version = '0.0.4'
+sourceCompatibility = '17'
 
 configurations {
 	compileOnly {
@@ -31,4 +31,3 @@ dependencies {
 test {
 	useJUnitPlatform()
 }
-targetCompatibility = JavaVersion.VERSION_16

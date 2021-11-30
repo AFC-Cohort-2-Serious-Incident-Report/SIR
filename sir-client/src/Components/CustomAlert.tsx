@@ -8,16 +8,21 @@ export enum AlertType {
   INFO = 'info',
 }
 
+export type CustomAlertLink = {
+  text: string;
+  onClick: () => void;
+};
+
 type CustomAlertProps = {
   text: string;
   alertType: AlertType;
-  onClick?: () => void;
+  customAlertLink?: CustomAlertLink;
   onClose: () => void;
 }
 
 const CustomAlert: React.FC<CustomAlertProps> = ({
   text,
-  onClick,
+  customAlertLink,
   alertType,
   onClose,
 }: CustomAlertProps) => {
@@ -30,7 +35,8 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
       </div>
       <div className="group">
         {
-          onClick !== undefined ? <button type="button" onClick={onClick}>View Reports</button> : null
+          customAlertLink !== undefined
+          && <button type="button" onClick={customAlertLink.onClick}>{customAlertLink.text}</button>
         }
         <button
           onClick={onClose}
@@ -44,7 +50,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
 };
 
 CustomAlert.defaultProps = {
-  onClick: undefined,
+  customAlertLink: undefined,
 };
 
 export default CustomAlert;

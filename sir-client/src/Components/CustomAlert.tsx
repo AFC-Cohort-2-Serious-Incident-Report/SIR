@@ -41,6 +41,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({
         <button
           onClick={onClose}
           type="button"
+          title="Close Alert"
         >
           <i className="gg-close" />
         </button>

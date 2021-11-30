@@ -249,14 +249,21 @@ describe('SirForm', () => {
     expect(screen.getByRole('textbox', { name: /patient address/i })).toHaveValue('123 Main St');
   });
 
-  // Button tests
+  // Button and alert tests
+  it('button is disabled until all required fields have text', () => {
+    fillAllFields();
+    expect(screen.getByRole('button', { name: /submit/i })).not.toBeDisabled();
+  });
   it('button submits all fields', async () => {
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
     await waitFor(() => (expect(screen.getByText('Incident Report Submitted')).toBeInTheDocument()));
   });
-  it('button is disabled until all required fields have text', () => {
+  it('X button closes alert banner', async () => {
     fillAllFields();
-    expect(screen.getByRole('button', { name: /submit/i })).not.toBeDisabled();
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
+    await waitFor(() => (expect(screen.getByText('Incident Report Submitted')).toBeInTheDocument()));
+    userEvent.click(screen.getByTitle(/close alert/i));
+    await waitFor(() => (expect(screen.queryByTitle('close alert')).not.toBeInTheDocument()));
   });
 });

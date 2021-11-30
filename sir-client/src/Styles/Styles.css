@@ -276,6 +276,33 @@ button.primary {
   color: rgb(var(--background-color));
   background-color: rgb(var(--color-accent));
 }
+table {
+    border-collapse: collapse;
+    border-spacing: 40px 0;
+    text-align: left;
+
+}
+
+tr{
+    border-bottom: 1px solid lightgray;
+    line-height: 35px;
+
+}
+
+.responder-view{
+    display: flex;
+    justify-content: center;
+    max-width: 100%;
+}
+.table-left-align{
+    text-align: left;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 75%;
+
+}
+
 
 button:disabled {
   color: rgb(var(--color-muted));

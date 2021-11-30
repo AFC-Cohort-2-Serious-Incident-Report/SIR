@@ -19,4 +19,9 @@ public class IncidentController {
         log.info("Received POST: " + incident.toString());
         return this.repository.save(incident);
     }
+
+    @GetMapping
+    public Iterable<Incident> getAllIncidents() {
+        return this.repository.findAll();
+    }
 }

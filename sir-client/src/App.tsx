@@ -9,7 +9,7 @@ import ResponderView from './ResponderView/ResponderView';
 import CustomAlert, { AlertType } from './Components/CustomAlert';
 
 const App: React.FC = () => {
-  const [showSentToCommand, setShowSentToCommand] = useState(true);
+  const [showSentToCommand, setShowSentToCommand] = useState(false);
 
   return (
     <div className="App">
@@ -48,7 +48,7 @@ const App: React.FC = () => {
                       />
                     )}
                   </div>
-                    <ResponderView />
+                  <ResponderView />
                 </div>
               </div>
                     )}

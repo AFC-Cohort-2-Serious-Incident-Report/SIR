@@ -1,7 +1,5 @@
 import React from 'react';
-import {
-  getByRole, getByText, render, screen,
-} from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import App from './App';
 
@@ -10,25 +8,29 @@ test('renders reporter and responder links with reporter focused', async () => {
 
   // render App
   render(<App />);
-  const firstLink = screen.getByText(/Reporter/i);
-  const secondLink = screen.getByText(/Responder/i);
-  const logo = screen.getByTestId('swfLogo');
+  const reporterLink = screen.getByRole('link', { name: /Reporter/i });
+  const responderLink = screen.getByRole('link', { name: /Responder/i });
   // assert App loads with default nav elements
-  expect(firstLink).toBeInTheDocument();
-  expect(secondLink).toBeInTheDocument();
-  expect(logo).toBeInTheDocument();
-  // assert firstLink is focused
-  expect(firstLink).toHaveClass('focused');
-  expect(secondLink).toHaveClass('unfocused');
-  // click secondLink
-  await userEvent.click(secondLink);
-  // assert secondLink is focused
-  expect(screen.getByRole('heading', { name: /incident reports/i })).toBeInTheDocument();
-  expect(firstLink).toHaveClass('unfocused');
-  expect(secondLink).toHaveClass('focused');
-  // click firstLink
-  await userEvent.click(firstLink);
-  // assert firstLink is focused
-  expect(firstLink).toHaveClass('focused');
-  expect(secondLink).toHaveClass('unfocused');
+  expect(reporterLink).toBeInTheDocument();
+  expect(responderLink).toBeInTheDocument();
+  expect(screen.getByTestId('swfLogo')).toBeInTheDocument();
+  // assert reporterLink is focused
+  expect(reporterLink).toHaveClass('focused');
+  expect(responderLink).toHaveClass('unfocused');
+  expect(screen.getByRole('heading', { name: /Incident Report Form/i })).toBeInTheDocument();
+  expect(screen.queryByText(/Incident Reports/i)).not.toBeInTheDocument();
+  // click responderLink
+  await userEvent.click(responderLink);
+  // assert responderLink is focused
+  expect(reporterLink).toHaveClass('unfocused');
+  expect(responderLink).toHaveClass('focused');
+  expect(screen.queryByText(/Incident Report Form/i)).not.toBeInTheDocument();
+  expect(screen.getByRole('heading', { name: /Incident Reports/i })).toBeInTheDocument();
+  // click reporterLink
+  await userEvent.click(reporterLink);
+  // assert reporterLink is focused
+  expect(reporterLink).toHaveClass('focused');
+  expect(responderLink).toHaveClass('unfocused');
+  expect(screen.getByRole('heading', { name: /Incident Report Form/i })).toBeInTheDocument();
+  expect(screen.queryByText(/Incident Reports/i)).not.toBeInTheDocument();
 });

@@ -5,10 +5,11 @@ import {
 } from 'react-router-dom';
 import SirForm from './SirForm/SirForm';
 import NavBar from './NavBar/NavBar';
+import ResponderView from './ResponderView/ResponderView';
 import CustomAlert, { AlertType } from './Components/CustomAlert';
 
 const App: React.FC = () => {
-  const [showSentToCommand, setShowSentToCommand] = useState(true);
+  const [showSentToCommand, setShowSentToCommand] = useState(false);
 
   return (
     <div className="App">
@@ -47,7 +48,7 @@ const App: React.FC = () => {
                       />
                     )}
                   </div>
-                  <h2>Incident Reports</h2>
+                  <ResponderView />
                 </div>
               </div>
                     )}

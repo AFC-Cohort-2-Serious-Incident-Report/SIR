@@ -1,6 +1,12 @@
-import React, { ReactElement } from 'react';
+import React, { FC, ReactElement } from 'react';
 
-const SendToCommand = (): ReactElement => (
+type SendToCommandProps = {
+  onSubmit: () => void;
+}
+
+const SendToCommand : React.FC<SendToCommandProps> = ({
+  onSubmit,
+}: SendToCommandProps): ReactElement => (
   <div className="SendToCommandModal">
     <form>
       <h2 data-testid="commandModalTitle">
@@ -12,7 +18,7 @@ const SendToCommand = (): ReactElement => (
         <option>Battalion Commander</option>
         <option>Brigade Commander</option>
       </select>
-      <button type="submit">Send</button>
+      <button type="submit" onClick={onSubmit}>Send</button>
       <button type="submit">Cancel</button>
     </form>
 

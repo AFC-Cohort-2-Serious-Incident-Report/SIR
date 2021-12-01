@@ -57,7 +57,7 @@ const App: React.FC = () => {
           />
           <Route
             path="/edit"
-            element={<IncidentDetailView incident={fakeData} />}
+            element={<IncidentDetailView id={1} />}
           />
         </Routes>
       </BrowserRouter>

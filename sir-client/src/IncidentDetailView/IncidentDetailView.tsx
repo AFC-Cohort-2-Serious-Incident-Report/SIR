@@ -1,4 +1,4 @@
-import { FC, ReactElement } from 'react';
+import { FC, ReactElement, useState } from 'react';
 import CustomModal from '../Components/CustomModal';
 import SirForm from '../SirForm/SirForm';
 
@@ -42,19 +42,23 @@ export type Incident = {
 }
 
 type IncidentDetailViewProps = {
-    incident: Incident;
+    id: number;
 }
 
-const IncidentDetailView: FC<IncidentDetailViewProps> = ({ incident }: IncidentDetailViewProps) => (
-  <CustomModal
-    onModalClose={() => undefined}
-    onModalSubmit={{
-      onSubmit: () => undefined,
-      text: 'SAVE',
-    }}
-    modalTitle="Incident Report"
-    modalContent={<SirForm incident={incident} />}
-  />
-);
+const IncidentDetailView: FC<IncidentDetailViewProps> = ({ id }: IncidentDetailViewProps) => {
+  const [incident, setIncident] = useState<Incident | null>(null);
+  return (
+    <CustomModal
+      onModalClose={() => undefined}
+      onModalSubmit={{
+        onSubmit: () => undefined,
+        text: 'SAVE',
+      }}
+      modalTitle="Incident Report"
+      // TODO : Replace empty div with loading indicator
+      modalContent={incident ? <SirForm incident={incident} /> : <div />}
+    />
+  );
+};
 
 export default IncidentDetailView;

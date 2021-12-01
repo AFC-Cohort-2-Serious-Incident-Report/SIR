@@ -31,7 +31,7 @@ describe('ResponderView', () => {
     expect(screen.getByText(/^Harm/i)).toBeInTheDocument();
     // expect(screen.getByText('Individual(s) Involved')).toBeInTheDocument();
     expect(screen.getByText(/^Event Type/i)).toBeInTheDocument();
-    // expect(screen.getByText(/^details/i)).toBeInTheDocument();
+    expect(screen.getByText(/^details/i)).toBeInTheDocument();
   });
   it('should render json for responder', async () => {
     await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
@@ -46,6 +46,16 @@ describe('ResponderView', () => {
     // });
 
     screen.getAllByRole('checkbox')[1].click();
+  });
+
+  it('should render button to view details of incident', async () => {
+    await waitFor(() => expect(screen.getByRole('button', { name: /view/i })).toBeInTheDocument());
+  });
+
+  it('should render modal when view is clicked', async () => {
+    expect(screen.queryByRole('heading', { name: 'Incident Report' })).toBeNull();
+    await waitFor(() => userEvent.click(screen.getByRole('button', { name: /view/i })));
+    expect(screen.getByRole('heading', { name: 'Incident Report' })).toBeInTheDocument();
   });
 
   // await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {

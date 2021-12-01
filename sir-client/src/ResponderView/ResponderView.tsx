@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
+import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
 
 interface IncidentData {
     id: number,
@@ -13,6 +14,7 @@ interface IncidentData {
 
 const ResponderView: FC = () => {
   const [reports, setReports] = useState([]);
+  const [focusedID, setFocusedID] = useState<number | null>(null);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
@@ -35,36 +37,38 @@ const ResponderView: FC = () => {
       <td>{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
       {/* <td>{report.incidentDescription}</td> */}
       <td>{report.eventType}</td>
-      {/* <td>View</td> */}
+      <td><button type="button" onClick={() => setFocusedID(report.id)}>View</button></td>
     </tr>
   ));
 
   return (
-    <div className="responder-view">
-      <div className="table-left-align">
-        <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
-        <h3>Reports</h3>
-        <table>
-          <thead>
-            <tr>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <th><input type="checkbox" name="selectAll" /></th>
-              <th>Event Date</th>
-              <th>Location</th>
-              {/* <th>Incident Type</th> */}
-              <th>Harm</th>
-              {/* <th>Individual(s) Involved</th> */}
-              <th>Event Type</th>
-              {/* <th>Details</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {renderIncidentRow}
-          </tbody>
-        </table>
+    <>
+      {focusedID && <IncidentDetailView id={1} />}
+      <div className="responder-view">
+        <div className="table-left-align">
+          <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
+          <h3>Reports</h3>
+          <table>
+            <thead>
+              <tr>
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <th><input type="checkbox" name="selectAll" /></th>
+                <th>Event Date</th>
+                <th>Location</th>
+                {/* <th>Incident Type</th> */}
+                <th>Harm</th>
+                {/* <th>Individual(s) Involved</th> */}
+                <th>Event Type</th>
+                <th>Details</th>
+              </tr>
+            </thead>
+            <tbody>
+              {renderIncidentRow}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-
+    </>
   );
 };
 

@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
+import CustomCheckbox from '../Components/CustomCheckbox';
 
 interface Values {
     incidentDate: string;
@@ -80,6 +81,7 @@ function convertDate(date: Date): string {
 
 const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
@@ -90,6 +92,10 @@ const SirForm: React.FC = () => {
     axios.post(`${API_HOST}/api/incidents`, values)
       .then(() => setReportSubmitted(true));
     // .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
+  };
+
+  const handleFamilyMemberCheck = () => {
+    setFamilyMemberCheck(!familyMemberCheck);
   };
 
   return (
@@ -191,15 +197,25 @@ const SirForm: React.FC = () => {
                       Patient
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.familyMember" title="individualsInvolved.familyMember" />
+                      <Field type="checkbox" name="individualsInvolved.familyMember" title="individualsInvolved.familyMember" onClick={handleFamilyMemberCheck} />
                       Family Member
                     </p>
-                    <p>
-                      <Field type="checkbox" name="individualsInvolved.adult" title="individualsInvolved.adult" />
+                    <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
+                      <Field
+                        type="checkbox"
+                        name="individualsInvolved.adult"
+                        title="individualsInvolved.adult"
+                        disabled={!familyMemberCheck}
+                      />
                       Adult
                     </p>
-                    <p>
-                      <Field type="checkbox" name="individualsInvolved.child" title="individualsInvolved.child" />
+                    <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
+                      <Field
+                        type="checkbox"
+                        name="individualsInvolved.child"
+                        title="individualsInvolved.child"
+                        disabled={!familyMemberCheck}
+                      />
                       Child less than 18 years old
                     </p>
                   </div>

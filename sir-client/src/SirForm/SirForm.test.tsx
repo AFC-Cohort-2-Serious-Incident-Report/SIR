@@ -170,10 +170,12 @@ describe('SirForm', () => {
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.familyMember/i })).toBeChecked();
   });
   it('accepts individualsInvolved.adult selection', () => {
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.adult/i));
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).toBeChecked();
   });
   it('accepts individualsInvolved.child selection', () => {
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.child/i));
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).toBeChecked();
   });
@@ -192,6 +194,14 @@ describe('SirForm', () => {
   it('accepts individualsInvolved.other selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.other/i));
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.other/i })).toBeChecked();
+  });
+
+  it('disables Adult and Child inputs until Family Member is checked', () => {
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).toBeDisabled();
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeDisabled();
   });
 
   // Type of Event

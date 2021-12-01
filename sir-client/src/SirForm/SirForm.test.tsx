@@ -259,6 +259,18 @@ describe('SirForm', () => {
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
     await waitFor(() => (expect(screen.getByText('Incident Report Submitted')).toBeInTheDocument()));
   });
+  it('page scrolls to top to view alert banner upon submission', async () => {
+    window.scrollTo = jest.fn();
+    fillAllFields();
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
+    await waitFor(() => { expect(window.scrollTo).toHaveBeenCalledTimes(1); });
+    const expectedY = 0;
+    const expectedX = 0;
+    const actualY = window.scrollY;
+    const actualX = window.scrollX;
+    expect(actualX).toBe(expectedX);
+    expect(actualY).toBe(expectedY);
+  });
   it('X button closes alert banner', async () => {
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));

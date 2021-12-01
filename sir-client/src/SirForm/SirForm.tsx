@@ -9,7 +9,7 @@ interface Values {
     incidentTime: string;
     incidentLocation: string;
     eventType: string;
-    harmOrPotentialHarm: boolean,
+    harmOrPotentialHarm: boolean;
     individualsInvolved: {
         patient: boolean,
         familyMember: boolean,
@@ -19,16 +19,16 @@ interface Values {
         visitor: boolean,
         volunteer: boolean,
         other: boolean
-    },
-    typeOfEvent: string,
-    effectOnIndividual: string,
+    };
+    typeOfEvent: string;
+    effectOnIndividual: string;
     witnessOneName: string;
     witnessOnePhone: string;
     witnessTwoName: string;
     witnessTwoPhone: string;
     witnessThreeName: string;
     witnessThreePhone: string;
-    departmentsInvolved: string,
+    departmentsInvolved: string;
     incidentDescription: string;
     preventativeAction: string;
     patientInfo: {
@@ -40,16 +40,11 @@ interface Values {
 }
 
 const incidentSchema = Yup.object().shape({
-  incidentDate: Yup.string()
-    .required('Required'),
-  incidentTime: Yup.string()
-    .required('Required'),
-  incidentLocation: Yup.string()
-    .notRequired(),
-  eventType: Yup.string()
-    .required('Required'),
-  harmOrPotentialHarm: Yup.boolean()
-    .required('Required'),
+  incidentDate: Yup.string().required('Required'),
+  incidentTime: Yup.string().required('Required'),
+  incidentLocation: Yup.string().notRequired(),
+  eventType: Yup.string().required('Required'),
+  harmOrPotentialHarm: Yup.boolean().required('Required'),
   individualsInvolved: Yup.object().shape({
     patient: Yup.boolean().notRequired(),
     familyMember: Yup.boolean().notRequired(),
@@ -60,28 +55,17 @@ const incidentSchema = Yup.object().shape({
     volunteer: Yup.boolean().notRequired(),
     other: Yup.boolean().notRequired(),
   }),
-  typeOfEvent: Yup.string()
-    .required('Required'),
-  effectOnIndividual: Yup.string()
-    .required('Required'),
-  witnessOneName: Yup.string()
-    .notRequired(),
-  witnessOnePhone: Yup.string()
-    .notRequired(),
-  witnessTwoName: Yup.string()
-    .notRequired(),
-  witnessTwoPhone: Yup.string()
-    .notRequired(),
-  witnessThreeName: Yup.string()
-    .notRequired(),
-  witnessThreePhone: Yup.string()
-    .notRequired(),
-  departmentsInvolved: Yup.string()
-    .required('Required'),
-  incidentDescription: Yup.string()
-    .required('Required'),
-  preventativeAction: Yup.string()
-    .required('Required'),
+  typeOfEvent: Yup.string().required('Required'),
+  effectOnIndividual: Yup.string().required('Required'),
+  witnessOneName: Yup.string().notRequired(),
+  witnessOnePhone: Yup.string().notRequired(),
+  witnessTwoName: Yup.string().notRequired(),
+  witnessTwoPhone: Yup.string().notRequired(),
+  witnessThreeName: Yup.string().notRequired(),
+  witnessThreePhone: Yup.string().notRequired(),
+  departmentsInvolved: Yup.string().required('Required'),
+  incidentDescription: Yup.string().required('Required'),
+  preventativeAction: Yup.string().required('Required'),
   patientInfo: Yup.object().shape({
     patientName: Yup.string().required('Required'),
     patientSocial: Yup.string().required('Required'),
@@ -104,8 +88,8 @@ const SirForm: React.FC = () => {
 
   const handleSubmitClick = (values: Values) => {
     axios.post(`${API_HOST}/api/incidents`, values)
-      .then(() => setReportSubmitted(true))
-      .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
+      .then(() => setReportSubmitted(true));
+    // .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
   };
 
   return (
@@ -157,14 +141,17 @@ const SirForm: React.FC = () => {
             },
           }}
           validationSchema={incidentSchema}
-          onSubmit={handleSubmitClick}
+          onSubmit={(values, { resetForm }) => {
+            handleSubmitClick(values);
+            resetForm();
+          }}
         >
           {(formik) => {
             const {
               isValid, dirty,
             } = formik;
             return (
-              <Form>
+              <Form title="sir-form">
                 <div className="group split">
                   <div className="group">
                     <label htmlFor="incidentDate">Date of Event</label>
@@ -196,27 +183,43 @@ const SirForm: React.FC = () => {
                     </Field>
                   </div>
                 </div>
+                <label htmlFor="individualsInvolved">Individuals Involved</label>
                 <div className="group split">
                   <div className="group">
-                    <label htmlFor="individualsInvolved">Individuals Involved</label>
-                    <Field type="checkbox" name="individualsInvolved.patient" title="individualsInvolved.patient" />
-                    Patient
-                    <Field type="checkbox" name="individualsInvolved.familyMember" title="individualsInvolved.familyMember" />
-                    Family Member
-                    <Field type="checkbox" name="individualsInvolved.adult" title="individualsInvolved.adult" />
-                    Adult
-                    <Field type="checkbox" name="individualsInvolved.child" title="individualsInvolved.child" />
-                    Child less than 18 years old
+                    <p>
+                      <Field type="checkbox" name="individualsInvolved.patient" title="individualsInvolved.patient" />
+                      Patient
+                    </p>
+                    <p>
+                      <Field type="checkbox" name="individualsInvolved.familyMember" title="individualsInvolved.familyMember" />
+                      Family Member
+                    </p>
+                    <p>
+                      <Field type="checkbox" name="individualsInvolved.adult" title="individualsInvolved.adult" />
+                      Adult
+                    </p>
+                    <p>
+                      <Field type="checkbox" name="individualsInvolved.child" title="individualsInvolved.child" />
+                      Child less than 18 years old
+                    </p>
                   </div>
                   <div className="group">
-                    <Field type="checkbox" name="individualsInvolved.staffMember" title="individualsInvolved.staffMember" />
-                    Staff Member
-                    <Field type="checkbox" name="individualsInvolved.visitor" title="individualsInvolved.visitor" />
-                    Visitor
-                    <Field type="checkbox" name="individualsInvolved.volunteer" title="individualsInvolved.volunteer" />
-                    Volunteer
-                    <Field type="checkbox" name="individualsInvolved.other" title="individualsInvolved.other" />
-                    Other
+                    <p>
+                      <Field type="checkbox" name="individualsInvolved.staffMember" title="individualsInvolved.staffMember" />
+                      Staff Member
+                    </p>
+                    <p>
+                      <Field type="checkbox" name="individualsInvolved.visitor" title="individualsInvolved.visitor" />
+                      Visitor
+                    </p>
+                    <p>
+                      <Field type="checkbox" name="individualsInvolved.volunteer" title="individualsInvolved.volunteer" />
+                      Volunteer
+                    </p>
+                    <p>
+                      <Field type="checkbox" name="individualsInvolved.other" title="individualsInvolved.other" />
+                      Other
+                    </p>
                   </div>
                 </div>
                 <div className="group">

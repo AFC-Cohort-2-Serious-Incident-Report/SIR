@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
+import { Incident } from '../IncidentDetailView/IncidentDetailView';
 
 interface Values {
     incidentDate: string;
@@ -78,7 +79,11 @@ function convertDate(date: Date): string {
   return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`;
 }
 
-const SirForm: React.FC = () => {
+type SirFormProps = {
+    incident?: Incident;
+}
+
+const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
@@ -94,23 +99,25 @@ const SirForm: React.FC = () => {
 
   return (
     <>
+      { !incident && (
       <div className="alert-container">
         {reportSubmitted && (
-          <CustomAlert
-            onClose={() => setReportSubmitted(false)}
-            alertType={AlertType.SUCCESS}
-            text="Incident Report Submitted"
-          />
+        <CustomAlert
+          onClose={() => setReportSubmitted(false)}
+          alertType={AlertType.SUCCESS}
+          text="Incident Report Submitted"
+        />
         )}
       </div>
+      )}
       <div className="container">
-        <h2>Incident Report Form</h2>
+        { !incident && <h2>Incident Report Form</h2> }
         <Formik
-          initialValues={{
+          initialValues={incident || {
             incidentDate: convertDate(new Date()),
             incidentTime: '',
             incidentLocation: '',
-            eventType: 'Actual Event',
+            eventType: 'Actual Event / Incident',
             harmOrPotentialHarm: false,
             individualsInvolved: {
               patient: false,
@@ -170,9 +177,9 @@ const SirForm: React.FC = () => {
                   <div className="group">
                     <label htmlFor="eventType">Event Type</label>
                     <Field type="select" as="select" id="eventType" name="eventType">
-                      <option value="Actual Event">Actual Event / Incident</option>
-                      <option value="Not Actual Event">Not Actual Event / Incident</option>
-                      <option value="Training Event">Training Event / Not Real</option>
+                      <option value="Actual Event / Incident">Actual Event / Incident</option>
+                      <option value="Not Actual Event / Incident">Not Actual Event / Incident</option>
+                      <option value="Training Event / Not Real">Training Event / Not Real</option>
                     </Field>
                   </div>
                   <div className="group">
@@ -277,15 +284,17 @@ const SirForm: React.FC = () => {
                   <label htmlFor="patientInfo.patientAddress">Patient Address</label>
                   <Field type="text" id="patientInfo.patientAddress" name="patientInfo.patientAddress" title="patientInfo.patientAddress" />
                 </div>
-                <div className="group flex">
-                  <button
-                    type="submit"
-                    className="primary right"
-                    disabled={!(dirty && isValid)}
-                  >
-                    Submit
-                  </button>
-                </div>
+                {!incident && (
+                  <div className="group flex">
+                    <button
+                      type="submit"
+                      className="primary right"
+                      disabled={!(dirty && isValid)}
+                    >
+                      Submit
+                    </button>
+                  </div>
+                )}
               </Form>
             );
           }}
@@ -293,6 +302,10 @@ const SirForm: React.FC = () => {
       </div>
     </>
   );
+};
+
+SirForm.defaultProps = {
+  incident: undefined,
 };
 
 export default SirForm;

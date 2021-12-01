@@ -7,8 +7,8 @@ import SirForm from './SirForm/SirForm';
 import NavBar from './NavBar/NavBar';
 import ResponderView from './ResponderView/ResponderView';
 import CustomAlert, { AlertType } from './Components/CustomAlert';
-import CustomModal from './Components/CustomModal';
-import SendToCommand from './SendToCommand/SendToCommand';
+import fakeData from './sir_test_data.json';
+import IncidentDetailView from './IncidentDetailView/IncidentDetailView';
 
 const App: React.FC = () => {
   const [showSentToCommand, setShowSentToCommand] = useState(false);
@@ -54,6 +54,10 @@ const App: React.FC = () => {
                 </div>
               </div>
                     )}
+          />
+          <Route
+            path="/edit"
+            element={<IncidentDetailView incident={fakeData} />}
           />
         </Routes>
       </BrowserRouter>

@@ -544,7 +544,9 @@ tr {
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  padding: 30px 85px;
+  padding: 30px 85px 0px;
+  max-height: 678px;
+  overflow: scroll;
 }
 
 .modal-container > .modal-dialog .modal-content label {

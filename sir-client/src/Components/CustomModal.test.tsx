@@ -26,14 +26,14 @@ describe('CustomModal', () => {
 
   test('renders expected elements', () => {
     expect(screen.getByRole('heading', { name: modalTitleText })).toBeInTheDocument();
-    expect(screen.getByTestId('close-button')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-close-button')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Test Content' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: modalSubmitText })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
   });
 
-  it('should trigger passed function when close-button is clicked', () => {
-    userEvent.click(screen.getByTestId('close-button'));
+  it('should trigger passed function when modal-close-button is clicked', () => {
+    userEvent.click(screen.getByTestId('modal-close-button'));
     expect(modalCloseFn).toHaveBeenCalled();
   });
 

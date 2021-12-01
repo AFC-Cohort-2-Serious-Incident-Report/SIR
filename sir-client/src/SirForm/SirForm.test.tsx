@@ -151,7 +151,7 @@ describe('SirForm', () => {
   // Event Type
   it('accepts eventType selection', () => {
     userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
-    expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event');
+    expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event / Incident');
   });
 
   // Harm or Potential Harm

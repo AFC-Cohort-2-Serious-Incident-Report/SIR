@@ -13,6 +13,8 @@ interface IncidentData {
 
 const ResponderView = () => {
   const [reports, setReports] = useState([]);
+  const [selectedReports, setSelectedReports] = useState([]);
+
   useEffect(() => {
     axios.get('/api/incidents')
       .then((response) => setReports(response.data));

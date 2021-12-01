@@ -13,11 +13,20 @@ interface IncidentData {
 
 const ResponderView = () => {
   const [reports, setReports] = useState([]);
+
   const [selectedReports, setSelectedReports] = useState([]);
 
+
+  // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
+  // otherwise, use the proxy settings in package.json.
+  // Example value: REACT_APP_API_HOST="http://3.134.135.195:3001"
+  const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
+
+
   useEffect(() => {
-    axios.get('/api/incidents')
-      .then((response) => setReports(response.data));
+    axios.get(`${API_HOST}/api/incidents`)
+      .then((response) => setReports(response.data))
+      .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
     return () => setReports([]);
   }, []);
 

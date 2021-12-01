@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
+import userEvent from '@testing-library/user-event';
 import ResponderView from './ResponderView';
 import dataWithOne from '../Responder_Test_Data_1.json';
 
@@ -39,4 +40,14 @@ describe('ResponderView', () => {
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('visa')).toBeInTheDocument();
   });
+  it('send up to command bar should render when reports checked', async () => {
+    // screen.getAllByRole('checkbox').forEach((val) => {
+    //   userEvent.click(val);
+    // });
+
+    screen.getAllByRole('checkbox')[1].click();
+  });
+
+  // await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
+  //   expect(val).not.toBeChecked();
 });

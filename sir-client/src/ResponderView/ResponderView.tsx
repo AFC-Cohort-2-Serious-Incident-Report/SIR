@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 
 interface IncidentData {
@@ -11,7 +11,7 @@ interface IncidentData {
     eventType: string
 }
 
-const ResponderView = () => {
+const ResponderView: FC = () => {
   const [reports, setReports] = useState([]);
   useEffect(() => {
     axios.get('/api/incidents')

@@ -7,6 +7,8 @@ import SirForm from './SirForm/SirForm';
 import NavBar from './NavBar/NavBar';
 import ResponderView from './ResponderView/ResponderView';
 import CustomAlert, { AlertType } from './Components/CustomAlert';
+import CustomModal from './Components/CustomModal';
+import SendToCommand from './SendToCommand/SendToCommand';
 
 const App: React.FC = () => {
   const [showSentToCommand, setShowSentToCommand] = useState(false);

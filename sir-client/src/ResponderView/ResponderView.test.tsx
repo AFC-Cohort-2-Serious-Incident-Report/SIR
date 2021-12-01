@@ -59,6 +59,18 @@ describe('ResponderView', () => {
     expect(screen.queryByText(/send up to command/i)).not.toBeInTheDocument();
   });
 
-  // await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
-  //   expect(val).not.toBeChecked();
+  it('display the number of selected reports when reports are selected', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    expect(screen.getByText(/1 selected/i)).toBeInTheDocument();
+  });
+
+  it('form header checkbox selects all reports', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[0]));
+    await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
+      expect(val).toBeChecked();
+    }));
+  });
 });

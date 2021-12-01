@@ -1,5 +1,9 @@
-import React, { FC, useEffect, useState } from 'react';
+import React, {
+  FC, useEffect, useRef, useState,
+} from 'react';
 import axios from 'axios';
+import { Simulate } from 'react-dom/test-utils';
+import userEvent from '@testing-library/user-event';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
 
@@ -16,6 +20,8 @@ interface IncidentData {
 const ResponderView: FC = () => {
   const [reports, setReports] = useState([]);
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
+  const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
+
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
   // Example value: REACT_APP_API_HOST="http://3.134.135.195:3001"
@@ -38,6 +44,23 @@ const ResponderView: FC = () => {
     setSelectedReports(newSelectReports);
   }; // add report to selectReports
 
+  const selectAllChangeHandler = () => {
+    if (selectedReports.length > 0) {
+      setSelectedReports([]);
+    } else {
+      setSelectedReports([...reports]);
+    }
+  };
+
+  useEffect(() => {
+    const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
+    if (selectedReports.length > 0 && selectedReports.length < reports.length) {
+      currentSelectAllCheckbox.indeterminate = true;
+    } else {
+      currentSelectAllCheckbox.indeterminate = false;
+    }
+  }, [selectedReports]);
+
   const renderIncidentRow = reports.map((report: IncidentData) => (
     <tr key={report.id}>
       <td>
@@ -59,39 +82,52 @@ const ResponderView: FC = () => {
   ));
 
   return (
-    <>
-      <div className="alert-container">
-        {(selectedReports.length > 0) && (
+    <div className="responder-view">
+      <div className="table-left-align">
+        <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
         <div>
-          Send up to command
+          {(selectedReports.length > 0) ? (
+            <div className="reports-selected-bar">
+              <div className="reports-selected-text">
+                {selectedReports.length}
+                {' '}
+                selected
+              </div>
+              <button className="send-button" type="button">
+                Send up to command
+              </button>
+            </div>
+          )
+            : <h3>Reports</h3>}
         </div>
-        )}
+        <table>
+          <thead>
+            <tr>
+              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+              <th>
+                <input
+                  type="checkbox"
+                  name="selectAll"
+                  checked={(selectedReports.length > 0)}
+                  onChange={() => selectAllChangeHandler()}
+                  ref={selectAllCheckbox}
+                />
+              </th>
+              <th>Event Date</th>
+              <th>Location</th>
+              {/* <th>Incident Type</th> */}
+              <th>Harm</th>
+              {/* <th>Individual(s) Involved</th> */}
+              <th>Event Type</th>
+              {/* <th>Details</th> */}
+            </tr>
+          </thead>
+          <tbody>
+            {renderIncidentRow}
+          </tbody>
+        </table>
       </div>
-      <div className="responder-view">
-        <div className="table-left-align">
-          <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
-          <h3>Reports</h3>
-          <table>
-            <thead>
-              <tr>
-                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                <th><input type="checkbox" name="selectAll" /></th>
-                <th>Event Date</th>
-                <th>Location</th>
-                {/* <th>Incident Type</th> */}
-                <th>Harm</th>
-                {/* <th>Individual(s) Involved</th> */}
-                <th>Event Type</th>
-                {/* <th>Details</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {renderIncidentRow}
-            </tbody>
-          </table>
-        </div>
-      </div>
-    </>
+    </div>
   );
 };
 

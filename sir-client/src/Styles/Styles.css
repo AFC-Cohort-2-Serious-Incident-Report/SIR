@@ -2,13 +2,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Public+Sans:wght@100&display=swap');
 
 :root {
-    --color-white: 245, 245, 245;
-    --color-light-gray: 235, 235, 235;
-    --color-black: 20, 20, 20;
-    --color-gray: 160, 160, 160;
-    --color-grey: var(--color-gray);
-    --color-puke: 96, 105, 39;
-    --color-cyan: 42, 157, 143;
+  --color-white: 245, 245, 245;
+  --color-light-gray: 235, 235, 235;
+  --color-black: 20, 20, 20;
+  --color-gray: 160, 160, 160;
+  --color-grey: var(--color-gray);
+  --color-puke: 96, 105, 39;
+  --color-cyan: 42, 157, 143;
+  --color-red: 255, 82, 82;
+  --color-yellow: 255, 145, 0;
 
   --safe-zone: 40px;
   --transition-linear: all 0.1s linear;
@@ -498,4 +500,53 @@ button:disabled {
 .alert.alert-info > .group > span {
   color: rgb(var(--color-info));
   filter: brightness(20%);
+}
+
+.pagination {
+  display: flex;
+  position: relative;
+  width: 100%;
+  height: auto;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+
+.pagination > *:first-child {
+  margin-left: auto;
+}
+
+.pagination button {
+  padding: 0;
+  cursor: pointer;
+  color: rgb(var(--color-primary));
+}
+
+.pagination button.disabled,
+.pagination button[disabled],
+.pagination button:disabled {
+  color: rgba(var(--color-primary), 0.4);
+  background-color: transparent;
+  pointer-events: none;
+}
+
+.pagination > .size-container {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  align-items: center;
+}
+
+.pagination > .page-controls {
+  display: block;
+}
+
+.pagination > .page-controls {
+  display: flex;
+  position: relative;
+  width: 50px;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  --ggs: 0.9;
 }

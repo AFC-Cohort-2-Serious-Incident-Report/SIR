@@ -20,6 +20,7 @@ interface IncidentData {
 const ResponderView: FC = () => {
   const [reports, setReports] = useState([]);
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
+  const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
@@ -85,6 +86,14 @@ const ResponderView: FC = () => {
     <div className="responder-view">
       <div className="table-left-align">
         <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
+        {showSendToCommandModal
+          && (
+          <div>
+            <SendToCommand
+              onSubmit={() => setShowSendToCommandModal(false)}
+            />
+          </div>
+          )}
         <div>
           {(selectedReports.length > 0) ? (
             <div className="reports-selected-bar">
@@ -93,7 +102,11 @@ const ResponderView: FC = () => {
                 {' '}
                 selected
               </div>
-              <button className="send-button" type="button">
+              <button
+                className="send-button"
+                type="button"
+                onClick={() => setShowSendToCommandModal(true)}
+              >
                 Send up to command
               </button>
             </div>

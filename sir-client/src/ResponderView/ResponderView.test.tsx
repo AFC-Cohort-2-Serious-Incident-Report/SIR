@@ -73,4 +73,12 @@ describe('ResponderView', () => {
       expect(val).toBeChecked();
     }));
   });
+
+  it('clicking send to command button display modal', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
+    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+  });
 });

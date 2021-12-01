@@ -40,12 +40,23 @@ describe('ResponderView', () => {
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('visa')).toBeInTheDocument();
   });
-  it('send up to command bar should render when reports checked', async () => {
-    // screen.getAllByRole('checkbox').forEach((val) => {
-    //   userEvent.click(val);
-    // });
 
-    screen.getAllByRole('checkbox')[1].click();
+  // Checkbox actions/send to command functions
+  it('send up to command bar should render when reports checked', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    expect(screen.getByText(/send up to command/i)).toBeInTheDocument();
+  });
+
+  it('send up to command bar should disappear when reports unchecked', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => expect(screen.getAllByRole('checkbox')[1]).toBeChecked());
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => expect(screen.getAllByRole('checkbox')[1]).not.toBeChecked());
+    expect(screen.queryByText(/send up to command/i)).not.toBeInTheDocument();
   });
 
   // await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {

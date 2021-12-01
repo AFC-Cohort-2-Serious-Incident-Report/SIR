@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios, { Method } from 'axios';
+import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';

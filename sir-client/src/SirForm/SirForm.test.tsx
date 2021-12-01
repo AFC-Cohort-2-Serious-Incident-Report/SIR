@@ -8,12 +8,8 @@ const server = setupServer(
   rest.post('/api/incidents', (req, res, ctx) => res(ctx.json({ location: 'Thanks for your submission' }))),
 );
 
-function convertDate(date: Date): string {
-  return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`;
-}
-
 const initialValuesMinusObjects = {
-  incidentDate: convertDate(new Date()),
+  incidentDate: '',
   incidentTime: '',
   incidentLocation: '',
   eventType: 'Actual Event',

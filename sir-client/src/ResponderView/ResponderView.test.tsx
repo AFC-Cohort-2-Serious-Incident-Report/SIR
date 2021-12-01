@@ -30,7 +30,7 @@ describe('ResponderView', () => {
     expect(screen.getByText(/^Harm/i)).toBeInTheDocument();
     // expect(screen.getByText('Individual(s) Involved')).toBeInTheDocument();
     expect(screen.getByText(/^Event Type/i)).toBeInTheDocument();
-    expect(screen.getByText(/^details/i)).toBeInTheDocument();
+    // expect(screen.getByText(/^details/i)).toBeInTheDocument();
   });
   it('should render json for responder', async () => {
     await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());

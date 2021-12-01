@@ -8,6 +8,25 @@ const server = setupServer(
   rest.post('/api/incidents', (req, res, ctx) => res(ctx.json({ location: 'Thanks for your submission' }))),
 );
 
+const initialValuesMinusObjects = {
+  incidentDate: '',
+  incidentTime: '',
+  incidentLocation: '',
+  eventType: 'Actual Event',
+  harmOrPotentialHarm: 'false',
+  typeOfEvent: '',
+  effectOnIndividual: 'No Harm Sustained',
+  witnessOneName: '',
+  witnessOnePhone: '',
+  witnessTwoName: '',
+  witnessTwoPhone: '',
+  witnessThreeName: '',
+  witnessThreePhone: '',
+  departmentsInvolved: '',
+  incidentDescription: '',
+  preventativeAction: '',
+};
+
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
@@ -277,5 +296,17 @@ describe('SirForm', () => {
     await waitFor(() => (expect(screen.getByText('Incident Report Submitted')).toBeInTheDocument()));
     userEvent.click(screen.getByTitle(/close alert/i));
     await waitFor(() => (expect(screen.queryByTitle('close alert')).not.toBeInTheDocument()));
+  });
+  // Form Resets after submission
+  it('Resets all fields after submission', async () => {
+    fillAllFields();
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
+    await waitFor(() => (expect(screen.getByTitle('sir-form')).toHaveFormValues(initialValuesMinusObjects)));
+    await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
+      expect(val).not.toBeChecked();
+    }));
+    await waitFor(() => screen.getAllByTitle(/^patientinfo/i).forEach((value) => {
+      expect(value).toHaveValue('');
+    }));
   });
 });

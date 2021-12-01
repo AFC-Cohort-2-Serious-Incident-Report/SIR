@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
+import userEvent from '@testing-library/user-event';
 import ResponderView from './ResponderView';
 import dataWithOne from '../Responder_Test_Data_1.json';
 
@@ -30,7 +31,7 @@ describe('ResponderView', () => {
     expect(screen.getByText(/^Harm/i)).toBeInTheDocument();
     // expect(screen.getByText('Individual(s) Involved')).toBeInTheDocument();
     expect(screen.getByText(/^Event Type/i)).toBeInTheDocument();
-    expect(screen.getByText(/^details/i)).toBeInTheDocument();
+    // expect(screen.getByText(/^details/i)).toBeInTheDocument();
   });
   it('should render json for responder', async () => {
     await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
@@ -39,4 +40,14 @@ describe('ResponderView', () => {
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('visa')).toBeInTheDocument();
   });
+  it('send up to command bar should render when reports checked', async () => {
+    // screen.getAllByRole('checkbox').forEach((val) => {
+    //   userEvent.click(val);
+    // });
+
+    screen.getAllByRole('checkbox')[1].click();
+  });
+
+  // await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
+  //   expect(val).not.toBeChecked();
 });

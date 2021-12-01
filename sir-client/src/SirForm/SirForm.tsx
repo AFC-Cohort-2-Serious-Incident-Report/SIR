@@ -282,6 +282,7 @@ const SirForm: React.FC = () => {
                     type="submit"
                     className="primary right"
                     disabled={!(dirty && isValid)}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
                   >
                     Submit
                   </button>

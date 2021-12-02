@@ -93,4 +93,14 @@ describe('ResponderView', () => {
     await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
     await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
   });
+
+  it('clicking send inside modal does not work if command not selected', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
+    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+    userEvent.click(screen.getByRole('button', { name: /^send$/i }));
+    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+  });
 });

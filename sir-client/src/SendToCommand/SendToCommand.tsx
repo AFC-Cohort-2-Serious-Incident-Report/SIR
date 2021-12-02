@@ -8,11 +8,21 @@ type SendToCommandProps = {
   closeModal: () => void;
 }
 
+type DropdownState = {
+  isOpen: boolean;
+  selected: {
+    value: string;
+    label: string;
+  };
+}
+
 const SendToCommand : React.FC<SendToCommandProps> = ({
   onSubmit,
   showModal,
   closeModal,
 }: SendToCommandProps): ReactElement => {
+  const dropDownRef = React.useRef<Dropdown | null>(null);
+
   const options: Option[] = [
     {
       label: 'Company Commander',
@@ -33,12 +43,27 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
       <Dropdown
         options={options}
         placeholder="Select a command"
+        ref={dropDownRef}
       />
     </form>
   );
+
   const sendToCommandSubmit: CustomModalSubmitProps = {
     text: 'Send',
-    onSubmit,
+    onSubmit: () => {
+      // Check if dropdown is selected
+      const currentDropdown = dropDownRef.current as Dropdown;
+      const dropdownState = currentDropdown.state as DropdownState;
+      console.log(currentDropdown.state);
+      console.log(dropdownState);
+      if (dropdownState.selected.value !== '') {
+        console.log(`Sending to command: ${dropdownState.selected.value}`);
+        onSubmit();
+      } else {
+      // notify user to select a command
+        console.log("User didn't select a command");
+      }
+    },
   };
 
   return showModal ? (

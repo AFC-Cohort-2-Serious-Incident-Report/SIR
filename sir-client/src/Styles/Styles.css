@@ -106,6 +106,7 @@ input[type='text'] {
   border: 1px solid rgba(var(--color-primary), 0.23);
   box-shadow: 0 1px 4px rgba(var(--color-primary), 0.25);
   font-size: 1.05rem;
+  margin-bottom: 10px;
 }
 
 input[type='date'],
@@ -145,6 +146,10 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 input[type='time'] {
   background-image: url("data:image/svg+xml,%3Csvg width='24' height='24' viewBox='0 0 24 24' fill='none' xmlns='http://www.w3.org/2000/svg'%0A%3E%3Cpath d='M9 7H11V12H16V14H9V7Z' fill='currentColor' /%3E%3Cpath fill-rule='evenodd' clip-rule='evenodd' d='M22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12ZM20 12C20 16.4183 16.4183 20 12 20C7.58172 20 4 16.4183 4 12C4 7.58172 7.58172 4 12 4C16.4183 4 20 7.58172 20 12Z' fill='currentColor' /%3E%3C/svg%3E");
+}
+
+input[type='checkbox']{
+  outline-color: hotpink;
 }
 
 textarea {
@@ -297,6 +302,8 @@ tr {
   position: relative;
   margin-bottom: 40px;
 }
+
+
 
 .group.split {
   grid-template-columns: 1fr 1fr;
@@ -480,10 +487,21 @@ p[data-indent="yes"]{
   margin-left: 20px;
 }
 p {
+  display: flex;
+  flex-direction: row;
   font-family: 'Public Sans', sans-serif;
-  margin: 4px 0px;
-
+  margin: 10px 0px;
+  font-size: 16px;
+  gap: 10px;
+  align-items: center;
 }
+
+.box {
+  height: 18px;
+  width: 18px;
+  border-radius: 8px;
+}
+
 
 p.disabled{
   opacity: 0.5;

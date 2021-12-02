@@ -29,7 +29,7 @@ describe('CustomModal', () => {
     expect(screen.getByTestId('modal-close-button')).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Test Content' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: modalSubmitText })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Cancel' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'CANCEL' })).toBeInTheDocument();
   });
 
   it('should trigger passed function when modal-close-button is clicked', () => {
@@ -43,7 +43,7 @@ describe('CustomModal', () => {
   });
 
   it('should trigger passed function when submit is clicked', () => {
-    userEvent.click(screen.getByRole('button', { name: 'Cancel' }));
+    userEvent.click(screen.getByRole('button', { name: 'CANCEL' }));
     expect(modalCloseFn).toHaveBeenCalled();
   });
 

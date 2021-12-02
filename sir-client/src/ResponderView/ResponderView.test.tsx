@@ -41,11 +41,12 @@ describe('ResponderView', () => {
     expect(screen.getByText('visa')).toBeInTheDocument();
   });
   it('send up to command bar should render when reports checked', async () => {
+    // TODO: what is this? Why was it pushed? Lol - JP
     // screen.getAllByRole('checkbox').forEach((val) => {
     //   userEvent.click(val);
     // });
-
-    screen.getAllByRole('checkbox')[1].click();
+    //
+    // screen.getAllByRole('checkbox')[1].click();
   });
 
   it('should render button to view details of incident', async () => {

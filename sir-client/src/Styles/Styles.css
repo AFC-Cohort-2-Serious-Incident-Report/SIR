@@ -65,6 +65,16 @@ h2 {
   padding: 0;
 }
 
+h3 {
+  display: block;
+  position: relative;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--color-muted-dark));
+  height: 25px;
+  padding-top: 1em;
+}
+
 h4 {
   font-size: 1.5rem;
   font-weight: 400;

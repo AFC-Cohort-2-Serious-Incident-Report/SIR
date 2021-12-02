@@ -21,6 +21,7 @@ export type Patient = {
 }
 
 export type Incident = {
+    id?: number;
     incidentDate: string;
     incidentTime: string;
     incidentLocation: string;
@@ -41,7 +42,14 @@ export type Incident = {
     patientInfo: Patient;
 }
 
+export const getAllIncidents = () => axios.get(`${API_HOST}/api/incidents`);
+
 export const getIncidentByID = async (id: number): Promise<Incident> => {
   const response = await axios.get(`${API_HOST}/api/incidents/${id}`);
   return response.data;
 };
+
+export const updateIncidentByID = (updatedIncident: Incident) => axios.patch(
+  `${API_HOST}/api/incidents/${updatedIncident.id}`,
+  updatedIncident,
+);

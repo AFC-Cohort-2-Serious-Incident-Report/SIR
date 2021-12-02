@@ -1,6 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import axios from 'axios';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
+import { getAllIncidents, Incident, updateIncidentByID } from '../API';
 
 interface IncidentData {
     id: number,
@@ -21,17 +22,26 @@ const ResponderView: FC = () => {
   // Example value: REACT_APP_API_HOST="http://3.134.135.195:3001"
   const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
 
-  useEffect(() => {
-    axios.get(`${API_HOST}/api/incidents`)
+  const updateTable = () => {
+    getAllIncidents()
       .then((response) => setReports(response.data))
       .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
+  };
+
+  useEffect(() => {
+    updateTable();
     return () => setReports([]);
   }, []);
 
   const handleDetailViewClose = () => setFocusedID(null);
 
-  const handleDetailViewSubmit = () => {
-
+  const handleDetailViewSubmit = (updatedIncident: Incident) => {
+    updateIncidentByID(updatedIncident)
+      .then(() => {
+        setFocusedID(null);
+        updateTable();
+      })
+      .catch();
   };
 
   const renderIncidentRows = reports.map((report: IncidentData) => (
@@ -43,19 +53,21 @@ const ResponderView: FC = () => {
       <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
       {/* <td>{report.incidentDescription}</td> */}
       <td data-testid="event-type">{report.eventType}</td>
-      <td><button type="button" onClick={() => setFocusedID(report.id)}>View</button></td>
+      <td>
+        <button type="button" onClick={() => setFocusedID(report.id)}>View</button>
+      </td>
     </tr>
   ));
 
   return (
     <>
       {focusedID && (
-      <IncidentDetailView
-          // todo change 1 to passed id
-        id={1}
-        onClose={handleDetailViewClose}
-        onSubmit={handleDetailViewSubmit}
-      />
+        <IncidentDetailView
+                    // todo change 1 to passed id
+          id={1}
+          onClose={handleDetailViewClose}
+          onSubmit={handleDetailViewSubmit}
+        />
       )}
       <div className="responder-view">
         <div className="table-left-align">

@@ -5,8 +5,8 @@ import { getIncidentByID, Incident } from '../API';
 
 type IncidentDetailViewProps = {
     id: number;
-    onClose: () => null;
-    onSubmit: () => null;
+    onClose: () => void;
+    onSubmit: (updatedIncident: Incident) => void;
 }
 
 const IncidentDetailView: FC<IncidentDetailViewProps> = ({
@@ -24,11 +24,16 @@ const IncidentDetailView: FC<IncidentDetailViewProps> = ({
     return () => setIncident(null);
   }, []);
 
+  const handleIncidentSave = (updatedIncident: Incident | null) => {
+    if (!updatedIncident) return;
+    onSubmit(updatedIncident);
+  };
+
   return (
     <CustomModal
       onModalClose={onClose}
       onModalSubmit={{
-        onSubmit,
+        onSubmit: () => handleIncidentSave(incident),
         text: 'SAVE',
       }}
       modalTitle="Incident Report"

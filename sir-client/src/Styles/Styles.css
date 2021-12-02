@@ -231,6 +231,7 @@ tr {
   display: flex;
   justify-content: center;
   max-width: 100%;
+  padding: 0 0 150px 0;
 }
 
 .table-left-align {
@@ -717,4 +718,13 @@ tr {
   align-items: center;
   justify-content: space-between;
   --ggs: 0.9;
+}
+
+.pagination .Dropdown-root {
+  min-width: 75px;
+}
+
+.pagination .Dropdown-root > .Dropdown-control {
+  border: none;
+  box-shadow: none;
 }

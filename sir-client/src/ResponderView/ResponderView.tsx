@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import IncidentServices from '../Services/IncidentServices';
 import Pagination from '../Components/Pagination';
 
@@ -12,6 +11,8 @@ type IncidentData = {
     incidentDescription: string,
     eventType: string
 }
+
+// private Individuals individualsInvolved;
 
 type PageData = {
   pages: number;
@@ -40,7 +41,7 @@ const ResponderView = () => {
         setReports(response.data.content);
         setPageData({
           pages: response.data.totalPages,
-          offset: response.data.offset,
+          offset: response.data.pageable.offset,
           size: response.data.size,
           firstPage: response.data.first,
           lastPage: response.data.last,
@@ -63,6 +64,24 @@ const ResponderView = () => {
       <td>View</td>
     </tr>
   ));
+
+  const navigatePage = (page: number) => {
+    IncidentServices.getIncidents({
+      page,
+    })
+      .then((response) => {
+        setReports(response.data.content);
+        setPageData({
+          pages: response.data.totalPages,
+          offset: response.data.pageable.offset,
+          size: response.data.size,
+          firstPage: response.data.first,
+          lastPage: response.data.last,
+          totalCount: response.data.totalElements,
+          currentPage: response.data.number,
+        });
+      });
+  };
 
   return (
     <div className="responder-view">
@@ -90,11 +109,12 @@ const ResponderView = () => {
         <Pagination
           pages={pageData.pages}
           size={pageData.size}
-          firstPage: boolean;
-          lastPage: boolean;
-          totalCount: number;
-          currentPage: number;
-          offset: number;
+          firstPage={pageData.firstPage}
+          lastPage={pageData.lastPage}
+          totalCount={pageData.totalCount}
+          currentPage={pageData.currentPage}
+          offset={pageData.offset}
+          navigatePage={navigatePage}
         />
       </div>
     </div>

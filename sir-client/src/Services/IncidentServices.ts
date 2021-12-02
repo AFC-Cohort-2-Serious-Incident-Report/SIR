@@ -10,7 +10,7 @@ const IncidentServices = {
   getIncidents: (params?: any) => axios.get(IncidentServices.endpointUrl, {
     params: {
       ...IncidentServices.defaultParams,
-      params,
+      ...params,
     },
   }),
 };

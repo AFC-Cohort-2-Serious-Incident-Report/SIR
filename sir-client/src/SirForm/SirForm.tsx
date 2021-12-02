@@ -76,7 +76,9 @@ const incidentSchema = Yup.object().shape({
 });
 
 function convertDate(date: Date): string {
-  return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`;
+  const today = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate().toString().padStart(2, '0')}`;
+  console.log(`Today is: ${today}`);
+  return today;
 }
 
 const SirForm: React.FC = () => {

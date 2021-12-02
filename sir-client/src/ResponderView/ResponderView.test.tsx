@@ -40,14 +40,45 @@ describe('ResponderView', () => {
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('visa')).toBeInTheDocument();
   });
-  it('send up to command bar should render when reports checked', async () => {
-    // screen.getAllByRole('checkbox').forEach((val) => {
-    //   userEvent.click(val);
-    // });
 
-    screen.getAllByRole('checkbox')[1].click();
+  // Checkbox actions/send to command functions
+  it('send up to command bar should render when reports checked', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    expect(screen.getByText(/send up to command/i)).toBeInTheDocument();
   });
 
-  // await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
-  //   expect(val).not.toBeChecked();
+  it('send up to command bar should disappear when reports unchecked', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => expect(screen.getAllByRole('checkbox')[1]).toBeChecked());
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => expect(screen.getAllByRole('checkbox')[1]).not.toBeChecked());
+    expect(screen.queryByText(/send up to command/i)).not.toBeInTheDocument();
+  });
+
+  it('display the number of selected reports when reports are selected', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    expect(screen.getByText(/1 selected/i)).toBeInTheDocument();
+  });
+
+  it('form header checkbox selects all reports', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[0]));
+    await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
+      expect(val).toBeChecked();
+    }));
+  });
+
+  it('clicking send to command button display modal', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
+    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+  });
 });

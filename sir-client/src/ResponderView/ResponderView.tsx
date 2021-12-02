@@ -21,6 +21,9 @@ const ResponderView: FC = () => {
   const [reports, setReports] = useState([]);
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
   const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
+  const [showSentToCommandBanner, setShowSentToCommandBanner] = useState(false);
+  const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
+
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
@@ -51,6 +54,13 @@ const ResponderView: FC = () => {
     } else {
       setSelectedReports([...reports]);
     }
+  };
+
+  const sendButtonHandler = (command: string) => {
+    setShowSendToCommandModal(false);
+    setSelectedReports([]);
+    setShowSentToCommandBanner(true);
+    setSelectedSendToCommander(command);
   };
 
   useEffect(() => {
@@ -85,61 +95,72 @@ const ResponderView: FC = () => {
   ));
 
   return (
-    <div className="responder-view">
-      <div className="table-left-align">
-        <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
-        <SendToCommand
-          showModal={showSendToCommandModal}
-          onSubmit={() => setShowSendToCommandModal(false)}
-          closeModal={() => setShowSendToCommandModal(false)}
-        />
-        <div>
-          {(selectedReports.length > 0) ? (
-            <div className="reports-selected-bar">
-              <div className="reports-selected-text">
-                {selectedReports.length}
-                {' '}
-                selected
-              </div>
-              <button
-                className="send-button"
-                type="button"
-                onClick={() => setShowSendToCommandModal(true)}
-              >
-                Send up to command
-              </button>
-            </div>
-          )
-            : <h3>Reports</h3>}
-        </div>
-        <table>
-          <thead>
-            <tr>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <th>
-                <input
-                  type="checkbox"
-                  name="selectAll"
-                  checked={(selectedReports.length > 0)}
-                  onChange={() => selectAllChangeHandler()}
-                  ref={selectAllCheckbox}
-                />
-              </th>
-              <th>Event Date</th>
-              <th>Location</th>
-              {/* <th>Incident Type</th> */}
-              <th>Harm</th>
-              {/* <th>Individual(s) Involved</th> */}
-              <th>Event Type</th>
-              {/* <th>Details</th> */}
-            </tr>
-          </thead>
-          <tbody>
-            {renderIncidentRow}
-          </tbody>
-        </table>
+    <>
+      <div className="alert-container">
+        {showSentToCommandBanner && (
+          <CustomAlert
+            onClose={() => setShowSentToCommandBanner(false)}
+            alertType={AlertType.SUCCESS}
+            text={`Sent to ${selectedSendToCommander}`}
+          />
+        )}
       </div>
-    </div>
+      <div className="responder-view">
+        <div className="table-left-align">
+          <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
+          <SendToCommand
+            showModal={showSendToCommandModal}
+            onSubmit={(command: string) => sendButtonHandler(command)}
+            closeModal={() => setShowSendToCommandModal(false)}
+          />
+          <div>
+            {(selectedReports.length > 0) ? (
+              <div className="reports-selected-bar">
+                <div className="reports-selected-text">
+                  {selectedReports.length}
+                  {' '}
+                  selected
+                </div>
+                <button
+                  className="send-button"
+                  type="button"
+                  onClick={() => setShowSendToCommandModal(true)}
+                >
+                  Send up to command
+                </button>
+              </div>
+            )
+              : <h3>Reports</h3>}
+          </div>
+          <table>
+            <thead>
+              <tr>
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <th>
+                  <input
+                    type="checkbox"
+                    name="selectAll"
+                    checked={(selectedReports.length > 0)}
+                    onChange={() => selectAllChangeHandler()}
+                    ref={selectAllCheckbox}
+                  />
+                </th>
+                <th>Event Date</th>
+                <th>Location</th>
+                {/* <th>Incident Type</th> */}
+                <th>Harm</th>
+                {/* <th>Individual(s) Involved</th> */}
+                <th>Event Type</th>
+                {/* <th>Details</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {renderIncidentRow}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </>
   );
 };
 

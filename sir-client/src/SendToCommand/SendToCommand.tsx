@@ -3,7 +3,7 @@ import Dropdown, { Option } from 'react-dropdown';
 import CustomModal, { CustomModalSubmitProps } from '../Components/CustomModal';
 
 type SendToCommandProps = {
-  onSubmit: () => void;
+  onSubmit: (command: string) => void;
   showModal: boolean;
   closeModal: () => void;
 }
@@ -37,6 +37,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
       value: 'brigade-commander',
     },
   ];
+
   const sendToCommandContent: ReactElement = (
     <form data-testid="send-to-command-modal-form">
       <label htmlFor="command" title="command">Command</label>
@@ -58,7 +59,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
       console.log(dropdownState);
       if (dropdownState.selected.value !== '') {
         console.log(`Sending to command: ${dropdownState.selected.value}`);
-        onSubmit();
+        onSubmit(dropdownState.selected.label);
       } else {
       // notify user to select a command
         console.log("User didn't select a command");

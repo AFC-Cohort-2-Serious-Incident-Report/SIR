@@ -18,18 +18,19 @@ describe('Send To Command Modal', () => {
     />);
   });
 
-  it('renders components correctly', () => {
-    expect(screen.getByTestId('commandModalTitle')).toBeInTheDocument();
-    expect(screen.queryByText(/send up to command/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/command/i)).toBeInTheDocument();
-    expect(screen.getByRole('combobox', { name: /command/i })).toBeInTheDocument();
+  it('renders components correctly', async () => {
+    expect(screen.queryByText(/^send up to command$/i)).toBeInTheDocument();
+    expect(screen.getByTestId('close-button')).toBeInTheDocument();
+    expect(screen.getByTitle(/^command$/i)).toBeInTheDocument();
+    expect(screen.getByText(/^select a command$/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /send/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /cancel/i })).toBeEnabled();
   });
 
-  it('accepts command selection', () => {
-    userEvent.selectOptions(screen.getByRole('combobox', { name: /command/i }), 'Battalion Commander');
-    expect(screen.getByRole('combobox', { name: /command/i })).toHaveValue('Battalion Commander');
+  it('accepts command selection', async () => {
+    userEvent.click(screen.getByText(/^select a command$/i));
+    await waitFor(() => userEvent.click(screen.getByText(/battalion commander/i)));
+    expect(screen.getByText(/^battalion commander$/i));
   });
 
   it('send button does not function when item not selected', async () => {

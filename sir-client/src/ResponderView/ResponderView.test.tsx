@@ -79,7 +79,7 @@ describe('ResponderView', () => {
     expect(screen.getAllByRole('checkbox')).toHaveLength(2);
     userEvent.click((screen.getAllByRole('checkbox')[1]));
     await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
-    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId('send-to-command-modal-form')).toBeInTheDocument());
   });
 
   it('clicking cancel inside modal closes modal and modal can open again', async () => {
@@ -87,11 +87,11 @@ describe('ResponderView', () => {
     expect(screen.getAllByRole('checkbox')).toHaveLength(2);
     userEvent.click((screen.getAllByRole('checkbox')[1]));
     await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
-    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId('send-to-command-modal-form')).toBeInTheDocument());
     userEvent.click(screen.getByRole('button', { name: /cancel/i }));
-    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).not.toBeInTheDocument());
+    await waitFor(() => expect(screen.queryByTestId('send-to-command-modal-form')).not.toBeInTheDocument());
     await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
-    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId('send-to-command-modal-form')).toBeInTheDocument());
   });
 
   it('clicking send inside modal does not work if command not selected', async () => {
@@ -99,8 +99,8 @@ describe('ResponderView', () => {
     expect(screen.getAllByRole('checkbox')).toHaveLength(2);
     userEvent.click((screen.getAllByRole('checkbox')[1]));
     await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
-    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId('send-to-command-modal-form')).toBeInTheDocument());
     userEvent.click(screen.getByRole('button', { name: /^send$/i }));
-    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByTestId('send-to-command-modal-form')).toBeInTheDocument());
   });
 });

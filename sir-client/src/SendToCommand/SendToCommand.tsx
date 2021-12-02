@@ -38,13 +38,12 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
     },
   ];
   const sendToCommandContent: ReactElement = (
-    <form>
-      <label htmlFor="command">Command</label>
+    <form data-testid="send-to-command-modal-form">
+      <label htmlFor="command" title="command">Command</label>
       <Dropdown
         options={options}
         placeholder="Select a command"
         ref={dropDownRef}
-        data-testid="send-to-command-dropdown"
       />
     </form>
   );
@@ -71,7 +70,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
     <CustomModal
       onModalClose={closeModal}
       onModalSubmit={sendToCommandSubmit}
-      modalTitle="Select a Command for submission."
+      modalTitle="Send up to command"
       modalContent={sendToCommandContent}
     />
   ) : <div />;

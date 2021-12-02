@@ -30,6 +30,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
       <Dropdown
         options={options}
         placeholder="Select a command"
+        test-id="send-to-command-modal"
       />
     </form>
   );
@@ -44,7 +45,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
     <CustomModal
       onModalClose={closeModal}
       onModalSubmit={sendToCommandSubmit}
-      modalTitle="Test Title"
+      modalTitle="Select a Command for submission."
       modalContent={sendToCommandContent}
     />
   ) : <div />;

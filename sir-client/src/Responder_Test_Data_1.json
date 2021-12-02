@@ -1,1 +1,9 @@
-[{"id":1,"incidentDate":"03/27/2021","incidentLocation":"Shouxihu","harmOrPotentialHarm":true,"eventType":"visa"}]
+[
+  {
+    "id": 1,
+    "incidentDate": "03/27/2021",
+    "incidentLocation": "Shouxihu",
+    "harmOrPotentialHarm": true,
+    "eventType": "visa"
+  }
+]

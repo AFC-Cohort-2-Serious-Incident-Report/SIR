@@ -53,7 +53,7 @@ describe('ResponderView', () => {
     expect(await screen.findByRole('button', { name: /view/i })).toBeInTheDocument();
   });
 
-  it('should render modal when view is clicked', async () => {
+  it('should render incident detail view modal when view is clicked', async () => {
     expect(screen.queryByRole('heading', { name: 'Incident Report' })).toBeNull();
     userEvent.click(await screen.findByRole('button', { name: /view/i }));
     expect(screen.getByRole('heading', { name: 'Incident Report' })).toBeInTheDocument();
@@ -61,4 +61,26 @@ describe('ResponderView', () => {
 
   // await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
   //   expect(val).not.toBeChecked();
+
+  it('should close incident detail view modal when cancel button is clicked', async () => {
+    userEvent.click(await screen.findByRole('button', { name: /view/i }));
+    expect(screen.getByRole('heading', { name: 'Incident Report' })).toBeInTheDocument();
+    userEvent.click(await screen.getByRole('button', { name: 'CANCEL' }));
+    expect(screen.queryByRole('heading', { name: 'Incident Report' })).toBeNull();
+  });
+
+  it('should close incident detail view modal when X is clicked', async () => {
+    userEvent.click(await screen.findByRole('button', { name: /view/i }));
+    expect(screen.getByRole('heading', { name: 'Incident Report' })).toBeInTheDocument();
+    userEvent.click(await screen.getByTestId('modal-close-button'));
+    expect(screen.queryByRole('heading', { name: 'Incident Report' })).toBeNull();
+  });
+
+  it('should update record when detail view modal is saved', async () => {
+    expect(await screen.findByTestId('incident-date')).toHaveTextContent('03/27/2021');
+    expect(screen.getByTestId('incident-location')).toHaveTextContent('Shouxihu');
+    expect(screen.getByTestId('potential-harm')).toHaveTextContent('Yes');
+    expect(screen.getByTestId('event-type')).toHaveTextContent('visa');
+    // TODO: the rest...
+  });
 });

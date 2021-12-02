@@ -21,7 +21,7 @@ afterAll(() => server.close());
 
 describe('IncidentDetailView', () => {
   beforeEach(() => {
-    render(<IncidentDetailView id={1} />);
+    render(<IncidentDetailView id={1} onClose={() => null} onSubmit={() => null} />);
   });
 
   it('renders inside of modal with incident detail properties', () => {

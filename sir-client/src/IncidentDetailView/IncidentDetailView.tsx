@@ -5,9 +5,15 @@ import { getIncidentByID, Incident } from '../API';
 
 type IncidentDetailViewProps = {
     id: number;
+    onClose: () => null;
+    onSubmit: () => null;
 }
 
-const IncidentDetailView: FC<IncidentDetailViewProps> = ({ id }: IncidentDetailViewProps) => {
+const IncidentDetailView: FC<IncidentDetailViewProps> = ({
+  id,
+  onClose,
+  onSubmit,
+}: IncidentDetailViewProps) => {
   const [incident, setIncident] = useState<Incident | null>(null);
 
   useEffect(() => {
@@ -20,13 +26,13 @@ const IncidentDetailView: FC<IncidentDetailViewProps> = ({ id }: IncidentDetailV
 
   return (
     <CustomModal
-      onModalClose={() => undefined}
+      onModalClose={onClose}
       onModalSubmit={{
-        onSubmit: () => undefined,
+        onSubmit,
         text: 'SAVE',
       }}
       modalTitle="Incident Report"
-            // TODO : Replace empty div with loading indicator
+        // TODO : Replace empty div with loading indicator
       modalContent={incident ? <SirForm incident={incident} /> : <div />}
     />
   );

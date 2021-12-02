@@ -28,22 +28,35 @@ const ResponderView: FC = () => {
     return () => setReports([]);
   }, []);
 
-  const renderIncidentRow = reports.map((report: IncidentData) => (
+  const handleDetailViewClose = () => setFocusedID(null);
+
+  const handleDetailViewSubmit = () => {
+
+  };
+
+  const renderIncidentRows = reports.map((report: IncidentData) => (
     <tr key={report.id}>
       <td><input type="checkbox" name="selectRow" /></td>
-      <td>{report.incidentDate}</td>
-      <td>{report.incidentLocation}</td>
+      <td data-testid="incident-date">{report.incidentDate}</td>
+      <td data-testid="incident-location">{report.incidentLocation}</td>
       {/* <td>{report.incidentDescription}</td> */}
-      <td>{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
+      <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
       {/* <td>{report.incidentDescription}</td> */}
-      <td>{report.eventType}</td>
+      <td data-testid="event-type">{report.eventType}</td>
       <td><button type="button" onClick={() => setFocusedID(report.id)}>View</button></td>
     </tr>
   ));
 
   return (
     <>
-      {focusedID && <IncidentDetailView id={1} />}
+      {focusedID && (
+      <IncidentDetailView
+          // todo change 1 to passed id
+        id={1}
+        onClose={handleDetailViewClose}
+        onSubmit={handleDetailViewSubmit}
+      />
+      )}
       <div className="responder-view">
         <div className="table-left-align">
           <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
@@ -63,7 +76,7 @@ const ResponderView: FC = () => {
               </tr>
             </thead>
             <tbody>
-              {renderIncidentRow}
+              {renderIncidentRows}
             </tbody>
           </table>
         </div>

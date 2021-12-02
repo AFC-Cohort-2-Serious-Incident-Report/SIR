@@ -106,6 +106,7 @@ input[type='text'] {
   border: 1px solid rgba(var(--color-primary), 0.23);
   box-shadow: 0 1px 4px rgba(var(--color-primary), 0.25);
   font-size: 1.05rem;
+  margin-bottom: 10px;
 }
 
 input[type='date'],
@@ -297,6 +298,8 @@ tr {
   position: relative;
   margin-bottom: 40px;
 }
+
+
 
 .group.split {
   grid-template-columns: 1fr 1fr;

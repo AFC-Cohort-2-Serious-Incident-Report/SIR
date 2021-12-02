@@ -479,6 +479,18 @@ tr {
 .checkbox[parent] {
   padding-left: 32px;
 }
+p[data-indent="yes"]{
+  margin-left: 20px;
+}
+p {
+  font-family: 'Public Sans', sans-serif;
+  margin: 4px 0px;
+
+}
+
+p.disabled{
+  opacity: 0.5;
+}
 
 .modal-container {
   display: flex;

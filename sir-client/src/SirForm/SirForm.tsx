@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
-import CustomCheckbox from '../Components/CustomCheckbox';
 
 interface Values {
     incidentDate: string;
@@ -75,7 +74,7 @@ const incidentSchema = Yup.object().shape({
   }),
 });
 
-function convertDate(date: Date): string {
+export function convertDate(date: Date): string {
   const today = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate().toString().padStart(2, '0')}`;
   console.log(`Today is: ${today}`);
   return today;

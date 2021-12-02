@@ -3,7 +3,6 @@ import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
-import CustomCheckbox from '../Components/CustomCheckbox';
 
 interface Values {
     incidentDate: string;
@@ -75,7 +74,7 @@ const incidentSchema = Yup.object().shape({
   }),
 });
 
-function convertDate(date: Date): string {
+export function convertDate(date: Date): string {
   const today = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate().toString().padStart(2, '0')}`;
   console.log(`Today is: ${today}`);
   return today;
@@ -195,12 +194,13 @@ const SirForm: React.FC = () => {
                 <div className="group split">
                   <div className="group">
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.patient" title="individualsInvolved.patient" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.patient" title="individualsInvolved.patient" />
                       Patient
                     </p>
                     <p>
                       <Field
                         type="checkbox"
+                        className="box"
                         name="individualsInvolved.familyMember"
                         title="individualsInvolved.familyMember"
                         onClick={() => {
@@ -219,6 +219,7 @@ const SirForm: React.FC = () => {
                         name="individualsInvolved.adult"
                         title="individualsInvolved.adult"
                         disabled={!familyMemberCheck}
+                        className="box"
                       />
                       Adult
                     </p>
@@ -228,25 +229,26 @@ const SirForm: React.FC = () => {
                         name="individualsInvolved.child"
                         title="individualsInvolved.child"
                         disabled={!familyMemberCheck}
+                        className="box"
                       />
                       Child less than 18 years old
                     </p>
                   </div>
                   <div className="group">
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.staffMember" title="individualsInvolved.staffMember" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.staffMember" title="individualsInvolved.staffMember" />
                       Staff Member
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.visitor" title="individualsInvolved.visitor" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.visitor" title="individualsInvolved.visitor" />
                       Visitor
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.volunteer" title="individualsInvolved.volunteer" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.volunteer" title="individualsInvolved.volunteer" />
                       Volunteer
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.other" title="individualsInvolved.other" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.other" title="individualsInvolved.other" />
                       Other
                     </p>
                   </div>

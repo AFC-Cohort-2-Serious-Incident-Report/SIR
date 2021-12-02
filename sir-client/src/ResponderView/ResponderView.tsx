@@ -31,6 +31,9 @@ const ResponderView: FC = () => {
   const [reports, setReports] = useState([]);
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
   const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
+  const [showSentToCommandBanner, setShowSentToCommandBanner] = useState(false);
+  const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
+
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
   const [pageData, setPageData] = useState<PageData>({
     size: 0,
@@ -76,6 +79,13 @@ const ResponderView: FC = () => {
     }
   };
 
+  const sendButtonHandler = (command: string) => {
+    setShowSendToCommandModal(false);
+    setSelectedReports([]);
+    setShowSentToCommandBanner(true);
+    setSelectedSendToCommander(command);
+  };
+
   useEffect(() => {
     const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
     if (selectedReports.length > 0 && selectedReports.length < reports.length) {
@@ -86,22 +96,24 @@ const ResponderView: FC = () => {
   }, [selectedReports]);
 
   const renderIncidentRow = reports.map((report: IncidentData) => (
-    <tr key={report.id}>
+    <tr
+      key={report.id}
+      onClick={() => checkboxOnChangeHandler(report)}
+    >
       <td>
         <input
           type="checkbox"
           name="selectRow"
           checked={selectedReports.includes(report)}
-          onChange={() => checkboxOnChangeHandler(report)}
         />
       </td>
       <td>{report.incidentDate}</td>
       <td>{report.incidentLocation}</td>
-      <td>{report.incidentDescription}</td>
+      {/* <td>{report.incidentDescription}</td> */}
       <td>{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
-      <td>{report.incidentDescription}</td>
+      {/* <td>{report.incidentDescription}</td> */}
       <td>{report.eventType}</td>
-      <td>View</td>
+      {/* <td>View</td> */}
     </tr>
   ));
 
@@ -124,73 +136,81 @@ const ResponderView: FC = () => {
   };
 
   return (
-    <div className="responder-view">
-      <div className="table-left-align">
-        <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
-        {showSendToCommandModal
-          && (
-          <div>
-            <SendToCommand
-              onSubmit={() => setShowSendToCommandModal(false)}
-            />
-          </div>
-          )}
-        <div>
-          {(selectedReports.length > 0) ? (
-            <div className="reports-selected-bar">
-              <div className="reports-selected-text">
-                {selectedReports.length}
-                {' '}
-                selected
-              </div>
-              <button
-                className="send-button"
-                type="button"
-                onClick={() => setShowSendToCommandModal(true)}
-              >
-                Send up to command
-              </button>
-            </div>
-          )
-            : <h3>Reports</h3>}
-        </div>
-        <table>
-          <thead>
-            <tr>
-              {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-              <th>
-                <input
-                  type="checkbox"
-                  name="selectAll"
-                  checked={(selectedReports.length > 0)}
-                  onChange={() => selectAllChangeHandler()}
-                  ref={selectAllCheckbox}
-                />
-              </th>
-              <th>Event Date</th>
-              <th>Location</th>
-              <th>Incident Type</th>
-              <th>Harm</th>
-              <th>Individual(s) Involved</th>
-              <th>Event Type</th>
-              <th>Details</th>
-            </tr>
-          </thead>
-          <tbody>
-            {renderIncidentRow}
-          </tbody>
-        </table>
-        <Pagination
-          size={pageData.size}
-          firstPage={pageData.firstPage}
-          lastPage={pageData.lastPage}
-          totalCount={pageData.totalCount}
-          currentPage={pageData.currentPage}
-          offset={pageData.offset}
-          navigatePage={navigatePage}
-        />
+    <>
+      <div className="alert-container">
+        {showSentToCommandBanner && (
+          <CustomAlert
+            onClose={() => setShowSentToCommandBanner(false)}
+            alertType={AlertType.SUCCESS}
+            text={`Sent to ${selectedSendToCommander}`}
+          />
+        )}
       </div>
-    </div>
+      <div className="responder-view">
+        <div className="table-left-align">
+          <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
+          <SendToCommand
+            showModal={showSendToCommandModal}
+            onSubmit={(command: string) => sendButtonHandler(command)}
+            closeModal={() => setShowSendToCommandModal(false)}
+          />
+          <div>
+            {(selectedReports.length > 0) ? (
+              <div className="reports-selected-bar">
+                <div className="reports-selected-text">
+                  {selectedReports.length}
+                  {' '}
+                  selected
+                </div>
+                <button
+                  className="send-button"
+                  type="button"
+                  onClick={() => setShowSendToCommandModal(true)}
+                >
+                  Send up to command
+                </button>
+              </div>
+            )
+              : <h3>Reports</h3>}
+          </div>
+          <table>
+            <thead>
+              <tr>
+                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                <th>
+                  <input
+                    type="checkbox"
+                    name="selectAll"
+                    checked={(selectedReports.length > 0)}
+                    onChange={() => selectAllChangeHandler()}
+                    ref={selectAllCheckbox}
+                  />
+                </th>
+                <th>Event Date</th>
+                <th>Location</th>
+                {/* <th>Incident Type</th> */}
+                <th>Harm</th>
+                {/* <th>Individual(s) Involved</th> */}
+                <th>Event Type</th>
+                {/* <th>Details</th> */}
+              </tr>
+            </thead>
+            <tbody>
+              {renderIncidentRow}
+            </tbody>
+          </table>
+          <Pagination
+            size={pageData.size}
+            firstPage={pageData.firstPage}
+            lastPage={pageData.lastPage}
+            totalCount={pageData.totalCount}
+            currentPage={pageData.currentPage}
+            offset={pageData.offset}
+            navigatePage={navigatePage}
+          />
+        </div>
+      </div>
+    </>
   );
 };
 

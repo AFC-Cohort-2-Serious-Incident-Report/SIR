@@ -4,14 +4,14 @@ import {
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import SirForm from './SirForm';
+import SirForm, { convertDate } from './SirForm';
 
 const server = setupServer(
   rest.post('/api/incidents', (req, res, ctx) => res(ctx.json({ location: 'Thanks for your submission' }))),
 );
 
 const initialValuesMinusObjects = {
-  incidentDate: '',
+  incidentDate: convertDate(new Date()),
   incidentTime: '',
   incidentLocation: '',
   eventType: 'Actual Event',

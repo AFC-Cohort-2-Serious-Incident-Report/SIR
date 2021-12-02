@@ -1,4 +1,6 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent, render, screen, waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
@@ -204,6 +206,15 @@ describe('SirForm', () => {
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeDisabled();
   });
 
+  it('conditionally unchecks Adult and Child inputs when Family Member is unchecked', () => {
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
+    userEvent.click(screen.getByTitle(/individualsInvolved.adult/i));
+    userEvent.click(screen.getByTitle(/individualsInvolved.child/i));
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeChecked();
+  });
+
   // Type of Event
   it('accepts typeOfEvent string', () => {
     userEvent.type(screen.getByRole('textbox', { name: /type of event/i }), 'Adverse Drug Reaction, Medication Related');
@@ -292,13 +303,13 @@ describe('SirForm', () => {
     window.scrollTo = jest.fn();
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
-    await waitFor(() => { expect(window.scrollTo).toHaveBeenCalledTimes(1); });
-    const expectedY = 0;
-    const expectedX = 0;
-    const actualY = window.scrollY;
-    const actualX = window.scrollX;
-    expect(actualX).toBe(expectedX);
-    expect(actualY).toBe(expectedY);
+    await waitFor(() => { expect(window.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 0 }); });
+    // const expectedY = 0;
+    // const expectedX = 0;
+    // const actualY = window.scrollY;
+    // const actualX = window.scrollX;
+    // expect(actualX).toBe(expectedX);
+    // expect(actualY).toBe(expectedY);
   });
   it('X button closes alert banner', async () => {
     fillAllFields();

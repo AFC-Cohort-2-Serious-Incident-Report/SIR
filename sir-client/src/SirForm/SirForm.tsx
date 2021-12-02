@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
@@ -197,7 +197,18 @@ const SirForm: React.FC = () => {
                       Patient
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.familyMember" title="individualsInvolved.familyMember" onClick={handleFamilyMemberCheck} />
+                      <Field
+                        type="checkbox"
+                        name="individualsInvolved.familyMember"
+                        title="individualsInvolved.familyMember"
+                        onClick={() => {
+                          handleFamilyMemberCheck();
+                          if (formik.values.individualsInvolved.familyMember) {
+                            formik.setFieldValue('individualsInvolved.adult', false);
+                            formik.setFieldValue('individualsInvolved.child', false);
+                          }
+                        }}
+                      />
                       Family Member
                     </p>
                     <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>

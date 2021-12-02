@@ -44,6 +44,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
         options={options}
         placeholder="Select a command"
         ref={dropDownRef}
+        data-testid="send-to-command-dropdown"
       />
     </form>
   );

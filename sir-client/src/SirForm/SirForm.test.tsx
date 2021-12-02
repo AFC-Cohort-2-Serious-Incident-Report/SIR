@@ -8,11 +8,15 @@ const server = setupServer(
   rest.post('/api/incidents', (req, res, ctx) => res(ctx.json({ location: 'Thanks for your submission' }))),
 );
 
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
 const initialValuesMinusObjects = {
   incidentDate: '',
   incidentTime: '',
   incidentLocation: '',
-  eventType: 'Actual Event',
+  eventType: 'Actual Event / Incident',
   harmOrPotentialHarm: 'false',
   typeOfEvent: '',
   effectOnIndividual: 'No Harm Sustained',
@@ -26,10 +30,6 @@ const initialValuesMinusObjects = {
   incidentDescription: '',
   preventativeAction: '',
 };
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
 
 function fillAllFields() {
   // Date of Event

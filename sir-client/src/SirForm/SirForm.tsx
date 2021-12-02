@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
-import { Incident } from '../IncidentDetailView/IncidentDetailView';
+import { Incident } from '../API';
 
 interface Values {
     incidentDate: string;

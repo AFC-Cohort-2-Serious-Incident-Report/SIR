@@ -1,14 +1,30 @@
 import { render, screen } from '@testing-library/react';
+import { setupServer } from 'msw/node';
+import { rest } from 'msw';
 import IncidentDetailView from './IncidentDetailView';
 import testData from '../sir_test_data.json';
 
+const server = setupServer(
+  rest.get(
+    '/api/incidents/*',
+    (
+      req,
+      res,
+      ctx,
+    ) => res(ctx.json(testData)),
+  ),
+);
+
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
 describe('IncidentDetailView', () => {
   beforeEach(() => {
-    render(<IncidentDetailView incident={testData} />);
+    render(<IncidentDetailView id={1} />);
   });
 
   it('renders inside of modal with incident detail properties', () => {
-    render(<IncidentDetailView incident={testData} />);
     expect(screen.getByRole('heading', { name: 'Incident Report' })).toBeInTheDocument();
     expect(screen.getByTestId('modal-close-button')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
@@ -16,13 +32,12 @@ describe('IncidentDetailView', () => {
   });
 
   it('renders sirform without header or submit', () => {
-    render(<IncidentDetailView incident={testData} />);
     expect(screen.queryByRole('heading', { name: /Incident Report Form/i })).toBeNull();
     expect(screen.queryByRole('button', { name: /submit/i })).toBeNull();
   });
 
-  it('renders SIR form with fields populated from existing SIR', () => {
-    expect(screen.getByLabelText(/date of event/i)).toHaveValue(testData.incidentDate);
+  it('renders SIR form with fields populated from existing SIR', async () => {
+    expect(await screen.findByLabelText(/date of event/i)).toHaveValue(testData.incidentDate);
     expect(screen.getByLabelText(/time of event/i)).toHaveValue(testData.incidentTime);
     expect(screen.getByRole('textbox', { name: /incident location/i })).toHaveValue(testData.incidentLocation);
     expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue(testData.eventType);

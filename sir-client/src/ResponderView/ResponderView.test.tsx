@@ -49,12 +49,12 @@ describe('ResponderView', () => {
   });
 
   it('should render button to view details of incident', async () => {
-    await waitFor(() => expect(screen.getByRole('button', { name: /view/i })).toBeInTheDocument());
+    expect(await screen.findByRole('button', { name: /view/i })).toBeInTheDocument();
   });
 
   it('should render modal when view is clicked', async () => {
     expect(screen.queryByRole('heading', { name: 'Incident Report' })).toBeNull();
-    await waitFor(() => userEvent.click(screen.getByRole('button', { name: /view/i })));
+    userEvent.click(await screen.findByRole('button', { name: /view/i }));
     expect(screen.getByRole('heading', { name: 'Incident Report' })).toBeInTheDocument();
   });
 

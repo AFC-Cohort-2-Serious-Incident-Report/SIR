@@ -7,7 +7,6 @@ import SirForm from './SirForm/SirForm';
 import NavBar from './NavBar/NavBar';
 import ResponderView from './ResponderView/ResponderView';
 import CustomAlert, { AlertType } from './Components/CustomAlert';
-import fakeData from './sir_test_data.json';
 import IncidentDetailView from './IncidentDetailView/IncidentDetailView';
 
 const App: React.FC = () => {

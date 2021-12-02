@@ -86,14 +86,11 @@ const ResponderView: FC = () => {
     <div className="responder-view">
       <div className="table-left-align">
         <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
-        {showSendToCommandModal
-          && (
-          <div>
-            <SendToCommand
-              onSubmit={() => setShowSendToCommandModal(false)}
-            />
-          </div>
-          )}
+        <SendToCommand
+          showModal={showSendToCommandModal}
+          onSubmit={() => setShowSendToCommandModal(false)}
+          closeModal={() => setShowSendToCommandModal(false)}
+        />
         <div>
           {(selectedReports.length > 0) ? (
             <div className="reports-selected-bar">

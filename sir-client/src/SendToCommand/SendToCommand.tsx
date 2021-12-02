@@ -4,12 +4,15 @@ import CustomModal, { CustomModalSubmitProps } from '../Components/CustomModal';
 
 type SendToCommandProps = {
   onSubmit: () => void;
+  showModal: boolean;
+  closeModal: () => void;
 }
 
 const SendToCommand : React.FC<SendToCommandProps> = ({
   onSubmit,
+  showModal,
+  closeModal,
 }: SendToCommandProps): ReactElement => {
-  const [showModal, setShowModal] = useState(true);
   const options: Option[] = [
     {
       label: 'Company Commander',
@@ -30,7 +33,6 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
       <Dropdown
         options={options}
         placeholder="Select a command"
-        test-id="send-to-command-modal"
       />
     </form>
   );
@@ -38,9 +40,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
     text: 'Send',
     onSubmit,
   };
-  const closeModal: () => void = () => {
-    setShowModal(false);
-  };
+
   return showModal ? (
     <CustomModal
       onModalClose={closeModal}

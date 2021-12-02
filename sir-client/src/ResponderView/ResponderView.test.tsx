@@ -74,10 +74,22 @@ describe('ResponderView', () => {
     }));
   });
 
-  it('clicking send to command button display modal', async () => {
+  it('clicking send to command button displays modal', async () => {
     await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
     expect(screen.getAllByRole('checkbox')).toHaveLength(2);
     userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
+    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+  });
+
+  it('clicking cancel inside modal closes modal and modal can open again', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
+    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
+    userEvent.click(screen.getByRole('button', { name: /cancel/i }));
+    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).not.toBeInTheDocument());
     await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
     await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
   });

@@ -18,10 +18,7 @@ type IncidentData = {
     eventType: string
 }
 
-// private Individuals individualsInvolved;
-
 type PageData = {
-  pages: number;
   size: number;
   firstPage: boolean;
   lastPage: boolean;
@@ -36,7 +33,6 @@ const ResponderView: FC = () => {
   const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
   const [pageData, setPageData] = useState<PageData>({
-    pages: 0,
     size: 0,
     firstPage: true,
     lastPage: false,
@@ -50,7 +46,6 @@ const ResponderView: FC = () => {
       .then((response) => {
         setReports(response.data.content);
         setPageData({
-          pages: response.data.totalPages,
           offset: response.data.pageable.offset,
           size: response.data.size,
           firstPage: response.data.first,
@@ -71,7 +66,7 @@ const ResponderView: FC = () => {
       newSelectReports = [...selectedReports, report];
     }
     setSelectedReports(newSelectReports);
-  }; // add report to selectReports
+  };
 
   const selectAllChangeHandler = () => {
     if (selectedReports.length > 0) {
@@ -118,7 +113,6 @@ const ResponderView: FC = () => {
       .then((response) => {
         setReports(response.data.content);
         setPageData({
-          pages: response.data.totalPages,
           offset: response.data.pageable.offset,
           size: response.data.size,
           firstPage: response.data.first,
@@ -187,7 +181,6 @@ const ResponderView: FC = () => {
           </tbody>
         </table>
         <Pagination
-          pages={pageData.pages}
           size={pageData.size}
           firstPage={pageData.firstPage}
           lastPage={pageData.lastPage}

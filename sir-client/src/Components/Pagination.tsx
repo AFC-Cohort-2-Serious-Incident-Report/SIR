@@ -1,10 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Dropdown from 'react-dropdown';
-import { set } from 'msw/lib/types/context';
 
-// eslint-disable-next-line @typescript-eslint/ban-types
 type paginationProps = {
-  pages: number;
   size: number;
   firstPage: boolean;
   lastPage: boolean;
@@ -15,7 +12,6 @@ type paginationProps = {
 };
 
 const Pagination: React.FC<paginationProps> = ({
-  pages,
   size,
   firstPage,
   lastPage,
@@ -54,9 +50,3 @@ const Pagination: React.FC<paginationProps> = ({
 );
 
 export default Pagination;
-
-/*
- Rows per page: 5 \/
- 1-5 of 13 <----
- < >
-*/

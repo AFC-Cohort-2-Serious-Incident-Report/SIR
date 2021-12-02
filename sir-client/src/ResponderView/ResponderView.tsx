@@ -65,9 +65,10 @@ const ResponderView = () => {
     </tr>
   ));
 
-  const navigatePage = (page: number) => {
+  const navigatePage = (page?: number, size?: number) => {
     IncidentServices.getIncidents({
-      page,
+      page: page || 0,
+      size: size || 5,
     })
       .then((response) => {
         setReports(response.data.content);

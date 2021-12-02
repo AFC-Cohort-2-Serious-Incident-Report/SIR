@@ -9,7 +9,7 @@ type paginationProps = {
   totalCount: number;
   currentPage: number;
   offset: number;
-  navigatePage: (page: number) => void;
+  navigatePage: (page: number, size: number) => void;
 };
 
 const Pagination: React.FC<paginationProps> = ({
@@ -45,10 +45,10 @@ const Pagination: React.FC<paginationProps> = ({
         {`${offset + 1}-${offset + size} of ${totalCount}`}
       </span>
       <div className="page-controls">
-        <button type="button" disabled={firstPage} onClick={() => navigatePage(currentPage - 1)}>
+        <button type="button" disabled={firstPage} onClick={() => navigatePage(currentPage - 1, size)}>
           <i className="gg-chevron-left" />
         </button>
-        <button type="button" disabled={lastPage} onClick={() => navigatePage(currentPage + 1)}>
+        <button type="button" disabled={lastPage} onClick={() => navigatePage(currentPage + 1, size)}>
           <i className="gg-chevron-right" />
         </button>
       </div>

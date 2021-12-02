@@ -39,7 +39,9 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <hr className="extra-spacing" />
       <div className="modal-footer">
         <button type="button" onClick={onModalClose}>Cancel</button>
-        <button type="button" onClick={onModalSubmit.onSubmit}>{onModalSubmit.text}</button>
+        <button type="button" onClick={onModalSubmit.onSubmit}>
+          {onModalSubmit.text}
+        </button>
       </div>
     </div>
   </div>

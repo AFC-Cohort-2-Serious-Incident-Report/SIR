@@ -63,13 +63,15 @@ const ResponderView: FC = () => {
   }, [selectedReports]);
 
   const renderIncidentRow = reports.map((report: IncidentData) => (
-    <tr key={report.id}>
+    <tr
+      key={report.id}
+      onClick={() => checkboxOnChangeHandler(report)}
+    >
       <td>
         <input
           type="checkbox"
           name="selectRow"
           checked={selectedReports.includes(report)}
-          onChange={() => checkboxOnChangeHandler(report)}
         />
       </td>
       <td>{report.incidentDate}</td>

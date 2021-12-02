@@ -1,4 +1,6 @@
-import React, { FC, ReactElement } from 'react';
+import React, { ReactElement, useState } from 'react';
+import Dropdown, { Option } from 'react-dropdown';
+import CustomModal, { CustomModalSubmitProps } from '../Components/CustomModal';
 
 type SendToCommandProps = {
   onSubmit: () => void;
@@ -6,23 +8,47 @@ type SendToCommandProps = {
 
 const SendToCommand : React.FC<SendToCommandProps> = ({
   onSubmit,
-}: SendToCommandProps): ReactElement => (
-  <div className="SendToCommandModal">
+}: SendToCommandProps): ReactElement => {
+  const [showModal, setShowModal] = useState(true);
+  const options: Option[] = [
+    {
+      label: 'Company Commander',
+      value: 'company-commander',
+    },
+    {
+      label: 'Battalion Commander',
+      value: 'battalion-commander',
+    },
+    {
+      label: 'Brigade Commander',
+      value: 'brigade-commander',
+    },
+  ];
+  const sendToCommandContent: ReactElement = (
     <form>
-      <h2 data-testid="commandModalTitle">
-        Send up to command
-      </h2>
       <label htmlFor="command">Command</label>
-      <select id="command">
-        <option>Company Commander</option>
-        <option>Battalion Commander</option>
-        <option>Brigade Commander</option>
-      </select>
-      <button type="submit" onClick={onSubmit}>Send</button>
-      <button type="submit">Cancel</button>
+      <Dropdown
+        options={options}
+        placeholder="Select a command"
+        test-id="send-to-command-modal"
+      />
     </form>
-
-  </div>
-);
+  );
+  const sendToCommandSubmit: CustomModalSubmitProps = {
+    text: 'Send',
+    onSubmit,
+  };
+  const closeModal: () => void = () => {
+    setShowModal(false);
+  };
+  return showModal ? (
+    <CustomModal
+      onModalClose={closeModal}
+      onModalSubmit={sendToCommandSubmit}
+      modalTitle="Select a Command for submission."
+      modalContent={sendToCommandContent}
+    />
+  ) : <div />;
+};
 
 export default SendToCommand;

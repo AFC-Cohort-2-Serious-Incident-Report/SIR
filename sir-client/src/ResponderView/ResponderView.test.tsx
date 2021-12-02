@@ -1,6 +1,7 @@
 import { render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
+import userEvent from '@testing-library/user-event';
 import ResponderView from './ResponderView';
 import dataWithOne from '../Responder_Test_Data_1.json';
 
@@ -30,7 +31,7 @@ describe('ResponderView', () => {
     expect(screen.getByText(/^Harm/i)).toBeInTheDocument();
     // expect(screen.getByText('Individual(s) Involved')).toBeInTheDocument();
     expect(screen.getByText(/^Event Type/i)).toBeInTheDocument();
-    expect(screen.getByText(/^details/i)).toBeInTheDocument();
+    // expect(screen.getByText(/^details/i)).toBeInTheDocument();
   });
   it('should render json for responder', async () => {
     await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
@@ -38,5 +39,46 @@ describe('ResponderView', () => {
     expect(screen.getByText('Shouxihu')).toBeInTheDocument();
     expect(screen.getByText('Yes')).toBeInTheDocument();
     expect(screen.getByText('visa')).toBeInTheDocument();
+  });
+
+  // Checkbox actions/send to command functions
+  it('send up to command bar should render when reports checked', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    expect(screen.getByText(/send up to command/i)).toBeInTheDocument();
+  });
+
+  it('send up to command bar should disappear when reports unchecked', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => expect(screen.getAllByRole('checkbox')[1]).toBeChecked());
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => expect(screen.getAllByRole('checkbox')[1]).not.toBeChecked());
+    expect(screen.queryByText(/send up to command/i)).not.toBeInTheDocument();
+  });
+
+  it('display the number of selected reports when reports are selected', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    expect(screen.getByText(/1 selected/i)).toBeInTheDocument();
+  });
+
+  it('form header checkbox selects all reports', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[0]));
+    await waitFor(() => screen.getAllByRole('checkbox').forEach((val) => {
+      expect(val).toBeChecked();
+    }));
+  });
+
+  it('clicking send to command button display modal', async () => {
+    await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+    expect(screen.getAllByRole('checkbox')).toHaveLength(2);
+    userEvent.click((screen.getAllByRole('checkbox')[1]));
+    await waitFor(() => userEvent.click(screen.getByRole('button', { name: /send up to command/i })));
+    await waitFor(() => expect(screen.queryByText(/select a command for submission/i)).toBeInTheDocument());
   });
 });

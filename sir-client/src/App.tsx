@@ -9,49 +9,38 @@ import ResponderView from './ResponderView/ResponderView';
 import CustomAlert, { AlertType } from './Components/CustomAlert';
 import IncidentDetailView from './IncidentDetailView/IncidentDetailView';
 
-const App: React.FC = () => {
-  const [showSentToCommand, setShowSentToCommand] = useState(false);
+const App: React.FC = () => (
+  <div className="App">
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={(
+            <div>
+              <header><NavBar isResponder={false} /></header>
+              <SirForm />
+            </div>
+                    )}
+        />
+        <Route
+          path="/reporter"
+          element={(
+            <div>
+              <header><NavBar isResponder={false} /></header>
+              <SirForm />
+            </div>
+                    )}
+        />
+        <Route
+          path="/responder"
+          element={(
+            <div>
+              <header><NavBar isResponder /></header>
+              <div className="view-container">
 
-  return (
-    <div className="App">
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path="/"
-            element={(
-              <div>
-                <header><NavBar isResponder={false} /></header>
-                <SirForm />
+                <ResponderView />
               </div>
-                    )}
-          />
-          <Route
-            path="/reporter"
-            element={(
-              <div>
-                <header><NavBar isResponder={false} /></header>
-                <SirForm />
-              </div>
-                    )}
-          />
-          <Route
-            path="/responder"
-            element={(
-              <div>
-                <header><NavBar isResponder /></header>
-                <div className="view-container">
-                  <div className="alert-container">
-                    {showSentToCommand && (
-                      <CustomAlert
-                        onClose={() => setShowSentToCommand(false)}
-                        alertType={AlertType.SUCCESS}
-                        text="Sent to Commander"
-                      />
-                    )}
-                  </div>
-                  <ResponderView />
-                </div>
-              </div>
+            </div>
                     )}
           />
           <Route

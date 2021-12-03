@@ -3,13 +3,26 @@ import Dropdown, { Option } from 'react-dropdown';
 import CustomModal, { CustomModalSubmitProps } from '../Components/CustomModal';
 
 type SendToCommandProps = {
-  onSubmit: () => void;
+  onSubmit: (command: string) => void;
+  showModal: boolean;
+  closeModal: () => void;
+}
+
+type DropdownState = {
+  isOpen: boolean;
+  selected: {
+    value: string;
+    label: string;
+  };
 }
 
 const SendToCommand : React.FC<SendToCommandProps> = ({
   onSubmit,
+  showModal,
+  closeModal,
 }: SendToCommandProps): ReactElement => {
-  const [showModal, setShowModal] = useState(true);
+  const dropDownRef = React.useRef<Dropdown | null>(null);
+
   const options: Option[] = [
     {
       label: 'Company Commander',
@@ -24,27 +37,41 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
       value: 'brigade-commander',
     },
   ];
+
   const sendToCommandContent: ReactElement = (
-    <form>
-      <h3>Command</h3>
+    <form data-testid="send-to-command-modal-form">
+      <label htmlFor="command" title="command">Command</label>
       <Dropdown
         options={options}
         placeholder="Select a command"
+        ref={dropDownRef}
       />
     </form>
   );
+
   const sendToCommandSubmit: CustomModalSubmitProps = {
     text: 'Send',
-    onSubmit,
+    onSubmit: () => {
+      // Check if dropdown is selected
+      const currentDropdown = dropDownRef.current as Dropdown;
+      const dropdownState = currentDropdown.state as DropdownState;
+      console.log(currentDropdown.state);
+      console.log(dropdownState);
+      if (dropdownState.selected.value !== '') {
+        console.log(`Sending to command: ${dropdownState.selected.value}`);
+        onSubmit(dropdownState.selected.label);
+      } else {
+      // notify user to select a command
+        console.log("User didn't select a command");
+      }
+    },
   };
-  const closeModal: () => void = () => {
-    setShowModal(false);
-  };
+
   return showModal ? (
     <CustomModal
       onModalClose={closeModal}
       onModalSubmit={sendToCommandSubmit}
-      modalTitle="Send Up To Command"
+      modalTitle="Send up to command"
       modalContent={sendToCommandContent}
     />
   ) : <div />;

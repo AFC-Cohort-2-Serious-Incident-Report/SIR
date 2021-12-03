@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Formik, Field, Form } from 'formik';
 import * as Yup from 'yup';
@@ -75,8 +75,10 @@ const incidentSchema = Yup.object().shape({
   }),
 });
 
-function convertDate(date: Date): string {
-  return `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate()}`;
+export function convertDate(date: Date): string {
+  const today = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate().toString().padStart(2, '0')}`;
+  console.log(`Today is: ${today}`);
+  return today;
 }
 
 type SirFormProps = {
@@ -85,6 +87,7 @@ type SirFormProps = {
 
 const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
@@ -95,6 +98,10 @@ const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
     axios.post(`${API_HOST}/api/incidents`, values)
       .then(() => setReportSubmitted(true));
     // .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
+  };
+
+  const handleFamilyMemberCheck = () => {
+    setFamilyMemberCheck(!familyMemberCheck);
   };
 
   return (
@@ -194,37 +201,61 @@ const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
                 <div className="group split">
                   <div className="group">
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.patient" title="individualsInvolved.patient" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.patient" title="individualsInvolved.patient" />
                       Patient
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.familyMember" title="individualsInvolved.familyMember" />
+                      <Field
+                        type="checkbox"
+                        className="box"
+                        name="individualsInvolved.familyMember"
+                        title="individualsInvolved.familyMember"
+                        onClick={() => {
+                          handleFamilyMemberCheck();
+                          if (formik.values.individualsInvolved.familyMember) {
+                            formik.setFieldValue('individualsInvolved.adult', false);
+                            formik.setFieldValue('individualsInvolved.child', false);
+                          }
+                        }}
+                      />
                       Family Member
                     </p>
-                    <p>
-                      <Field type="checkbox" name="individualsInvolved.adult" title="individualsInvolved.adult" />
+                    <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
+                      <Field
+                        type="checkbox"
+                        name="individualsInvolved.adult"
+                        title="individualsInvolved.adult"
+                        disabled={!familyMemberCheck}
+                        className="box"
+                      />
                       Adult
                     </p>
-                    <p>
-                      <Field type="checkbox" name="individualsInvolved.child" title="individualsInvolved.child" />
+                    <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
+                      <Field
+                        type="checkbox"
+                        name="individualsInvolved.child"
+                        title="individualsInvolved.child"
+                        disabled={!familyMemberCheck}
+                        className="box"
+                      />
                       Child less than 18 years old
                     </p>
                   </div>
                   <div className="group">
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.staffMember" title="individualsInvolved.staffMember" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.staffMember" title="individualsInvolved.staffMember" />
                       Staff Member
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.visitor" title="individualsInvolved.visitor" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.visitor" title="individualsInvolved.visitor" />
                       Visitor
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.volunteer" title="individualsInvolved.volunteer" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.volunteer" title="individualsInvolved.volunteer" />
                       Volunteer
                     </p>
                     <p>
-                      <Field type="checkbox" name="individualsInvolved.other" title="individualsInvolved.other" />
+                      <Field type="checkbox" className="box" name="individualsInvolved.other" title="individualsInvolved.other" />
                       Other
                     </p>
                   </div>
@@ -295,6 +326,16 @@ const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
                     </button>
                   </div>
                 )}
+                <div className="group flex">
+                  <button
+                    type="submit"
+                    className="primary right"
+                    disabled={!(dirty && isValid)}
+                    onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  >
+                    Submit
+                  </button>
+                </div>
               </Form>
             );
           }}

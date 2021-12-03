@@ -1,8 +1,10 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import {
+  fireEvent, render, screen, waitFor,
+} from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import SirForm from './SirForm';
+import SirForm, { convertDate } from './SirForm';
 
 const server = setupServer(
   rest.post('/api/incidents', (req, res, ctx) => res(ctx.json({ location: 'Thanks for your submission' }))),
@@ -13,7 +15,7 @@ afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
 const initialValuesMinusObjects = {
-  incidentDate: '',
+  incidentDate: convertDate(new Date()),
   incidentTime: '',
   incidentLocation: '',
   eventType: 'Actual Event / Incident',
@@ -170,10 +172,12 @@ describe('SirForm', () => {
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.familyMember/i })).toBeChecked();
   });
   it('accepts individualsInvolved.adult selection', () => {
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.adult/i));
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).toBeChecked();
   });
   it('accepts individualsInvolved.child selection', () => {
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.child/i));
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).toBeChecked();
   });
@@ -192,6 +196,23 @@ describe('SirForm', () => {
   it('accepts individualsInvolved.other selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.other/i));
     expect(screen.getByRole('checkbox', { name: /individualsInvolved.other/i })).toBeChecked();
+  });
+
+  it('disables Adult and Child inputs until Family Member is checked', () => {
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).toBeDisabled();
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeDisabled();
+  });
+
+  it('conditionally unchecks Adult and Child inputs when Family Member is unchecked', () => {
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
+    userEvent.click(screen.getByTitle(/individualsInvolved.adult/i));
+    userEvent.click(screen.getByTitle(/individualsInvolved.child/i));
+    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeChecked();
   });
 
   // Type of Event
@@ -277,6 +298,18 @@ describe('SirForm', () => {
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
     await waitFor(() => (expect(screen.getByText('Incident Report Submitted')).toBeInTheDocument()));
+  });
+  it('page scrolls to top to view alert banner upon submission', async () => {
+    window.scrollTo = jest.fn();
+    fillAllFields();
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
+    await waitFor(() => { expect(window.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 0 }); });
+    // const expectedY = 0;
+    // const expectedX = 0;
+    // const actualY = window.scrollY;
+    // const actualX = window.scrollX;
+    // expect(actualX).toBe(expectedX);
+    // expect(actualY).toBe(expectedY);
   });
   it('X button closes alert banner', async () => {
     fillAllFields();

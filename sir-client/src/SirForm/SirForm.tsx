@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Formik, Field, Form } from 'formik';
+import { Field, Form, Formik } from 'formik';
 import * as Yup from 'yup';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
+import { Incident } from '../API';
 
 interface Values {
     incidentDate: string;
@@ -80,7 +81,11 @@ export function convertDate(date: Date): string {
   return today;
 }
 
-const SirForm: React.FC = () => {
+type SirFormProps = {
+    incident?: Incident;
+}
+
+const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
   const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
 
@@ -101,23 +106,25 @@ const SirForm: React.FC = () => {
 
   return (
     <>
-      <div className="alert-container">
-        {reportSubmitted && (
-        <CustomAlert
-          onClose={() => setReportSubmitted(false)}
-          alertType={AlertType.SUCCESS}
-          text="Incident Report Submitted"
-        />
-        )}
-      </div>
+      {!incident && (
+        <div className="alert-container">
+          {reportSubmitted && (
+          <CustomAlert
+            onClose={() => setReportSubmitted(false)}
+            alertType={AlertType.SUCCESS}
+            text="Incident Report Submitted"
+          />
+          )}
+        </div>
+      )}
       <div className="container">
-        <h2>Incident Report Form</h2>
+        {!incident && <h2>Incident Report Form</h2>}
         <Formik
-          initialValues={{
+          initialValues={incident || {
             incidentDate: convertDate(new Date()),
             incidentTime: '',
             incidentLocation: '',
-            eventType: 'Actual Event',
+            eventType: 'Actual Event / Incident',
             harmOrPotentialHarm: false,
             individualsInvolved: {
               patient: false,
@@ -177,14 +184,21 @@ const SirForm: React.FC = () => {
                   <div className="group">
                     <label htmlFor="eventType">Event Type</label>
                     <Field type="select" as="select" id="eventType" name="eventType">
-                      <option value="Actual Event">Actual Event / Incident</option>
-                      <option value="Not Actual Event">Not Actual Event / Incident</option>
-                      <option value="Training Event">Training Event / Not Real</option>
+                      <option value="Actual Event / Incident">Actual Event / Incident</option>
+                      <option value="Not Actual Event / Incident">
+                        Not Actual Event / Incident
+                      </option>
+                      <option value="Training Event / Not Real">Training Event / Not Real</option>
                     </Field>
                   </div>
                   <div className="group">
                     <label htmlFor="harmOrPotentialHarm">Harm or Potential Harm</label>
-                    <Field type="select" as="select" id="harmOrPotentialHarm" name="harmOrPotentialHarm">
+                    <Field
+                      type="select"
+                      as="select"
+                      id="harmOrPotentialHarm"
+                      name="harmOrPotentialHarm"
+                    >
                       <option value="false">No</option>
                       <option value="true">Yes</option>
                     </Field>
@@ -287,7 +301,10 @@ const SirForm: React.FC = () => {
                   <Field type="text" id="typeOfEvent" name="typeOfEvent" title="typeOfEvent" />
                 </div>
                 <div className="group">
-                  <label htmlFor="effectOnIndividual">Effect of this incident on the individual(s) involved</label>
+                  <label htmlFor="effectOnIndividual">
+                    Effect of this incident on the individual(s)
+                    involved
+                  </label>
                   <Field type="select" as="select" id="effectOnIndividual" name="effectOnIndividual">
                     <option value="No Harm Sustained">Harm Sustained</option>
                     <option value="Harm Sustained">No Harm Sustained</option>
@@ -296,47 +313,111 @@ const SirForm: React.FC = () => {
                 <div className="group split">
                   <div className="group">
                     <label htmlFor="witnessOneName">Witness Name</label>
-                    <Field type="text" id="witnessOneName" name="witnessOneName" title="witnessOneName" />
-                    <Field type="text" id="witnessTwoName" name="witnessTwoName" title="witnessTwoName" />
-                    <Field type="text" id="witnessThreeName" name="witnessThreeName" title="witnessThreeName" />
+                    <Field
+                      type="text"
+                      id="witnessOneName"
+                      name="witnessOneName"
+                      title="witnessOneName"
+                    />
+                    <Field
+                      type="text"
+                      id="witnessTwoName"
+                      name="witnessTwoName"
+                      title="witnessTwoName"
+                    />
+                    <Field
+                      type="text"
+                      id="witnessThreeName"
+                      name="witnessThreeName"
+                      title="witnessThreeName"
+                    />
                   </div>
                   <div className="group">
                     <label htmlFor="witnessOnePhone">Witness Phone</label>
-                    <Field type="text" id="witnessOnePhone" name="witnessOnePhone" title="witnessOnePhone" />
-                    <Field type="text" id="witnessTwoPhone" name="witnessTwoPhone" title="witnessTwoPhone" />
-                    <Field type="text" id="witnessThreePhone" name="witnessThreePhone" title="witnessThreePhone" />
+                    <Field
+                      type="text"
+                      id="witnessOnePhone"
+                      name="witnessOnePhone"
+                      title="witnessOnePhone"
+                    />
+                    <Field
+                      type="text"
+                      id="witnessTwoPhone"
+                      name="witnessTwoPhone"
+                      title="witnessTwoPhone"
+                    />
+                    <Field
+                      type="text"
+                      id="witnessThreePhone"
+                      name="witnessThreePhone"
+                      title="witnessThreePhone"
+                    />
                   </div>
                 </div>
                 <div className="group">
                   <label htmlFor="departmentsInvolved">Department(s) Involved in this Incident</label>
-                  <Field type="text" id="departmentsInvolved" name="departmentsInvolved" title="departmentsInvolved" />
+                  <Field
+                    type="text"
+                    id="departmentsInvolved"
+                    name="departmentsInvolved"
+                    title="departmentsInvolved"
+                  />
                 </div>
                 <div className="group">
                   <label htmlFor="incidentDescription">Description of Incident</label>
-                  <Field type="text" as="textarea" id="incidentDescription" name="incidentDescription" />
+                  <Field
+                    type="text"
+                    as="textarea"
+                    id="incidentDescription"
+                    name="incidentDescription"
+                  />
                 </div>
                 <div className="group">
-                  <label htmlFor="preventativeAction">What actions, if any, could have been taken to prevent this incident from occurring?</label>
+                  <label htmlFor="preventativeAction">
+                    What actions, if any, could have been taken to
+                    prevent this incident from occurring?
+                  </label>
                   <Field type="text" as="textarea" id="preventativeAction" name="preventativeAction" />
                 </div>
                 <div className="group">
                   <label htmlFor="patientInfo.patientName">Patient Name or ID Plate</label>
-                  <Field type="text" id="patientInfo.patientName" name="patientInfo.patientName" title="patientInfo.patientName" />
+                  <Field
+                    type="text"
+                    id="patientInfo.patientName"
+                    name="patientInfo.patientName"
+                    title="patientInfo.patientName"
+                  />
                 </div>
                 <div className="group split">
                   <div className="group">
                     <label htmlFor="patientInfo.patientSocial">Patient SSN</label>
-                    <Field type="text" id="patientInfo.patientSocial" name="patientInfo.patientSocial" title="patientInfo.patientSocial" />
+                    <Field
+                      type="text"
+                      id="patientInfo.patientSocial"
+                      name="patientInfo.patientSocial"
+                      title="patientInfo.patientSocial"
+                    />
                   </div>
                   <div className="group">
                     <label htmlFor="patientInfo.patientPhone">Patient Telephone Number</label>
-                    <Field type="text" id="patientInfo.patientPhone" name="patientInfo.patientPhone" title="patientInfo.patientPhone" />
+                    <Field
+                      type="text"
+                      id="patientInfo.patientPhone"
+                      name="patientInfo.patientPhone"
+                      title="patientInfo.patientPhone"
+                    />
                   </div>
                 </div>
                 <div className="group">
                   <label htmlFor="patientInfo.patientAddress">Patient Address</label>
-                  <Field type="text" id="patientInfo.patientAddress" name="patientInfo.patientAddress" title="patientInfo.patientAddress" />
+                  <Field
+                    type="text"
+                    id="patientInfo.patientAddress"
+                    name="patientInfo.patientAddress"
+                    title="patientInfo.patientAddress"
+                  />
                 </div>
+                {!incident && (
                 <div className="group flex">
                   <button
                     type="submit"
@@ -347,6 +428,7 @@ const SirForm: React.FC = () => {
                     Submit
                   </button>
                 </div>
+                )}
               </Form>
             );
           }}
@@ -354,6 +436,10 @@ const SirForm: React.FC = () => {
       </div>
     </>
   );
+};
+
+SirForm.defaultProps = {
+  incident: undefined,
 };
 
 export default SirForm;

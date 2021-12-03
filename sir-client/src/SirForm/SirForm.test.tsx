@@ -1,6 +1,4 @@
-import {
-  fireEvent, render, screen, waitFor,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
@@ -10,11 +8,15 @@ const server = setupServer(
   rest.post('/api/incidents', (req, res, ctx) => res(ctx.json({ location: 'Thanks for your submission' }))),
 );
 
+beforeAll(() => server.listen());
+afterEach(() => server.resetHandlers());
+afterAll(() => server.close());
+
 const initialValuesMinusObjects = {
   incidentDate: convertDate(new Date()),
   incidentTime: '',
   incidentLocation: '',
-  eventType: 'Actual Event',
+  eventType: 'Actual Event / Incident',
   harmOrPotentialHarm: 'false',
   typeOfEvent: '',
   effectOnIndividual: 'No Harm Sustained',
@@ -28,10 +30,6 @@ const initialValuesMinusObjects = {
   incidentDescription: '',
   preventativeAction: '',
 };
-
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
 
 function fillAllFields() {
   // Date of Event
@@ -153,7 +151,7 @@ describe('SirForm', () => {
   // Event Type
   it('accepts eventType selection', () => {
     userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
-    expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event');
+    expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event / Incident');
   });
 
   // Harm or Potential Harm
@@ -303,7 +301,9 @@ describe('SirForm', () => {
     window.scrollTo = jest.fn();
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
-    await waitFor(() => { expect(window.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 0 }); });
+    await waitFor(() => {
+      expect(window.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 0 });
+    });
     // const expectedY = 0;
     // const expectedX = 0;
     // const actualY = window.scrollY;

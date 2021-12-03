@@ -103,11 +103,11 @@ const SirForm: React.FC = () => {
     <>
       <div className="alert-container">
         {reportSubmitted && (
-          <CustomAlert
-            onClose={() => setReportSubmitted(false)}
-            alertType={AlertType.SUCCESS}
-            text="Incident Report Submitted"
-          />
+        <CustomAlert
+          onClose={() => setReportSubmitted(false)}
+          alertType={AlertType.SUCCESS}
+          text="Incident Report Submitted"
+        />
         )}
       </div>
       <div className="container">
@@ -193,16 +193,17 @@ const SirForm: React.FC = () => {
                 <label htmlFor="individualsInvolved">Individuals Involved</label>
                 <div className="group split">
                   <div className="group">
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.patient" title="individualsInvolved.patient" />
+                    <label htmlFor="individualsInvolved.patient">
+                      <Field type="checkbox" className="box" name="individualsInvolved.patient" title="individualsInvolved.patient" id="individualsInvolved.patient" />
                       Patient
-                    </p>
-                    <p>
+                    </label>
+                    <label htmlFor="individualsInvolved.familyMember">
                       <Field
                         type="checkbox"
                         className="box"
                         name="individualsInvolved.familyMember"
                         title="individualsInvolved.familyMember"
+                        id="individualsInvolved.familyMember"
                         onClick={() => {
                           handleFamilyMemberCheck();
                           if (formik.values.individualsInvolved.familyMember) {
@@ -212,45 +213,73 @@ const SirForm: React.FC = () => {
                         }}
                       />
                       Family Member
-                    </p>
-                    <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
+                    </label>
+                    <label htmlFor="individualsInvolved.adult" data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'label'}>
                       <Field
                         type="checkbox"
                         name="individualsInvolved.adult"
                         title="individualsInvolved.adult"
+                        id="individualsInvolved.adult"
                         disabled={!familyMemberCheck}
                         className="box"
                       />
                       Adult
-                    </p>
-                    <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
+                    </label>
+                    <label htmlFor="individualsInvolved.child" data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
                       <Field
                         type="checkbox"
                         name="individualsInvolved.child"
                         title="individualsInvolved.child"
+                        id="individualsInvolved.child"
                         disabled={!familyMemberCheck}
                         className="box"
                       />
                       Child less than 18 years old
-                    </p>
+                    </label>
                   </div>
                   <div className="group">
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.staffMember" title="individualsInvolved.staffMember" />
+                    <label htmlFor="individualsInvolved.staffMember">
+                      <Field
+                        type="checkbox"
+                        className="box"
+                        name="individualsInvolved.staffMember"
+                        title="individualsInvolved.staffMember"
+                        id="individualsInvolved.staffMember"
+                      />
                       Staff Member
-                    </p>
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.visitor" title="individualsInvolved.visitor" />
+                    </label>
+                    <label htmlFor="individualsInvolved.visitor">
+                      <Field
+                        type="checkbox"
+                        className="box"
+                        name="individualsInvolved.visitor"
+                        title="individualsInvolved.visitor"
+                        id="individualsInvolved.visitor"
+                      />
                       Visitor
-                    </p>
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.volunteer" title="individualsInvolved.volunteer" />
+                    </label>
+                    <label
+                      htmlFor="individualsInvolved.volunteer"
+                    >
+                      <Field
+                        type="checkbox"
+                        className="box"
+                        name="individualsInvolved.volunteer"
+                        title="individualsInvolved.volunteer"
+                        id="individualsInvolved.volunteer"
+                      />
                       Volunteer
-                    </p>
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.other" title="individualsInvolved.other" />
+                    </label>
+                    <label htmlFor="individualsInvolved.other">
+                      <Field
+                        type="checkbox"
+                        className="box"
+                        name="individualsInvolved.other"
+                        title="individualsInvolved.other"
+                        id="individualsInvolved.other"
+                      />
                       Other
-                    </p>
+                    </label>
                   </div>
                 </div>
                 <div className="group">

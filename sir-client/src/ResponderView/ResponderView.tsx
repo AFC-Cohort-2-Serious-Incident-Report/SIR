@@ -1,13 +1,14 @@
 import React, {
   FC, useEffect, useRef, useState,
 } from 'react';
-import axios from 'axios';
 import { Simulate } from 'react-dom/test-utils';
 import userEvent from '@testing-library/user-event';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
+import IncidentServices from '../Services/IncidentServices';
+import Pagination from '../Components/Pagination';
 
-interface IncidentData {
+type IncidentData = {
     id: number,
     incidentDate: string,
     incidentLocation: string,
@@ -15,6 +16,15 @@ interface IncidentData {
     harmOrPotentialHarm: boolean,
     incidentDescription: string,
     eventType: string
+}
+
+type PageData = {
+  size: number;
+  firstPage: boolean;
+  lastPage: boolean;
+  totalCount: number;
+  currentPage: number;
+  offset: number;
 }
 
 const ResponderView: FC = () => {
@@ -25,16 +35,29 @@ const ResponderView: FC = () => {
   const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
 
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
-
-  // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
-  // otherwise, use the proxy settings in package.json.
-  // Example value: REACT_APP_API_HOST="http://3.134.135.195:3001"
-  const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
+  const [pageData, setPageData] = useState<PageData>({
+    size: 0,
+    firstPage: true,
+    lastPage: false,
+    totalCount: 0,
+    currentPage: 0,
+    offset: 0,
+  });
 
   useEffect(() => {
-    axios.get(`${API_HOST}/api/incidents`)
-      .then((response) => setReports(response.data))
-      .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
+    IncidentServices.getIncidents()
+      .then((response) => {
+        setReports(response.data.content);
+        setPageData({
+          offset: response.data.pageable.offset,
+          size: response.data.size,
+          firstPage: response.data.first,
+          lastPage: response.data.last,
+          totalCount: response.data.totalElements,
+          currentPage: response.data.number,
+        });
+      })
+      .then(() => console.log(`Submitted report to ${IncidentServices.endpointUrl}`));
     return () => setReports([]);
   }, []);
 
@@ -46,7 +69,7 @@ const ResponderView: FC = () => {
       newSelectReports = [...selectedReports, report];
     }
     setSelectedReports(newSelectReports);
-  }; // add report to selectReports
+  };
 
   const selectAllChangeHandler = () => {
     if (selectedReports.length > 0) {
@@ -93,6 +116,24 @@ const ResponderView: FC = () => {
       {/* <td>View</td> */}
     </tr>
   ));
+
+  const navigatePage = (page?: number, size?: number) => {
+    IncidentServices.getIncidents({
+      page: page || 0,
+      size: size || 5,
+    })
+      .then((response) => {
+        setReports(response.data.content);
+        setPageData({
+          offset: response.data.pageable.offset,
+          size: response.data.size,
+          firstPage: response.data.first,
+          lastPage: response.data.last,
+          totalCount: response.data.totalElements,
+          currentPage: response.data.number,
+        });
+      });
+  };
 
   return (
     <>
@@ -158,6 +199,15 @@ const ResponderView: FC = () => {
               {renderIncidentRow}
             </tbody>
           </table>
+          <Pagination
+            size={pageData.size}
+            firstPage={pageData.firstPage}
+            lastPage={pageData.lastPage}
+            totalCount={pageData.totalCount}
+            currentPage={pageData.currentPage}
+            offset={pageData.offset}
+            navigatePage={navigatePage}
+          />
         </div>
       </div>
     </>

@@ -208,7 +208,13 @@ const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
                 <div className="group split">
                   <div className="group">
                     <label htmlFor="individualsInvolved.patient">
-                      <Field type="checkbox" className="box" name="individualsInvolved.patient" title="individualsInvolved.patient" id="individualsInvolved.patient" />
+                      <Field
+                        type="checkbox"
+                        className="box"
+                        name="individualsInvolved.patient"
+                        title="individualsInvolved.patient"
+                        id="individualsInvolved.patient"
+                      />
                       Patient
                     </label>
                     <label htmlFor="individualsInvolved.familyMember">
@@ -228,7 +234,11 @@ const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
                       />
                       Family Member
                     </label>
-                    <label htmlFor="individualsInvolved.adult" data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'label'}>
+                    <label
+                      htmlFor="individualsInvolved.adult"
+                      data-indent="yes"
+                      className={!familyMemberCheck ? 'disabled' : 'label'}
+                    >
                       <Field
                         type="checkbox"
                         name="individualsInvolved.adult"
@@ -239,7 +249,11 @@ const SirForm: React.FC<SirFormProps> = ({ incident }: SirFormProps) => {
                       />
                       Adult
                     </label>
-                    <label htmlFor="individualsInvolved.child" data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
+                    <label
+                      htmlFor="individualsInvolved.child"
+                      data-indent="yes"
+                      className={!familyMemberCheck ? 'disabled' : 'p'}
+                    >
                       <Field
                         type="checkbox"
                         name="individualsInvolved.child"

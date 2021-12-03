@@ -9,13 +9,14 @@ import IncidentServices from '../Services/IncidentServices';
 import Pagination from '../Components/Pagination';
 
 type IncidentData = {
-    id: number,
-    incidentDate: string,
-    incidentLocation: string,
-    incidentType: string,
-    harmOrPotentialHarm: boolean,
-    incidentDescription: string,
-    eventType: string
+  id: number,
+  incidentDate: string,
+  incidentLocation: string,
+  incidentType: string,
+  harmOrPotentialHarm: boolean,
+  incidentDescription: string,
+  eventType: string,
+  individualsInvolved: string
 }
 
 type PageData = {
@@ -111,7 +112,7 @@ const ResponderView: FC = () => {
       <td>{report.incidentLocation}</td>
       {/* <td>{report.incidentDescription}</td> */}
       <td>{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
-      {/* <td>{report.incidentDescription}</td> */}
+      <td>{report.individualsInvolved}</td>
       <td>{report.eventType}</td>
       {/* <td>View</td> */}
     </tr>
@@ -190,7 +191,7 @@ const ResponderView: FC = () => {
                 <th>Location</th>
                 {/* <th>Incident Type</th> */}
                 <th>Harm</th>
-                {/* <th>Individual(s) Involved</th> */}
+                <th>Individual(s) Involved</th>
                 <th>Event Type</th>
                 {/* <th>Details</th> */}
               </tr>

@@ -3,10 +3,12 @@ import React, {
 } from 'react';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
+import IncidentServices from '../Services/IncidentServices';
+import Pagination from '../Components/Pagination';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
 import { getAllIncidents, Incident, updateIncidentByID } from '../API';
 
-interface IncidentData {
+type IncidentData = {
     id: number,
     incidentDate: string,
     incidentLocation: string,
@@ -14,6 +16,15 @@ interface IncidentData {
     harmOrPotentialHarm: boolean,
     incidentDescription: string,
     eventType: string
+}
+
+type PageData = {
+    size: number;
+    firstPage: boolean;
+    lastPage: boolean;
+    totalCount: number;
+    currentPage: number;
+    offset: number;
 }
 
 const ResponderView: FC = () => {
@@ -25,22 +36,43 @@ const ResponderView: FC = () => {
 
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
   const [focusedID, setFocusedID] = useState<number | null>(null);
-
-  // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
-  // otherwise, use the proxy settings in package.json.
-  // Example value: REACT_APP_API_HOST="http://3.134.135.195:3001"
-  const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
+  const [pageData, setPageData] = useState<PageData>({
+    size: 0,
+    firstPage: true,
+    lastPage: false,
+    totalCount: 0,
+    currentPage: 0,
+    offset: 0,
+  });
 
   const updateTable = () => {
     getAllIncidents()
-      .then((response) => setReports(response.data))
-      .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
+      .then((response) => {
+        setReports(response.data.content);
+        setPageData({
+          offset: response.data.pageable.offset,
+          size: response.data.size,
+          firstPage: response.data.first,
+          lastPage: response.data.last,
+          totalCount: response.data.totalElements,
+          currentPage: response.data.number,
+        });
+      });
   };
 
   useEffect(() => {
     updateTable();
     return () => setReports([]);
   }, []);
+
+  useEffect(() => {
+    const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
+    if (selectedReports.length > 0 && selectedReports.length < reports.length) {
+      currentSelectAllCheckbox.indeterminate = true;
+    } else {
+      currentSelectAllCheckbox.indeterminate = false;
+    }
+  }, [selectedReports]);
 
   const checkboxOnChangeHandler = async (report: IncidentData) => {
     let newSelectReports: IncidentData[] = [];
@@ -88,8 +120,17 @@ const ResponderView: FC = () => {
   };
 
   const renderIncidentRows = reports.map((report: IncidentData) => (
-    <tr key={report.id}>
-      <td><input type="checkbox" name="selectRow" /></td>
+    <tr
+      key={report.id}
+      onClick={() => checkboxOnChangeHandler(report)}
+    >
+      <td>
+        <input
+          type="checkbox"
+          name="selectRow"
+          checked={selectedReports.includes(report)}
+        />
+      </td>
       <td data-testid="incident-date">{report.incidentDate}</td>
       <td data-testid="incident-location">{report.incidentLocation}</td>
       {/* <td>{report.incidentDescription}</td> */}
@@ -101,6 +142,24 @@ const ResponderView: FC = () => {
       </td>
     </tr>
   ));
+
+  const navigatePage = (page?: number, size?: number) => {
+    IncidentServices.getIncidents({
+      page: page || 0,
+      size: size || 5,
+    })
+      .then((response) => {
+        setReports(response.data.content);
+        setPageData({
+          offset: response.data.pageable.offset,
+          size: response.data.size,
+          firstPage: response.data.first,
+          lastPage: response.data.last,
+          totalCount: response.data.totalElements,
+          currentPage: response.data.number,
+        });
+      });
+  };
 
   return (
     <>
@@ -175,6 +234,15 @@ const ResponderView: FC = () => {
               {renderIncidentRows}
             </tbody>
           </table>
+          <Pagination
+            size={pageData.size}
+            firstPage={pageData.firstPage}
+            lastPage={pageData.lastPage}
+            totalCount={pageData.totalCount}
+            currentPage={pageData.currentPage}
+            offset={pageData.offset}
+            navigatePage={navigatePage}
+          />
         </div>
       </div>
     </>

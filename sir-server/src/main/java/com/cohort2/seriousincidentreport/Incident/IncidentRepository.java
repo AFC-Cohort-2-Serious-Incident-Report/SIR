@@ -1,7 +1,7 @@
 package com.cohort2.seriousincidentreport.Incident;
 
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.PagingAndSortingRepository;
 
-public interface IncidentRepository extends CrudRepository <Incident, Long> {
+public interface IncidentRepository extends PagingAndSortingRepository<Incident, Long> {
 
 }

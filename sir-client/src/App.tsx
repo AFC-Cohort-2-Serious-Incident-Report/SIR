@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SirForm from './SirForm/SirForm';
 import NavBar from './NavBar/NavBar';
 import ResponderView from './ResponderView/ResponderView';
-import IncidentDetailView from './IncidentDetailView/IncidentDetailView';
 
 const App: React.FC = () => (
   <div className="App">
@@ -39,16 +38,6 @@ const App: React.FC = () => (
               </div>
             </div>
                     )}
-        />
-        <Route
-          path="/edit"
-          element={(
-            <IncidentDetailView
-              id={1}
-              onClose={() => undefined}
-              onSubmit={() => undefined}
-            />
-)}
         />
       </Routes>
     </BrowserRouter>

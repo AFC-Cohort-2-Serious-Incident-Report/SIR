@@ -1,6 +1,4 @@
-import {
-  fireEvent, render, screen, waitFor,
-} from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
@@ -303,7 +301,9 @@ describe('SirForm', () => {
     window.scrollTo = jest.fn();
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
-    await waitFor(() => { expect(window.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 0 }); });
+    await waitFor(() => {
+      expect(window.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 0 });
+    });
     // const expectedY = 0;
     // const expectedX = 0;
     // const actualY = window.scrollY;

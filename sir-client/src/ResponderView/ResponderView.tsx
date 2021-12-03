@@ -1,12 +1,12 @@
 import React, {
   FC, useEffect, useRef, useState,
 } from 'react';
-import { Simulate } from 'react-dom/test-utils';
-import userEvent from '@testing-library/user-event';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
 import IncidentServices from '../Services/IncidentServices';
 import Pagination from '../Components/Pagination';
+import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
+import { getAllIncidents, Incident, updateIncidentByID } from '../API';
 
 type IncidentData = {
   id: number,
@@ -20,12 +20,12 @@ type IncidentData = {
 }
 
 type PageData = {
-  size: number;
-  firstPage: boolean;
-  lastPage: boolean;
-  totalCount: number;
-  currentPage: number;
-  offset: number;
+    size: number;
+    firstPage: boolean;
+    lastPage: boolean;
+    totalCount: number;
+    currentPage: number;
+    offset: number;
 }
 
 const ResponderView: FC = () => {
@@ -36,6 +36,7 @@ const ResponderView: FC = () => {
   const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
 
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
+  const [focusedID, setFocusedID] = useState<number | null>(null);
   const [pageData, setPageData] = useState<PageData>({
     size: 0,
     firstPage: true,
@@ -45,8 +46,8 @@ const ResponderView: FC = () => {
     offset: 0,
   });
 
-  useEffect(() => {
-    IncidentServices.getIncidents()
+  const updateTable = () => {
+    getAllIncidents()
       .then((response) => {
         setReports(response.data.content);
         setPageData({
@@ -57,10 +58,22 @@ const ResponderView: FC = () => {
           totalCount: response.data.totalElements,
           currentPage: response.data.number,
         });
-      })
-      .then(() => console.log(`Submitted report to ${IncidentServices.endpointUrl}`));
+      });
+  };
+
+  useEffect(() => {
+    updateTable();
     return () => setReports([]);
   }, []);
+
+  useEffect(() => {
+    const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
+    if (selectedReports.length > 0 && selectedReports.length < reports.length) {
+      currentSelectAllCheckbox.indeterminate = true;
+    } else {
+      currentSelectAllCheckbox.indeterminate = false;
+    }
+  }, [selectedReports]);
 
   const checkboxOnChangeHandler = async (report: IncidentData) => {
     let newSelectReports: IncidentData[] = [];
@@ -70,7 +83,7 @@ const ResponderView: FC = () => {
       newSelectReports = [...selectedReports, report];
     }
     setSelectedReports(newSelectReports);
-  };
+  }; // add report to selectReports
 
   const selectAllChangeHandler = () => {
     if (selectedReports.length > 0) {
@@ -96,7 +109,18 @@ const ResponderView: FC = () => {
     }
   }, [selectedReports]);
 
-  const renderIncidentRow = reports.map((report: IncidentData) => (
+  const handleDetailViewClose = () => setFocusedID(null);
+
+  const handleDetailViewSubmit = (updatedIncident: Incident) => {
+    updateIncidentByID(updatedIncident)
+      .then(() => {
+        setFocusedID(null);
+        updateTable();
+      })
+      .catch();
+  };
+
+  const renderIncidentRows = reports.map((report: IncidentData) => (
     <tr
       key={report.id}
       onClick={() => checkboxOnChangeHandler(report)}
@@ -108,13 +132,15 @@ const ResponderView: FC = () => {
           checked={selectedReports.includes(report)}
         />
       </td>
-      <td>{report.incidentDate}</td>
-      <td>{report.incidentLocation}</td>
+      <td data-testid="incident-date">{report.incidentDate}</td>
+      <td data-testid="incident-location">{report.incidentLocation}</td>
       {/* <td>{report.incidentDescription}</td> */}
-      <td>{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
-      <td>{report.individualsInvolved}</td>
-      <td>{report.eventType}</td>
-      {/* <td>View</td> */}
+      <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
+      {/* <td>{report.individualsInvolved}</td> */}
+      <td data-testid="event-type">{report.eventType}</td>
+      <td>
+        <button type="button" onClick={() => setFocusedID(report.id)}>View</button>
+      </td>
     </tr>
   ));
 
@@ -140,13 +166,22 @@ const ResponderView: FC = () => {
     <>
       <div className="alert-container">
         {showSentToCommandBanner && (
-          <CustomAlert
-            onClose={() => setShowSentToCommandBanner(false)}
-            alertType={AlertType.SUCCESS}
-            text={`Sent to ${selectedSendToCommander}`}
-          />
+        <CustomAlert
+          onClose={() => setShowSentToCommandBanner(false)}
+          alertType={AlertType.SUCCESS}
+          text={`Sent to ${selectedSendToCommander}`}
+        />
         )}
+
       </div>
+      {focusedID && (
+        <IncidentDetailView
+                    // todo change 1 to passed id
+          id={1}
+          onClose={handleDetailViewClose}
+          onSubmit={handleDetailViewSubmit}
+        />
+      )}
       <div className="responder-view">
         <div className="table-left-align">
           <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
@@ -193,11 +228,11 @@ const ResponderView: FC = () => {
                 <th>Harm</th>
                 <th>Individual(s) Involved</th>
                 <th>Event Type</th>
-                {/* <th>Details</th> */}
+                <th>Details</th>
               </tr>
             </thead>
             <tbody>
-              {renderIncidentRow}
+              {renderIncidentRows}
             </tbody>
           </table>
           <Pagination

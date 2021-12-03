@@ -27,7 +27,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
         <button
           onClick={onModalClose}
           type="button"
-          data-testid="close-button"
+          data-testid="modal-close-button"
         >
           <i className="gg-close" />
         </button>
@@ -36,9 +36,9 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <div className="modal-content">
         {modalContent}
       </div>
-      <hr className="extra-spacing" />
+      <hr />
       <div className="modal-footer">
-        <button type="button" onClick={onModalClose}>Cancel</button>
+        <button type="button" onClick={onModalClose}>CANCEL</button>
         <button type="button" onClick={onModalSubmit.onSubmit}>
           {onModalSubmit.text}
         </button>

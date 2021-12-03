@@ -91,6 +91,7 @@ const SirForm: React.FC = () => {
 
   const handleSubmitClick = (values: Values) => {
     axios.post(`${API_HOST}/api/incidents`, values)
+      .then((result) => console.log(values))
       .then(() => setReportSubmitted(true));
     // .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
   };

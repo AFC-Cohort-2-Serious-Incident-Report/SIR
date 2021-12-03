@@ -113,7 +113,13 @@ class IncidentControllerTests {
                 "harmOrPotentialHarm": true,
                 "individualsInvolved": {
                     "patient": true,
-                    "other": true
+                    "other": true,
+                    "familyMember": true,
+                    "adult": true,
+                    "child": true,
+                    "staffMember": true,
+                    "visitor": true,
+                    "volunteer":true
                     },
                 "typeOfEvent": "Adverse Drug Reaction, Medication Related",
                 "effectOnIndividual": "Harm Sustained",
@@ -166,7 +172,7 @@ class IncidentControllerTests {
         assertEquals("Test location", savedIncident.getIncidentLocation());
         assertEquals("Actual Event / Incident", savedIncident.getEventType());
         assertTrue(savedIncident.isHarmOrPotentialHarm());
-        assertEquals("{\"patient\":true,\"familyMember\":false,\"adult\":false,\"child\":false,\"staffMember\":false,\"visitor\":false,\"volunteer\":false,\"other\":true}", individualsInvolved);
+        assertEquals("{\"patient\":true,\"familyMember\":true,\"adult\":true,\"child\":true,\"staffMember\":true,\"visitor\":true,\"volunteer\":true,\"other\":true}", individualsInvolved);
         assertEquals("Adverse Drug Reaction, Medication Related", savedIncident.getTypeOfEvent());
         assertEquals("Harm Sustained", savedIncident.getEffectOnIndividual());
         assertEquals("Sir Jackman", savedIncident.getWitnessOneName());

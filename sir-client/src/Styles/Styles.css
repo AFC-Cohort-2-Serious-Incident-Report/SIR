@@ -301,6 +301,7 @@ tr {
   display: grid;
   box-sizing: border-box;
   position: relative;
+  margin-bottom: 40px;
 }
 
 
@@ -483,12 +484,7 @@ tr {
   padding-left: 32px;
 }
 
-/*TODO Is this used anywhere else than SirForm? It was refactored to label*/
 p[data-indent="yes"] {
-  margin-left: 20px;
-}
-
-label[data-indent="yes"] {
   margin-left: 20px;
 }
 
@@ -505,8 +501,7 @@ p {
 .box {
   height: 18px;
   width: 18px;
-  border-radius: 1px;
-  margin-right: 10px;
+  border-radius: 8px;
 }
 
 p.disabled{

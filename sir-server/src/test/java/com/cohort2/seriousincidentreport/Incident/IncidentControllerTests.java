@@ -76,12 +76,27 @@ class IncidentControllerTests {
         ResultActions perform =this.mvc.perform(request);
 
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id", equalTo(incident1.getId().intValue())))
-                .andExpect(jsonPath("$[0].incidentLocation", equalTo(incident1.getIncidentLocation())))
-                .andExpect(jsonPath("$[0].incidentDescription", equalTo(incident1.getIncidentDescription())))
-                .andExpect(jsonPath("$[0].preventativeAction", equalTo(incident1.getPreventativeAction())))
-                .andExpect(jsonPath("$.length()", equalTo(3)));
+                .andExpect(jsonPath("$.content.[0].id", equalTo(incident1.getId().intValue())))
+                .andExpect(jsonPath("$.content.[0].incidentLocation", equalTo(incident1.getIncidentLocation())))
+                .andExpect(jsonPath("$.content.[0].incidentDescription", equalTo(incident1.getIncidentDescription())))
+                .andExpect(jsonPath("$.content.[0].preventativeAction", equalTo(incident1.getPreventativeAction())))
+                .andExpect(jsonPath("$.content.length()", equalTo(3)));
 
+    }
+
+    @Test
+    @Transactional
+    @Rollback
+    void shouldReturnNumberOfEntriesInPagination() throws Exception {
+        final var request = get("/api/incidents?size=2&page=1");
+
+        mvc.perform(request)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content.length()").value(1))
+                .andExpect(jsonPath("$.content.[0].id", equalTo(incident3.getId().intValue())))
+                .andExpect(jsonPath("$.content.[0].incidentLocation", equalTo(incident3.getIncidentLocation())))
+                .andExpect(jsonPath("$.content.[0].incidentDescription", equalTo(incident3.getIncidentDescription())))
+                .andExpect(jsonPath("$.content.[0].preventativeAction", equalTo(incident3.getPreventativeAction())));
     }
 
     @Transactional

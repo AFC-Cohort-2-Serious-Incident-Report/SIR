@@ -1,9 +1,6 @@
 import React, {
   FC, useEffect, useRef, useState,
 } from 'react';
-import axios from 'axios';
-import { Simulate } from 'react-dom/test-utils';
-import userEvent from '@testing-library/user-event';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
@@ -79,7 +76,6 @@ const ResponderView: FC = () => {
     }
   }, [selectedReports]);
 
-
   const handleDetailViewClose = () => setFocusedID(null);
 
   const handleDetailViewSubmit = (updatedIncident: Incident) => {
@@ -110,22 +106,22 @@ const ResponderView: FC = () => {
     <>
       <div className="alert-container">
         {showSentToCommandBanner && (
-          <CustomAlert
-            onClose={() => setShowSentToCommandBanner(false)}
-            alertType={AlertType.SUCCESS}
-            text={`Sent to ${selectedSendToCommander}`}
-          />
+        <CustomAlert
+          onClose={() => setShowSentToCommandBanner(false)}
+          alertType={AlertType.SUCCESS}
+          text={`Sent to ${selectedSendToCommander}`}
+        />
         )}
 
       </div>
-        {focusedID && (
+      {focusedID && (
         <IncidentDetailView
-            // todo change 1 to passed id
-            id={1}
-            onClose={handleDetailViewClose}
-            onSubmit={handleDetailViewSubmit}
+                    // todo change 1 to passed id
+          id={1}
+          onClose={handleDetailViewClose}
+          onSubmit={handleDetailViewSubmit}
         />
-    )}
+      )}
       <div className="responder-view">
         <div className="table-left-align">
           <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>

@@ -1,12 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Styles/Styles.css';
-import {
-  BrowserRouter, Routes, Route,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SirForm from './SirForm/SirForm';
 import NavBar from './NavBar/NavBar';
 import ResponderView from './ResponderView/ResponderView';
-import CustomAlert, { AlertType } from './Components/CustomAlert';
 import IncidentDetailView from './IncidentDetailView/IncidentDetailView';
 
 const App: React.FC = () => (
@@ -42,15 +39,20 @@ const App: React.FC = () => (
               </div>
             </div>
                     )}
-          />
-          <Route
-            path="/edit"
-            element={<IncidentDetailView id={1} />}
-          />
-        </Routes>
-      </BrowserRouter>
-    </div>
-  );
-};
+        />
+        <Route
+          path="/edit"
+          element={(
+            <IncidentDetailView
+              id={1}
+              onClose={() => undefined}
+              onSubmit={() => undefined}
+            />
+)}
+        />
+      </Routes>
+    </BrowserRouter>
+  </div>
+);
 
 export default App;

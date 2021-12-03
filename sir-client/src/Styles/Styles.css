@@ -537,7 +537,7 @@ p {
 .box {
   height: 18px;
   width: 18px;
-  border-radius: 1px;
+  border-radius: 8px;
   margin-right: 10px;
 }
 

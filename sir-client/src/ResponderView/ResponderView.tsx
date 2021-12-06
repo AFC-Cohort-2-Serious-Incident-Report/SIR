@@ -129,6 +129,7 @@ const ResponderView: FC = () => {
           type="checkbox"
           name="selectRow"
           checked={selectedReports.includes(report)}
+          onChange={() => checkboxOnChangeHandler(report)}
         />
       </td>
       <td data-testid="incident-date">{report.incidentDate}</td>
@@ -176,7 +177,7 @@ const ResponderView: FC = () => {
       {focusedID && (
         <IncidentDetailView
                     // todo change 1 to passed id
-          id={1}
+          id={focusedID}
           onClose={handleDetailViewClose}
           onSubmit={handleDetailViewSubmit}
         />

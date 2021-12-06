@@ -92,14 +92,14 @@ describe('SirForm', () => {
     // Harm or Potential Harm
     expect(screen.getByRole('combobox', { name: /harm or potential harm/i })).toHaveValue('false');
     // Individuals Involved
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.patient/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.familyMember/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.staffMember/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.visitor/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.volunteer/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.other/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /patient/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /family Member/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /adult/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /child/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /staff Member/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /visitor/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /volunteer/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /other/i })).not.toBeChecked();
     // Type of Event
     expect(screen.getByRole('textbox', { name: /type of event/i })).toBeInTheDocument();
     // Effect of this incident on the individual(s) involved
@@ -131,9 +131,9 @@ describe('SirForm', () => {
 
   // Individual field tests
   // Date of Event
-  it('accepts date entry', () => {
+  it('accepts date entry', async () => {
     userEvent.type(screen.getByLabelText(/date of event/i), '1958-08-08');
-    expect(screen.getByLabelText(/date of event/i)).toHaveValue('1958-08-08');
+    await waitFor(() => expect(screen.getByLabelText(/date of event/i)).toHaveValue('1958-08-08'));
   });
 
   // Time of Event
@@ -163,45 +163,45 @@ describe('SirForm', () => {
   // Individuals Involved
   it('accepts individualsInvolved.patient selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.patient/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.patient/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /patient/i })).toBeChecked();
   });
   it('accepts individualsInvolved.familyMember selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.familyMember/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /family Member/i })).toBeChecked();
   });
   it('accepts individualsInvolved.adult selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.adult/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /adult/i })).toBeChecked();
   });
   it('accepts individualsInvolved.child selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.child/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /child/i })).toBeChecked();
   });
   it('accepts individualsInvolved.staffMember selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.staffMember/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.staffMember/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /staff Member/i })).toBeChecked();
   });
   it('accepts individualsInvolved.visitor selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.visitor/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.visitor/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /visitor/i })).toBeChecked();
   });
   it('accepts individualsInvolved.volunteer selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.volunteer/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.volunteer/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /volunteer/i })).toBeChecked();
   });
   it('accepts individualsInvolved.other selection', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.other/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.other/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /other/i })).toBeChecked();
   });
 
   it('disables Adult and Child inputs until Family Member is checked', () => {
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).toBeDisabled();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).toBeDisabled();
-    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeDisabled();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: /adult/i })).toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: /child/i })).toBeDisabled();
+    userEvent.click(screen.getByTitle(/familyMember/i));
+    expect(screen.getByRole('checkbox', { name: /adult/i })).not.toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: /child/i })).not.toBeDisabled();
   });
 
   it('conditionally unchecks Adult and Child inputs when Family Member is unchecked', () => {
@@ -209,8 +209,8 @@ describe('SirForm', () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.adult/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.child/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /adult/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /child/i })).not.toBeChecked();
   });
 
   // Type of Event

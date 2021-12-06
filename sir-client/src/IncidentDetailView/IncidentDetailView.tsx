@@ -1,45 +1,58 @@
-import { FC, useEffect, useState } from 'react';
+import {
+  FC, ReactElement, useEffect, useState,
+} from 'react';
+import { Formik, useFormikContext } from 'formik';
 import CustomModal from '../Components/CustomModal';
-import SirForm from '../SirForm/SirForm';
 import { getIncidentByID, Incident } from '../API';
+import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';
+import IncidentFields from '../IncidentFields/IncidentFields';
 
 type IncidentDetailViewProps = {
-    id: number;
-    onClose: () => void;
-    onSubmit: (updatedIncident: Incident) => void;
+  id: number;
+  onClose: () => void;
+  onSubmit: (updatedIncident: Incident) => void;
 }
 
-const IncidentDetailView: FC<IncidentDetailViewProps> = ({
+const IncidentDetailView = ({
   id,
   onClose,
   onSubmit,
-}: IncidentDetailViewProps) => {
+}: IncidentDetailViewProps): ReactElement => {
   const [incident, setIncident] = useState<Incident | null>(null);
 
   useEffect(() => {
     getIncidentByID(id)
       .then((results) => setIncident(results))
       .catch();
-
-    return () => setIncident(null);
   }, []);
 
-  const handleIncidentSave = (updatedIncident: Incident | null) => {
-    if (!updatedIncident) return;
-    onSubmit(updatedIncident);
-  };
-
   return (
-    <CustomModal
-      onModalClose={onClose}
-      onModalSubmit={{
-        onSubmit: () => handleIncidentSave(incident),
-        text: 'SAVE',
-      }}
-      modalTitle="Incident Report"
-        // TODO : Replace empty div with loading indicator
-      modalContent={incident ? <SirForm incident={incident} /> : <div />}
-    />
+    <div>
+      {incident && (
+      <Formik
+        initialValues={incident}
+        validationSchema={IncidentFieldsValidationSchema}
+        onSubmit={(values, { resetForm }) => {
+          onSubmit(values);
+          resetForm();
+        }}
+      >
+        {(formik) => {
+          const { handleSubmit, setFieldValue } = formik;
+          return (
+            <CustomModal
+              onModalClose={onClose}
+              onModalSubmit={{ onSubmit: handleSubmit, text: 'SAVE' }}
+              modalTitle="Incident Report"
+          // TODO : Replace empty div with loading indicator
+              modalContent={<IncidentFields setFieldValue={setFieldValue} />}
+            />
+          );
+        }}
+      </Formik>
+      )}
+    </div>
+
   );
 };
 

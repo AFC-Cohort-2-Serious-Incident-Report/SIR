@@ -6,7 +6,6 @@ import SendToCommand from '../SendToCommand/SendToCommand';
 import Pagination from '../Components/Pagination';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
 import {
-  getAllIncidents,
   Incident,
   updateIncidentByID,
   getIncidents,
@@ -51,7 +50,7 @@ const ResponderView: FC = () => {
   });
 
   const updateTable = () => {
-    getAllIncidents()
+    getIncidents()
       .then((response) => {
         setReports(response.data.content);
         setPageData({

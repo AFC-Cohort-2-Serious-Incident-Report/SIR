@@ -42,7 +42,8 @@ export type Incident = {
     patientInfo: Patient;
 }
 
-export const getAllIncidents = () => axios.get(`${API_HOST}/api/incidents`);
+// Shouldn't be needed now that pagination is implemented.
+// export const getAllIncidents = () => axios.get(`${API_HOST}/api/incidents`);
 
 export const getIncidents = (params?: any) => axios.get(`${API_HOST}/api/incidents`, {
   params: {

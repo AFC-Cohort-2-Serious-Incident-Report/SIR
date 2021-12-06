@@ -3,10 +3,14 @@ import React, {
 } from 'react';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
-import IncidentServices from '../Services/IncidentServices';
 import Pagination from '../Components/Pagination';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
-import { getAllIncidents, Incident, updateIncidentByID } from '../API';
+import {
+  getAllIncidents,
+  Incident,
+  updateIncidentByID,
+  getIncidents,
+} from '../API';
 
 type IncidentData = {
   id: number,
@@ -145,7 +149,7 @@ const ResponderView: FC = () => {
   ));
 
   const navigatePage = (page?: number, size?: number) => {
-    IncidentServices.getIncidents({
+    getIncidents({
       page: page || 0,
       size: size || 5,
     })

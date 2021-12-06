@@ -44,6 +44,15 @@ export type Incident = {
 
 export const getAllIncidents = () => axios.get(`${API_HOST}/api/incidents`);
 
+export const getIncidents = (params?: any) => axios.get(`${API_HOST}/api/incidents`, {
+  params: {
+    size: 5,
+    page: 0,
+    sort: 'incidentDate,DESC',
+    ...params,
+  },
+});
+
 export const getIncidentByID = async (id: number): Promise<Incident> => {
   const response = await axios.get(`${API_HOST}/api/incidents/${id}`);
   return response.data;

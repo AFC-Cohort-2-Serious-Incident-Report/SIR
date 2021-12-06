@@ -46,6 +46,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
         placeholder="Select a command"
         ref={dropDownRef}
       />
+      <div className="extra-spacing" />
     </form>
   );
 

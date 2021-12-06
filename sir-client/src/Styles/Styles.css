@@ -311,7 +311,6 @@ tr {
   display: grid;
   box-sizing: border-box;
   position: relative;
-  margin-bottom: 40px;
 }
 
 .group.split {
@@ -516,7 +515,12 @@ p.disabled{
   opacity: 0.5;
 }
 
+/*TODO Is this used anywhere else than SirForm? It was refactored to label*/
 p[data-indent="yes"] {
+  margin-left: 20px;
+}
+
+label[data-indent="yes"] {
   margin-left: 20px;
 }
 
@@ -534,6 +538,7 @@ p {
   height: 18px;
   width: 18px;
   border-radius: 8px;
+  margin-right: 10px;
 }
 
 p.disabled{
@@ -579,7 +584,7 @@ p.disabled{
   padding: 0;
 }
 
-.modal-container > .modal-dialog hr.extra-spacing {
+.extra-spacing {
   margin-top: 140px;
 }
 

@@ -13,7 +13,6 @@ describe('Send To Command Modal', () => {
   beforeEach(() => {
     render(<SendToCommand
       onSubmit={handleSubmit}
-      showModal
       closeModal={closeModal}
     />);
   });

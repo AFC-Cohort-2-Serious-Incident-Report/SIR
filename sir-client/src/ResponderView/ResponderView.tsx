@@ -5,11 +5,7 @@ import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
 import Pagination from '../Components/Pagination';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
-import {
-  Incident,
-  updateIncidentByID,
-  getIncidents,
-} from '../API';
+import { getIncidents, Incident, updateIncidentByID } from '../API';
 
 type IncidentData = {
   id: number,
@@ -23,12 +19,12 @@ type IncidentData = {
 }
 
 type PageData = {
-    size: number;
-    firstPage: boolean;
-    lastPage: boolean;
-    totalCount: number;
-    currentPage: number;
-    offset: number;
+  size: number;
+  firstPage: boolean;
+  lastPage: boolean;
+  totalCount: number;
+  currentPage: number;
+  offset: number;
 }
 
 const ResponderView: FC = () => {
@@ -188,11 +184,13 @@ const ResponderView: FC = () => {
       <div className="responder-view">
         <div className="table-left-align">
           <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
-          <SendToCommand
-            showModal={showSendToCommandModal}
-            onSubmit={(command: string) => sendButtonHandler(command)}
-            closeModal={() => setShowSendToCommandModal(false)}
-          />
+          {showSendToCommandModal
+                    && (
+                    <SendToCommand
+                      onSubmit={(command: string) => sendButtonHandler(command)}
+                      closeModal={() => setShowSendToCommandModal(false)}
+                    />
+                    )}
           <div>
             {(selectedReports.length > 0) ? (
               <div className="reports-selected-bar">

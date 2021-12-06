@@ -3,19 +3,23 @@ import React, {
 } from 'react';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
-import IncidentServices from '../Services/IncidentServices';
 import Pagination from '../Components/Pagination';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
-import { getAllIncidents, Incident, updateIncidentByID } from '../API';
+import {
+  Incident,
+  updateIncidentByID,
+  getIncidents,
+} from '../API';
 
 type IncidentData = {
-    id: number,
-    incidentDate: string,
-    incidentLocation: string,
-    incidentType: string,
-    harmOrPotentialHarm: boolean,
-    incidentDescription: string,
-    eventType: string
+  id: number,
+  incidentDate: string,
+  incidentLocation: string,
+  incidentType: string,
+  harmOrPotentialHarm: boolean,
+  incidentDescription: string,
+  eventType: string,
+  individualsInvolved: string
 }
 
 type PageData = {
@@ -46,7 +50,7 @@ const ResponderView: FC = () => {
   });
 
   const updateTable = () => {
-    getAllIncidents()
+    getIncidents()
       .then((response) => {
         setReports(response.data.content);
         setPageData({
@@ -135,7 +139,7 @@ const ResponderView: FC = () => {
       <td data-testid="incident-location">{report.incidentLocation}</td>
       {/* <td>{report.incidentDescription}</td> */}
       <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
-      {/* <td>{report.incidentDescription}</td> */}
+      {/* <td>{report.individualsInvolved}</td> */}
       <td data-testid="event-type">{report.eventType}</td>
       <td>
         <button type="button" onClick={() => setFocusedID(report.id)}>View</button>
@@ -144,7 +148,7 @@ const ResponderView: FC = () => {
   ));
 
   const navigatePage = (page?: number, size?: number) => {
-    IncidentServices.getIncidents({
+    getIncidents({
       page: page || 0,
       size: size || 5,
     })
@@ -225,7 +229,7 @@ const ResponderView: FC = () => {
                 <th>Location</th>
                 {/* <th>Incident Type</th> */}
                 <th>Harm</th>
-                {/* <th>Individual(s) Involved</th> */}
+                <th>Individual(s) Involved</th>
                 <th>Event Type</th>
                 <th>Details</th>
               </tr>

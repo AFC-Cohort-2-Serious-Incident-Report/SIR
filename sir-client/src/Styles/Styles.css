@@ -584,7 +584,7 @@ p.disabled{
   padding: 0;
 }
 
-.modal-container > .modal-dialog hr.extra-spacing {
+.extra-spacing {
   margin-top: 140px;
 }
 

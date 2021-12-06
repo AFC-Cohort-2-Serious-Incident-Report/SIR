@@ -1,8 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
-import { Formik, Field, Form } from 'formik';
-import * as Yup from 'yup';
+import { Field, Form, Formik } from 'formik';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
+import IncidentFields from '../IncidentFields/IncidentFields';
+import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';
+import IncidentFieldsInitialValues from '../IncidentFields/IncidentFieldsInitialValues';
 
 interface Values {
     incidentDate: string;
@@ -39,50 +41,8 @@ interface Values {
     };
 }
 
-const incidentSchema = Yup.object().shape({
-  incidentDate: Yup.string().required('Required'),
-  incidentTime: Yup.string().required('Required'),
-  incidentLocation: Yup.string().notRequired(),
-  eventType: Yup.string().required('Required'),
-  harmOrPotentialHarm: Yup.boolean().required('Required'),
-  individualsInvolved: Yup.object().shape({
-    patient: Yup.boolean().notRequired(),
-    familyMember: Yup.boolean().notRequired(),
-    adult: Yup.boolean().notRequired(),
-    child: Yup.boolean().notRequired(),
-    staffMember: Yup.boolean().notRequired(),
-    visitor: Yup.boolean().notRequired(),
-    volunteer: Yup.boolean().notRequired(),
-    other: Yup.boolean().notRequired(),
-  }),
-  typeOfEvent: Yup.string().required('Required'),
-  effectOnIndividual: Yup.string().required('Required'),
-  witnessOneName: Yup.string().notRequired(),
-  witnessOnePhone: Yup.string().notRequired(),
-  witnessTwoName: Yup.string().notRequired(),
-  witnessTwoPhone: Yup.string().notRequired(),
-  witnessThreeName: Yup.string().notRequired(),
-  witnessThreePhone: Yup.string().notRequired(),
-  departmentsInvolved: Yup.string().required('Required'),
-  incidentDescription: Yup.string().required('Required'),
-  preventativeAction: Yup.string().required('Required'),
-  patientInfo: Yup.object().shape({
-    patientName: Yup.string().required('Required'),
-    patientSocial: Yup.string().required('Required'),
-    patientPhone: Yup.string().required('Required'),
-    patientAddress: Yup.string().required('Required'),
-  }),
-});
-
-export function convertDate(date: Date): string {
-  const today = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate().toString().padStart(2, '0')}`;
-  console.log(`Today is: ${today}`);
-  return today;
-}
-
 const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
-  const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
@@ -94,10 +54,6 @@ const SirForm: React.FC = () => {
       .then((result) => console.log(values))
       .then(() => setReportSubmitted(true));
     // .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
-  };
-
-  const handleFamilyMemberCheck = () => {
-    setFamilyMemberCheck(!familyMemberCheck);
   };
 
   return (
@@ -114,41 +70,8 @@ const SirForm: React.FC = () => {
       <div className="container">
         <h2>Incident Report Form</h2>
         <Formik
-          initialValues={{
-            incidentDate: convertDate(new Date()),
-            incidentTime: '',
-            incidentLocation: '',
-            eventType: 'Actual Event',
-            harmOrPotentialHarm: false,
-            individualsInvolved: {
-              patient: false,
-              familyMember: false,
-              adult: false,
-              child: false,
-              staffMember: false,
-              visitor: false,
-              volunteer: false,
-              other: false,
-            },
-            typeOfEvent: '',
-            effectOnIndividual: 'No Harm Sustained',
-            witnessOneName: '',
-            witnessOnePhone: '',
-            witnessTwoName: '',
-            witnessTwoPhone: '',
-            witnessThreeName: '',
-            witnessThreePhone: '',
-            departmentsInvolved: '',
-            incidentDescription: '',
-            preventativeAction: '',
-            patientInfo: {
-              patientName: '',
-              patientSocial: '',
-              patientPhone: '',
-              patientAddress: '',
-            },
-          }}
-          validationSchema={incidentSchema}
+          initialValues={IncidentFieldsInitialValues}
+          validationSchema={IncidentFieldsValidationSchema}
           onSubmit={(values, { resetForm }) => {
             handleSubmitClick(values);
             resetForm();
@@ -160,155 +83,9 @@ const SirForm: React.FC = () => {
             } = formik;
             return (
               <Form title="sir-form">
-                <div className="group split">
-                  <div className="group">
-                    <label htmlFor="incidentDate">Date of Event</label>
-                    <Field type="date" id="incidentDate" name="incidentDate" />
-                  </div>
-                  <div className="group">
-                    <label htmlFor="incidentTime">Time of Event</label>
-                    <Field type="time" id="incidentTime" name="incidentTime" />
-                  </div>
-                </div>
-                <div className="group">
-                  <label htmlFor="incidentLocation">Incident Location</label>
-                  <Field type="text" id="incidentLocation" name="incidentLocation" />
-                </div>
-                <div className="group split">
-                  <div className="group">
-                    <label htmlFor="eventType">Event Type</label>
-                    <Field type="select" as="select" id="eventType" name="eventType">
-                      <option value="Actual Event">Actual Event / Incident</option>
-                      <option value="Not Actual Event">Not Actual Event / Incident</option>
-                      <option value="Training Event">Training Event / Not Real</option>
-                    </Field>
-                  </div>
-                  <div className="group">
-                    <label htmlFor="harmOrPotentialHarm">Harm or Potential Harm</label>
-                    <Field type="select" as="select" id="harmOrPotentialHarm" name="harmOrPotentialHarm">
-                      <option value="false">No</option>
-                      <option value="true">Yes</option>
-                    </Field>
-                  </div>
-                </div>
-                <label htmlFor="individualsInvolved">Individuals Involved</label>
-                <div className="group split">
-                  <div className="group">
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.patient" title="individualsInvolved.patient" />
-                      Patient
-                    </p>
-                    <p>
-                      <Field
-                        type="checkbox"
-                        className="box"
-                        name="individualsInvolved.familyMember"
-                        title="individualsInvolved.familyMember"
-                        onClick={() => {
-                          handleFamilyMemberCheck();
-                          if (formik.values.individualsInvolved.familyMember) {
-                            formik.setFieldValue('individualsInvolved.adult', false);
-                            formik.setFieldValue('individualsInvolved.child', false);
-                          }
-                        }}
-                      />
-                      Family Member
-                    </p>
-                    <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
-                      <Field
-                        type="checkbox"
-                        name="individualsInvolved.adult"
-                        title="individualsInvolved.adult"
-                        disabled={!familyMemberCheck}
-                        className="box"
-                      />
-                      Adult
-                    </p>
-                    <p data-indent="yes" className={!familyMemberCheck ? 'disabled' : 'p'}>
-                      <Field
-                        type="checkbox"
-                        name="individualsInvolved.child"
-                        title="individualsInvolved.child"
-                        disabled={!familyMemberCheck}
-                        className="box"
-                      />
-                      Child less than 18 years old
-                    </p>
-                  </div>
-                  <div className="group">
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.staffMember" title="individualsInvolved.staffMember" />
-                      Staff Member
-                    </p>
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.visitor" title="individualsInvolved.visitor" />
-                      Visitor
-                    </p>
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.volunteer" title="individualsInvolved.volunteer" />
-                      Volunteer
-                    </p>
-                    <p>
-                      <Field type="checkbox" className="box" name="individualsInvolved.other" title="individualsInvolved.other" />
-                      Other
-                    </p>
-                  </div>
-                </div>
-                <div className="group">
-                  <label htmlFor="typeOfEvent">Type of Event</label>
-                  <Field type="text" id="typeOfEvent" name="typeOfEvent" title="typeOfEvent" />
-                </div>
-                <div className="group">
-                  <label htmlFor="effectOnIndividual">Effect of this incident on the individual(s) involved</label>
-                  <Field type="select" as="select" id="effectOnIndividual" name="effectOnIndividual">
-                    <option value="No Harm Sustained">Harm Sustained</option>
-                    <option value="Harm Sustained">No Harm Sustained</option>
-                  </Field>
-                </div>
-                <div className="group split">
-                  <div className="group">
-                    <label htmlFor="witnessOneName">Witness Name</label>
-                    <Field type="text" id="witnessOneName" name="witnessOneName" title="witnessOneName" />
-                    <Field type="text" id="witnessTwoName" name="witnessTwoName" title="witnessTwoName" />
-                    <Field type="text" id="witnessThreeName" name="witnessThreeName" title="witnessThreeName" />
-                  </div>
-                  <div className="group">
-                    <label htmlFor="witnessOnePhone">Witness Phone</label>
-                    <Field type="text" id="witnessOnePhone" name="witnessOnePhone" title="witnessOnePhone" />
-                    <Field type="text" id="witnessTwoPhone" name="witnessTwoPhone" title="witnessTwoPhone" />
-                    <Field type="text" id="witnessThreePhone" name="witnessThreePhone" title="witnessThreePhone" />
-                  </div>
-                </div>
-                <div className="group">
-                  <label htmlFor="departmentsInvolved">Department(s) Involved in this Incident</label>
-                  <Field type="text" id="departmentsInvolved" name="departmentsInvolved" title="departmentsInvolved" />
-                </div>
-                <div className="group">
-                  <label htmlFor="incidentDescription">Description of Incident</label>
-                  <Field type="text" as="textarea" id="incidentDescription" name="incidentDescription" />
-                </div>
-                <div className="group">
-                  <label htmlFor="preventativeAction">What actions, if any, could have been taken to prevent this incident from occurring?</label>
-                  <Field type="text" as="textarea" id="preventativeAction" name="preventativeAction" />
-                </div>
-                <div className="group">
-                  <label htmlFor="patientInfo.patientName">Patient Name or ID Plate</label>
-                  <Field type="text" id="patientInfo.patientName" name="patientInfo.patientName" title="patientInfo.patientName" />
-                </div>
-                <div className="group split">
-                  <div className="group">
-                    <label htmlFor="patientInfo.patientSocial">Patient SSN</label>
-                    <Field type="text" id="patientInfo.patientSocial" name="patientInfo.patientSocial" title="patientInfo.patientSocial" />
-                  </div>
-                  <div className="group">
-                    <label htmlFor="patientInfo.patientPhone">Patient Telephone Number</label>
-                    <Field type="text" id="patientInfo.patientPhone" name="patientInfo.patientPhone" title="patientInfo.patientPhone" />
-                  </div>
-                </div>
-                <div className="group">
-                  <label htmlFor="patientInfo.patientAddress">Patient Address</label>
-                  <Field type="text" id="patientInfo.patientAddress" name="patientInfo.patientAddress" title="patientInfo.patientAddress" />
-                </div>
+                <IncidentFields
+                  setFieldValue={(field, newValue) => formik.setFieldValue(field, newValue)}
+                />
                 <div className="group flex">
                   <button
                     type="submit"
@@ -326,6 +103,10 @@ const SirForm: React.FC = () => {
       </div>
     </>
   );
+};
+
+SirForm.defaultProps = {
+  incident: undefined,
 };
 
 export default SirForm;

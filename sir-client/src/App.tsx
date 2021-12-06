@@ -1,14 +1,9 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './Styles/Styles.css';
-import {
-  BrowserRouter, Routes, Route,
-} from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import SirForm from './SirForm/SirForm';
 import NavBar from './NavBar/NavBar';
 import ResponderView from './ResponderView/ResponderView';
-import CustomAlert, { AlertType } from './Components/CustomAlert';
-import CustomModal from './Components/CustomModal';
-import SendToCommand from './SendToCommand/SendToCommand';
 
 const App: React.FC = () => (
   <div className="App">

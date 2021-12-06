@@ -65,6 +65,16 @@ h2 {
   padding: 0;
 }
 
+h3 {
+  display: block;
+  position: relative;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--color-muted-dark));
+  height: 25px;
+  padding-top: 1em;
+}
+
 h4 {
   font-size: 1.5rem;
   font-weight: 400;
@@ -301,9 +311,7 @@ tr {
   display: grid;
   box-sizing: border-box;
   position: relative;
-  margin-bottom: 40px;
 }
-
 
 .group.split {
   grid-template-columns: 1fr 1fr;
@@ -483,8 +491,36 @@ tr {
 .checkbox[parent] {
   padding-left: 32px;
 }
+p[data-indent="yes"]{
+  margin-left: 20px;
+}
+p {
+  display: flex;
+  flex-direction: row;
+  font-family: 'Public Sans', sans-serif;
+  margin: 10px 0px;
+  font-size: 16px;
+  gap: 10px;
+  align-items: center;
+}
 
+.box {
+  height: 18px;
+  width: 18px;
+  border-radius: 8px;
+}
+
+
+p.disabled{
+  opacity: 0.5;
+}
+
+/*TODO Is this used anywhere else than SirForm? It was refactored to label*/
 p[data-indent="yes"] {
+  margin-left: 20px;
+}
+
+label[data-indent="yes"] {
   margin-left: 20px;
 }
 
@@ -502,6 +538,7 @@ p {
   height: 18px;
   width: 18px;
   border-radius: 8px;
+  margin-right: 10px;
 }
 
 p.disabled{
@@ -575,7 +612,9 @@ p.disabled{
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  padding: 30px 85px;
+  padding: 30px 85px 0px;
+  max-height: 678px;
+  overflow: scroll;
 }
 
 .modal-container > .modal-dialog .modal-content label {

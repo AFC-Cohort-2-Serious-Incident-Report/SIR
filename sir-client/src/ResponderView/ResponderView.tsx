@@ -194,7 +194,7 @@ const ResponderView: FC = () => {
       )}
       <div className="responder-view">
         <div className="table-left-align">
-          <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
+          <h2>Incident Reports</h2>
           {showSendToCommandModal
                     && (
                     <SendToCommand

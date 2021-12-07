@@ -8,7 +8,7 @@ import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
 import {
   Incident,
   updateIncidentByID,
-  getIncidents,
+  getIncidents, Individual,
 } from '../API';
 
 type IncidentData = {
@@ -19,7 +19,8 @@ type IncidentData = {
   harmOrPotentialHarm: boolean,
   incidentDescription: string,
   eventType: string,
-  individualsInvolved: string
+  individualsInvolved: Individual,
+  typeOfEvent: string
 }
 
 type PageData = {
@@ -53,6 +54,7 @@ const ResponderView: FC = () => {
     getIncidents()
       .then((response) => {
         setReports(response.data.content);
+        console.log(response.data.content);
         setPageData({
           offset: response.data.pageable.offset,
           size: response.data.size,
@@ -123,6 +125,28 @@ const ResponderView: FC = () => {
       .catch();
   };
 
+  function handleIndividualsInvolved(report: IncidentData) {
+    let count = 0;
+    let firstTrueValue = '';
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [key, value] of Object.entries(report.individualsInvolved)) {
+      if (count === 0) {
+        if (value === true) {
+          firstTrueValue = key;
+          count += 1;
+        }
+      } else if (value === true) {
+        count += 1;
+      }
+      // else console.log(`${key} is false`);
+    }
+    if (firstTrueValue === 'familyMember') { firstTrueValue = 'family Member'; }
+    if (firstTrueValue === 'staffMember') { firstTrueValue = 'staff Member'; }
+    firstTrueValue = firstTrueValue.charAt(0).toUpperCase() + firstTrueValue.slice(1);
+    if (count === 1) { return firstTrueValue; }
+    return `${firstTrueValue}, +${count - 1}`;
+  }
+
   const renderIncidentRows = reports.map((report: IncidentData) => (
     <tr
       key={report.id}
@@ -135,12 +159,13 @@ const ResponderView: FC = () => {
           checked={selectedReports.includes(report)}
         />
       </td>
+      {/* THE TEST ID HERE REFERS TO COLUMN ON FIGMA, the data pulled is corresponds to data */}
       <td data-testid="incident-date">{report.incidentDate}</td>
       <td data-testid="incident-location">{report.incidentLocation}</td>
-      {/* <td>{report.incidentDescription}</td> */}
+      <td data-testid="incident_type">{report.eventType}</td>
       <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
-      {/* <td>{report.individualsInvolved}</td> */}
-      <td data-testid="event-type">{report.eventType}</td>
+      <td data-testid="individuals-involved">{handleIndividualsInvolved(report)}</td>
+      <td data-testid="event-type">{report.typeOfEvent}</td>
       <td>
         <button type="button" onClick={() => setFocusedID(report.id)}>View</button>
       </td>
@@ -227,7 +252,7 @@ const ResponderView: FC = () => {
                 </th>
                 <th>Event Date</th>
                 <th>Location</th>
-                {/* <th>Incident Type</th> */}
+                <th>Incident Type</th>
                 <th>Harm</th>
                 <th>Individual(s) Involved</th>
                 <th>Event Type</th>

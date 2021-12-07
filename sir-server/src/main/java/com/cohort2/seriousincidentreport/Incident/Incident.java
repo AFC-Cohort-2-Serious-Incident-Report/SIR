@@ -21,8 +21,8 @@ import java.time.LocalTime;
 @Table
 public class Incident implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private Long id;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -32,9 +32,26 @@ public class Incident implements Serializable {
     private String incidentLocation;
     private String eventType;
     private boolean harmOrPotentialHarm;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "individuals_id")
+    private Individuals individualsInvolved;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "patient_id")
+    private Patient patientInfo;
+
+    /*
     @OneToOne(mappedBy = "incident", fetch = FetchType.LAZY,
                     cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
     private Individuals individualsInvolved;
+
+    @OneToOne(mappedBy = "incident", fetch = FetchType.LAZY,
+      cascade = CascadeType.ALL)
+    @PrimaryKeyJoinColumn
+    private Patient patientInfo;
+*/
     private String typeOfEvent;
     private String effectOnIndividual;
     private String witnessOneName;
@@ -46,7 +63,5 @@ public class Incident implements Serializable {
     private String departmentsInvolved;
     private String incidentDescription;
     private String preventativeAction;
-    @OneToOne(mappedBy = "incident", fetch = FetchType.LAZY,
-                    cascade = CascadeType.ALL)
-    private Patient patientInfo;
+
 }

@@ -31,8 +31,8 @@ const Pagination: React.FC<paginationProps> = ({
           '5', '10', '15',
         ]}
         onChange={(val) => navigatePage(0, parseInt(val.value, 10))}
-        value="5"
-        placeholder="5"
+        value="10"
+        placeholder="10"
       />
     </div>
     <span>

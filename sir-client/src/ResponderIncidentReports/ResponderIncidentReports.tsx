@@ -106,7 +106,7 @@ const ResponderIncidentReports: FC = () => {
 
   const navigatePage = (page?: number, size?: number) => {
     getIncidents({
-      page: page || pageData.currentPage,
+      page: page || 0,
       size: size || pageData.size,
       sort: `${sortMethod.sortBy},${sortMethod.sortDirection}`,
     })

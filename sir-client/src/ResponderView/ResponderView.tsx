@@ -112,11 +112,9 @@ const ResponderView: FC = () => {
   const handleDetailViewClose = () => setFocusedID(null);
 
   const handleDetailViewSubmit = (updatedIncident: Incident) => {
-    console.log('I am in handleDetailViewSubmit');
     updateIncidentByID(updatedIncident)
       .then(() => {
         setFocusedID(null);
-
         updateTable();
       })
       .catch();

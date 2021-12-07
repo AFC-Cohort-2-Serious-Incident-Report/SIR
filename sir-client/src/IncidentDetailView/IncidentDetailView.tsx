@@ -33,22 +33,20 @@ const IncidentDetailView = ({
       <Formik
         initialValues={incident}
         validationSchema={IncidentFieldsValidationSchema}
-        onSubmit={(value) => {
-          console.log('OnSubmitUpdate');
-        }}
+        onSubmit={onSubmitUpdate}
       >
         {(formik) => {
-          const { setFieldValue } = formik;
+          const { setFieldValue, handleSubmit } = formik;
           return (
-            <form onSubmit={() => console.log('hi')}>
+            <Form>
               <CustomModal
                 onModalClose={onClose}
-                onModalSubmit={{ onSubmit: () => undefined, text: 'SAVE' }}
+                onModalSubmit={{ onSubmit: handleSubmit, text: 'SAVE' }}
                 modalTitle="Incident Report"
                 // TODO : Replace empty div with loading indicator
                 modalContent={<IncidentFields setFieldValue={setFieldValue} />}
               />
-            </form>
+            </Form>
           );
         }}
       </Formik>

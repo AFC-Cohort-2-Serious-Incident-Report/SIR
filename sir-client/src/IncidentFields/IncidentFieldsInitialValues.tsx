@@ -3,6 +3,7 @@ function convertDate(date: Date): string {
   console.log(`Today is: ${today}`);
   return today;
 }
+
 const IncidentFieldsInitialValues = {
   incidentDate: convertDate(new Date()),
   incidentTime: '',

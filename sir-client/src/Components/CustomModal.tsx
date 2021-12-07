@@ -39,7 +39,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <hr />
       <div className="modal-footer">
         <button type="button" onClick={onModalClose}>CANCEL</button>
-        <button type="submit">
+        <button type="button" onClick={onModalSubmit.onSubmit}>
           {onModalSubmit.text}
         </button>
       </div>

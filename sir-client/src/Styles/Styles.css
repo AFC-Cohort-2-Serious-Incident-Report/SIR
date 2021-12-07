@@ -238,8 +238,24 @@ table {
 }
 
 tr {
-  border-bottom: 1px solid lightgray;
-  line-height: 35px;
+  display: grid;
+  position: relative;
+  border-bottom: 1px solid rgba(var(--color-muted), 0.3);
+  line-height: 64px;
+  height: 64px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition-linear);
+  grid-template-columns: minmax(70px, 1fr) minmax(100px, 1fr) minmax(150px, 1fr) minmax(70px, 1fr) minmax(230px, 1fr) minmax(100px, 1fr) minmax(100px, 1fr);
+}
+
+tr td {
+  transition: var(--transition-linear);
+}
+
+tr:hover td {
+  background-color: rgba(var(--color-muted), 0.15);
 }
 
 .responder-view {

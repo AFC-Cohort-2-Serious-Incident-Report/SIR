@@ -27,7 +27,7 @@ type PageData = {
   offset: number;
 }
 
-const ResponderView: FC = () => {
+const ResponderIncidentReports: FC = () => {
   const [reports, setReports] = useState([]);
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
   const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
@@ -173,14 +173,14 @@ const ResponderView: FC = () => {
   ));
 
   return (
-    <>
+    <div className="view-container">
       <div className="alert-container">
         {showSentToCommandBanner && (
-        <CustomAlert
-          onClose={() => setShowSentToCommandBanner(false)}
-          alertType={AlertType.SUCCESS}
-          text={`Sent to ${selectedSendToCommander}`}
-        />
+          <CustomAlert
+            onClose={() => setShowSentToCommandBanner(false)}
+            alertType={AlertType.SUCCESS}
+            text={`Sent to ${selectedSendToCommander}`}
+          />
         )}
 
       </div>
@@ -274,8 +274,8 @@ const ResponderView: FC = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default ResponderView;
+export default ResponderIncidentReports;

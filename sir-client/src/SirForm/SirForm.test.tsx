@@ -14,7 +14,6 @@ afterAll(() => server.close());
 
 function convertDate(date: Date): string {
   const today = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate().toString().padStart(2, '0')}`;
-  console.log(`Today is: ${today}`);
   return today;
 }
 
@@ -305,6 +304,7 @@ describe('SirForm', () => {
     await waitFor(() => expect(screen.getByRole('button', { name: /submit/i })).not.toBeDisabled());
   });
   it('button submits all fields', async () => {
+    window.scrollTo = jest.fn();
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
     await waitFor(() => (expect(screen.getByText('Incident Report Submitted')).toBeInTheDocument()));
@@ -318,6 +318,7 @@ describe('SirForm', () => {
     });
   });
   it('X button closes alert banner', async () => {
+    window.scrollTo = jest.fn();
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
     await waitFor(() => (expect(screen.getByText('Incident Report Submitted')).toBeInTheDocument()));
@@ -326,6 +327,7 @@ describe('SirForm', () => {
   });
   // Form Resets after submission
   it('Resets all fields after submission', async () => {
+    window.scrollTo = jest.fn();
     fillAllFields();
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
     await waitFor(() => (expect(screen.getByTitle('sir-form')).toHaveFormValues(initialValuesMinusObjects)));

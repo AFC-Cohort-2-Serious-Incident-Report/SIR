@@ -18,7 +18,7 @@ import java.time.LocalTime;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table
+@Table (name="incident")
 public class Incident implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,7 +33,7 @@ public class Incident implements Serializable {
     private String eventType;
     private boolean harmOrPotentialHarm;
     @OneToOne(mappedBy = "incident", fetch = FetchType.LAZY,
-                    cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     private Individuals individualsInvolved;
     private String typeOfEvent;
     private String effectOnIndividual;
@@ -47,6 +47,6 @@ public class Incident implements Serializable {
     private String incidentDescription;
     private String preventativeAction;
     @OneToOne(mappedBy = "incident", fetch = FetchType.LAZY,
-                    cascade = CascadeType.ALL)
+            cascade = CascadeType.ALL)
     private Patient patientInfo;
 }

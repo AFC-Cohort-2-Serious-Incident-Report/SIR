@@ -24,8 +24,8 @@ describe('IncidentDetailView', () => {
     render(<IncidentDetailView id={1} onClose={() => null} onSubmit={() => null} />);
   });
 
-  it('renders inside of modal with incident detail properties', () => {
-    expect(screen.getByRole('heading', { name: 'Incident Report' })).toBeInTheDocument();
+  it('renders inside of modal with incident detail properties', async () => {
+    expect(await screen.findByRole('heading', { name: 'Incident Report' })).toBeInTheDocument();
     expect(screen.getByTestId('modal-close-button')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /save/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument();
@@ -45,14 +45,14 @@ describe('IncidentDetailView', () => {
     expect(screen.getByRole('combobox', {
       name: /harm or potential harm/i,
     })).toHaveValue(testData.harmOrPotentialHarm.toString());
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.patient/i })).toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.familyMember/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.staffMember/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.visitor/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.volunteer/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.other/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /patient/i })).toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /family member/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /adult/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /child/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /staff member/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /visitor/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /volunteer/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /other/i })).toBeChecked();
     expect(screen.getByRole('textbox', { name: /type of event/i })).toHaveValue(testData.typeOfEvent);
     expect(screen.getByRole('combobox', {
       name: /effect of this incident on the individual\(s\) involved/i,

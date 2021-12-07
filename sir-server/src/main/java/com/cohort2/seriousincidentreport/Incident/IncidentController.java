@@ -48,4 +48,19 @@ public class IncidentController {
             return new ResponseEntity<Iterable<Incident>>(incidents, null, 200);
         }
     }
+
+    @GetMapping("/{id}")
+    public Incident getSingleIncident(@PathVariable Long id){
+        return this.repository.findById(id).get();
+    }
+
+    @PatchMapping("/{id}")
+    public String updateSingleIncident(@PathVariable Long id, @RequestBody Incident updateIncident){
+        if(this.repository.existsById(id)){
+            this.repository.save(updateIncident);
+            return "Incident Updated";
+        } else {
+            return "No incident found at ID " + id;
+        }
+    }
 }

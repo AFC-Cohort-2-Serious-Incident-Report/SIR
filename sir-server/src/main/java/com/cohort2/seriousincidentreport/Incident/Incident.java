@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -35,7 +36,8 @@ public class Incident implements Serializable {
     @OneToOne(mappedBy = "incident", fetch = FetchType.LAZY,
                     cascade = CascadeType.ALL)
     private Individuals individualsInvolved;
-    private String typeOfEvent;
+    @ElementCollection
+    private List<String> typeOfEvent;
     private String effectOnIndividual;
     private String witnessOneName;
     private String witnessOnePhone;

@@ -26,7 +26,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
 
 @SpringBootTest
@@ -115,7 +114,7 @@ class IncidentControllerTests {
                     "patient": true,
                     "other": true
                     },
-                "typeOfEvent": "Adverse Drug Reaction, Medication Related",
+                "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"],
                 "effectOnIndividual": "Harm Sustained",
                 "witnessOneName": "Sir Jackman",
                 "witnessOnePhone": "719-526-6465",
@@ -167,7 +166,8 @@ class IncidentControllerTests {
         assertEquals("Actual Event / Incident", savedIncident.getEventType());
         assertTrue(savedIncident.isHarmOrPotentialHarm());
         assertEquals("{\"patient\":true,\"familyMember\":false,\"adult\":false,\"child\":false,\"staffMember\":false,\"visitor\":false,\"volunteer\":false,\"other\":true}", individualsInvolved);
-        assertEquals("Adverse Drug Reaction, Medication Related", savedIncident.getTypeOfEvent());
+        assertEquals("Adverse Drug Reaction", savedIncident.getTypeOfEvent().get(0));
+        assertEquals("Medication Related", savedIncident.getTypeOfEvent().get(1));
         assertEquals("Harm Sustained", savedIncident.getEffectOnIndividual());
         assertEquals("Sir Jackman", savedIncident.getWitnessOneName());
         assertEquals("719-526-6465", savedIncident.getWitnessOnePhone());

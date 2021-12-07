@@ -3,7 +3,7 @@ import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import userEvent from '@testing-library/user-event';
 import ResponderView from './ResponderView';
-import dataWithOne from '../Responder_Test_Data_1.json';
+import dataWithOne from '../Incident_Row_Test_Data.json';
 import testData from '../sir_test_data.json';
 
 type IncidentRowEntry = {
@@ -171,6 +171,8 @@ describe('ResponderView', () => {
   });
 
   describe('Detailed View Modal Submission', () => {
+    // const { content, ...pageableData } = dataWithOne;
+    const updatedDataWithOne = { ...dataWithOne };
     let receivedData: IncidentRowEntry[];
     let numOfCalls = 0;
     const server = setupServer(
@@ -179,7 +181,7 @@ describe('ResponderView', () => {
           numOfCalls += 1;
           return res(ctx.json(dataWithOne));
         }
-        return res(ctx.json(receivedData));
+        return res(ctx.json(updatedDataWithOne));
       }),
       rest.get(
         '/api/incidents/1',
@@ -194,7 +196,13 @@ describe('ResponderView', () => {
         res,
         ctx,
       ) => {
-        receivedData = [req.body];
+        const {
+          id, incidentDate, incidentLocation, harmOrPotentialHarm, eventType,
+        } = req.body;
+        receivedData = [{
+          id, incidentDate, incidentLocation, harmOrPotentialHarm, eventType,
+        }];
+        updatedDataWithOne.content = receivedData;
         return res(ctx.json(dataWithOne));
       }),
     );
@@ -204,7 +212,7 @@ describe('ResponderView', () => {
       render(<ResponderView />);
     });
 
-    it.skip('should update record when detail view modal is saved', async () => {
+    it('should update record when detail view modal is saved', async () => {
       expect(await screen.findByTestId('incident-date')).toHaveTextContent('03/27/2021');
       expect(screen.getByTestId('incident-location')).toHaveTextContent('Shouxihu');
       expect(screen.getByTestId('potential-harm')).toHaveTextContent('Yes');
@@ -217,7 +225,7 @@ describe('ResponderView', () => {
       userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'No');
       userEvent.click(screen.getByRole('button', { name: /save/i }));
 
-      await waitFor(() => expect(screen.getByTestId('incident-date')).toHaveTextContent('08/08/1958'));
+      await waitFor(() => expect(screen.getByTestId('incident-date')).toHaveTextContent('1958-08-08'));
       expect(screen.getByTestId('incident-location')).toHaveTextContent('Test text');
       expect(screen.getByTestId('potential-harm')).toHaveTextContent('No');
       expect(screen.getByTestId('event-type')).toHaveTextContent('Actual Event / Incident');

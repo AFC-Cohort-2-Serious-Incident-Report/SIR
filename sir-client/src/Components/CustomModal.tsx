@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 
 export type CustomModalSubmitProps = {
-  onSubmit: () => void;
+  onSubmit: () => void,
   text: string;
 }
 
@@ -39,7 +39,7 @@ const CustomModal: React.FC<CustomModalProps> = ({
       <hr />
       <div className="modal-footer">
         <button type="button" onClick={onModalClose}>CANCEL</button>
-        <button type="button" onClick={onModalSubmit.onSubmit}>
+        <button type="submit">
           {onModalSubmit.text}
         </button>
       </div>

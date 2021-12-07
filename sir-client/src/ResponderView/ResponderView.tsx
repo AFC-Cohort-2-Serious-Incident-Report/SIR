@@ -32,6 +32,7 @@ const ResponderView: FC = () => {
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
   const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
   const [showSentToCommandBanner, setShowSentToCommandBanner] = useState(false);
+  const [showUpdatedIncident, setShowUpdatedIncident] = useState(false);
   const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
 
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
@@ -111,9 +112,11 @@ const ResponderView: FC = () => {
   const handleDetailViewClose = () => setFocusedID(null);
 
   const handleDetailViewSubmit = (updatedIncident: Incident) => {
+    console.log('I am in handleDetailViewSubmit');
     updateIncidentByID(updatedIncident)
       .then(() => {
         setFocusedID(null);
+
         updateTable();
       })
       .catch();
@@ -179,7 +182,7 @@ const ResponderView: FC = () => {
                     // todo change 1 to passed id
           id={focusedID}
           onClose={handleDetailViewClose}
-          onSubmit={handleDetailViewSubmit}
+          onSubmitUpdate={handleDetailViewSubmit}
         />
       )}
       <div className="responder-view">

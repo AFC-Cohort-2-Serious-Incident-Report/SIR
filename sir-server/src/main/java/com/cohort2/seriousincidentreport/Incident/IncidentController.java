@@ -1,5 +1,6 @@
 package com.cohort2.seriousincidentreport.Incident;
 
+import com.cohort2.seriousincidentreport.Individuals.IndividualsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 @CrossOrigin
 public class IncidentController {
     private final IncidentRepository repository;
+    private final IndividualsRepository individualRepository;
 
     private static final Logger log = LoggerFactory.getLogger(IncidentController.class);
 

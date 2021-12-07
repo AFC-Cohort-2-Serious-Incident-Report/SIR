@@ -50,6 +50,7 @@ const SirForm: React.FC = () => {
   const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
 
   const handleSubmitClick = (values: Values) => {
+    console.log(values);
     axios.post(`${API_HOST}/api/incidents`, values)
       .then((result) => console.log(values))
       .then(() => setReportSubmitted(true));

@@ -4,7 +4,6 @@ import CustomModal, { CustomModalSubmitProps } from '../Components/CustomModal';
 
 type SendToCommandProps = {
   onSubmit: (command: string) => void;
-  showModal: boolean;
   closeModal: () => void;
 }
 
@@ -18,7 +17,6 @@ type DropdownState = {
 
 const SendToCommand : React.FC<SendToCommandProps> = ({
   onSubmit,
-  showModal,
   closeModal,
 }: SendToCommandProps): ReactElement => {
   const dropDownRef = React.useRef<Dropdown | null>(null);
@@ -46,6 +44,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
         placeholder="Select a command"
         ref={dropDownRef}
       />
+      <div className="extra-spacing" />
     </form>
   );
 
@@ -67,14 +66,14 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
     },
   };
 
-  return showModal ? (
+  return (
     <CustomModal
       onModalClose={closeModal}
       onModalSubmit={sendToCommandSubmit}
       modalTitle="Send up to command"
       modalContent={sendToCommandContent}
     />
-  ) : <div />;
+  );
 };
 
 export default SendToCommand;

@@ -3,28 +3,28 @@ import React, {
 } from 'react';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
-import IncidentServices from '../Services/IncidentServices';
 import Pagination from '../Components/Pagination';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
-import { getAllIncidents, Incident, updateIncidentByID } from '../API';
+import { getIncidents, Incident, updateIncidentByID } from '../API';
 
 type IncidentData = {
-    id: number,
-    incidentDate: string,
-    incidentLocation: string,
-    incidentType: string,
-    harmOrPotentialHarm: boolean,
-    incidentDescription: string,
-    eventType: string
+  id: number,
+  incidentDate: string,
+  incidentLocation: string,
+  incidentType: string,
+  harmOrPotentialHarm: boolean,
+  incidentDescription: string,
+  eventType: string,
+  individualsInvolved: string
 }
 
 type PageData = {
-    size: number;
-    firstPage: boolean;
-    lastPage: boolean;
-    totalCount: number;
-    currentPage: number;
-    offset: number;
+  size: number;
+  firstPage: boolean;
+  lastPage: boolean;
+  totalCount: number;
+  currentPage: number;
+  offset: number;
 }
 
 const ResponderView: FC = () => {
@@ -34,6 +34,10 @@ const ResponderView: FC = () => {
   const [showSentToCommandBanner, setShowSentToCommandBanner] = useState(false);
   const [showUpdatedIncident, setShowUpdatedIncident] = useState(false);
   const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
+  const [sortMethod, setSortMethod] = useState({
+    sortBy: 'incidentDate',
+    sortDirection: 'desc',
+  });
 
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
   const [focusedID, setFocusedID] = useState<number | null>(null);
@@ -47,7 +51,7 @@ const ResponderView: FC = () => {
   });
 
   const updateTable = () => {
-    getAllIncidents()
+    getIncidents()
       .then((response) => {
         setReports(response.data.content);
         setPageData({
@@ -100,14 +104,24 @@ const ResponderView: FC = () => {
     setSelectedSendToCommander(command);
   };
 
-  useEffect(() => {
-    const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
-    if (selectedReports.length > 0 && selectedReports.length < reports.length) {
-      currentSelectAllCheckbox.indeterminate = true;
-    } else {
-      currentSelectAllCheckbox.indeterminate = false;
-    }
-  }, [selectedReports]);
+  const navigatePage = (page?: number, size?: number) => {
+    getIncidents({
+      page: page || pageData.currentPage,
+      size: size || pageData.size,
+      sort: `${sortMethod.sortBy},${sortMethod.sortDirection}`,
+    })
+      .then((response) => {
+        setReports(response.data.content);
+        setPageData({
+          offset: response.data.pageable.offset,
+          size: response.data.size,
+          firstPage: response.data.first,
+          lastPage: response.data.last,
+          totalCount: response.data.totalElements,
+          currentPage: response.data.number,
+        });
+      });
+  };
 
   const handleDetailViewClose = () => setFocusedID(null);
 
@@ -119,6 +133,19 @@ const ResponderView: FC = () => {
       })
       .catch();
   };
+
+  useEffect(() => {
+    const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
+    if (selectedReports.length > 0 && selectedReports.length < reports.length) {
+      currentSelectAllCheckbox.indeterminate = true;
+    } else {
+      currentSelectAllCheckbox.indeterminate = false;
+    }
+  }, [selectedReports]);
+
+  useEffect(() => {
+    navigatePage(pageData.currentPage || 0, pageData.size || 10);
+  }, [sortMethod]);
 
   const renderIncidentRows = reports.map((report: IncidentData) => (
     <tr
@@ -137,31 +164,13 @@ const ResponderView: FC = () => {
       <td data-testid="incident-location">{report.incidentLocation}</td>
       {/* <td>{report.incidentDescription}</td> */}
       <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
-      {/* <td>{report.incidentDescription}</td> */}
+      {/* <td>{report.individualsInvolved}</td> */}
       <td data-testid="event-type">{report.eventType}</td>
       <td>
         <button type="button" onClick={() => setFocusedID(report.id)}>View</button>
       </td>
     </tr>
   ));
-
-  const navigatePage = (page?: number, size?: number) => {
-    IncidentServices.getIncidents({
-      page: page || 0,
-      size: size || 5,
-    })
-      .then((response) => {
-        setReports(response.data.content);
-        setPageData({
-          offset: response.data.pageable.offset,
-          size: response.data.size,
-          firstPage: response.data.first,
-          lastPage: response.data.last,
-          totalCount: response.data.totalElements,
-          currentPage: response.data.number,
-        });
-      });
-  };
 
   return (
     <>
@@ -186,11 +195,13 @@ const ResponderView: FC = () => {
       <div className="responder-view">
         <div className="table-left-align">
           <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
-          <SendToCommand
-            showModal={showSendToCommandModal}
-            onSubmit={(command: string) => sendButtonHandler(command)}
-            closeModal={() => setShowSendToCommandModal(false)}
-          />
+          {showSendToCommandModal
+                    && (
+                    <SendToCommand
+                      onSubmit={(command: string) => sendButtonHandler(command)}
+                      closeModal={() => setShowSendToCommandModal(false)}
+                    />
+                    )}
           <div>
             {(selectedReports.length > 0) ? (
               <div className="reports-selected-bar">
@@ -223,11 +234,27 @@ const ResponderView: FC = () => {
                     ref={selectAllCheckbox}
                   />
                 </th>
-                <th>Event Date</th>
+                <th
+                  onClick={() => {
+                    setSortMethod({
+                      sortBy: 'incidentDate',
+                      sortDirection: sortMethod.sortDirection === 'desc' ? 'asc' : 'desc',
+                    });
+                  }}
+                >
+                  Event Date
+                  {
+                    (sortMethod.sortBy === 'incidentDate')
+                      ? (
+                        <i className={sortMethod.sortDirection === 'asc' ? 'gg-chevron-up' : 'gg-chevron-down'} />
+                      )
+                      : null
+                  }
+                </th>
                 <th>Location</th>
                 {/* <th>Incident Type</th> */}
                 <th>Harm</th>
-                {/* <th>Individual(s) Involved</th> */}
+                <th>Individual(s) Involved</th>
                 <th>Event Type</th>
                 <th>Details</th>
               </tr>

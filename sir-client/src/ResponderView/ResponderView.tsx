@@ -32,6 +32,7 @@ const ResponderView: FC = () => {
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
   const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
   const [showSentToCommandBanner, setShowSentToCommandBanner] = useState(false);
+  const [showUpdatedIncident, setShowUpdatedIncident] = useState(false);
   const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
   const [sortMethod, setSortMethod] = useState({
     sortBy: 'incidentDate',
@@ -156,6 +157,7 @@ const ResponderView: FC = () => {
           type="checkbox"
           name="selectRow"
           checked={selectedReports.includes(report)}
+          onChange={() => checkboxOnChangeHandler(report)}
         />
       </td>
       <td data-testid="incident-date">{report.incidentDate}</td>
@@ -185,9 +187,9 @@ const ResponderView: FC = () => {
       {focusedID && (
         <IncidentDetailView
                     // todo change 1 to passed id
-          id={1}
+          id={focusedID}
           onClose={handleDetailViewClose}
-          onSubmit={handleDetailViewSubmit}
+          onSubmitUpdate={handleDetailViewSubmit}
         />
       )}
       <div className="responder-view">

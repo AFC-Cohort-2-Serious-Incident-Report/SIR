@@ -7,9 +7,10 @@ type CustomChipProps = {
 }
 
 const CustomChip: FC<CustomChipProps> = ({ text, onClose }: CustomChipProps): ReactElement => (
-  <div>
-    <div>{text}</div>
+  <div className="chip-container">
+    <div className="chip-text">{text}</div>
     <button
+      className="chip-button"
       onClick={onClose}
       type="button"
       data-testid="chip-close-button"
@@ -19,4 +20,14 @@ const CustomChip: FC<CustomChipProps> = ({ text, onClose }: CustomChipProps): Re
   </div>
 );
 
-export default CustomChip;
+type CustomChipsProps = {
+    chips: CustomChipProps[];
+}
+
+const CustomChips: FC<CustomChipsProps> = ({ chips }: CustomChipsProps): ReactElement => (
+  <div className="chip-container">
+    {chips.map((c) => <CustomChip text={c.text} onClose={c.onClose} />)}
+  </div>
+);
+
+export default CustomChips;

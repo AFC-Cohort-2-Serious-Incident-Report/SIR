@@ -1,22 +1,22 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import Dropdown, { Option } from 'react-dropdown';
 import CustomModal, { CustomModalSubmitProps } from '../Components/CustomModal';
 
 type SendToCommandProps = {
-  onSubmit: (command: string) => void;
-  showModal: boolean;
-  closeModal: () => void;
+    onSubmit: (command: string) => void;
+    showModal: boolean;
+    closeModal: () => void;
 }
 
 type DropdownState = {
-  isOpen: boolean;
-  selected: {
-    value: string;
-    label: string;
-  };
+    isOpen: boolean;
+    selected: {
+        value: string;
+        label: string;
+    };
 }
 
-const SendToCommand : React.FC<SendToCommandProps> = ({
+const SendToCommand: React.FC<SendToCommandProps> = ({
   onSubmit,
   showModal,
   closeModal,
@@ -62,7 +62,7 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
         console.log(`Sending to command: ${dropdownState.selected.value}`);
         onSubmit(dropdownState.selected.label);
       } else {
-      // notify user to select a command
+        // notify user to select a command
         console.log("User didn't select a command");
       }
     },

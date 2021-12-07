@@ -1,14 +1,14 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import CustomChip from './CustomChip';
+import CustomChips from './CustomChips';
 
 describe('CustomChip', () => {
   const customChipText = 'First Chip Text';
   const customChipCloseFn = jest.fn();
 
   beforeEach(() => {
-    render(<CustomChip text={customChipText} onClose={customChipCloseFn} />);
+    render(<CustomChips chips={[{ text: customChipText, onClose: customChipCloseFn }]} />);
   });
 
   it('renders passed string inside chip component', () => {
@@ -19,4 +19,5 @@ describe('CustomChip', () => {
     userEvent.click(screen.getByRole('button'));
     expect(customChipCloseFn).toHaveBeenCalled();
   });
+  // TODO: write tests for customChips
 });

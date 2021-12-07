@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
-import SirForm, { convertDate } from './SirForm';
+import SirForm from './SirForm';
 
 const server = setupServer(
   rest.post('/api/incidents', (req, res, ctx) => res(ctx.json({ location: 'Thanks for your submission' }))),
@@ -11,6 +11,12 @@ const server = setupServer(
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
+
+function convertDate(date: Date): string {
+  const today = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate().toString().padStart(2, '0')}`;
+  console.log(`Today is: ${today}`);
+  return today;
+}
 
 const initialValuesMinusObjects = {
   incidentDate: convertDate(new Date()),
@@ -92,14 +98,14 @@ describe('SirForm', () => {
     // Harm or Potential Harm
     expect(screen.getByRole('combobox', { name: /harm or potential harm/i })).toHaveValue('false');
     // Individuals Involved
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.patient/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.familyMember/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.staffMember/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.visitor/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.volunteer/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.other/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /patient/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /family Member/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /adult/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /child/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /staff Member/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /visitor/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /volunteer/i })).not.toBeChecked();
+    expect(screen.getByRole('checkbox', { name: /other/i })).not.toBeChecked();
     // Type of Event
     expect(screen.getByRole('textbox', { name: /type of event/i })).toBeInTheDocument();
     // Effect of this incident on the individual(s) involved
@@ -131,166 +137,172 @@ describe('SirForm', () => {
 
   // Individual field tests
   // Date of Event
-  it('accepts date entry', () => {
+  it('accepts date entry', async () => {
     userEvent.type(screen.getByLabelText(/date of event/i), '1958-08-08');
-    expect(screen.getByLabelText(/date of event/i)).toHaveValue('1958-08-08');
+    await waitFor(() => expect(screen.getByLabelText(/date of event/i)).toHaveValue('1958-08-08'));
   });
 
   // Time of Event
-  it('accepts time entry', () => {
+  it('accepts time entry', async () => {
     userEvent.type(screen.getByLabelText(/time of event/i), '09:15 PM');
-    expect(screen.getByLabelText(/time of event/i)).toHaveValue('09:15');
+    await waitFor(() => expect(screen.getByLabelText(/time of event/i)).toHaveValue('09:15'));
   });
 
   // Location of Event
-  it('accepts incidentLocation string', () => {
+  it('accepts incidentLocation string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /incident location/i }), 'Test text');
-    expect(screen.getByRole('textbox', { name: /incident location/i })).toHaveValue('Test text');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /incident location/i })).toHaveValue('Test text'));
   });
 
   // Event Type
-  it('accepts eventType selection', () => {
+  it('accepts eventType selection', async () => {
     userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
-    expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event / Incident');
+    await waitFor(() => expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event / Incident'));
   });
 
   // Harm or Potential Harm
-  it('accepts harmOrPotentialHarm selection', () => {
+  it('accepts harmOrPotentialHarm selection', async () => {
     userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'Yes');
-    expect(screen.getByRole('combobox', { name: /harm or potential harm/i })).toHaveValue('true');
+    await waitFor(() => expect(screen.getByRole('combobox', { name: /harm or potential harm/i })).toHaveValue('true'));
   });
 
   // Individuals Involved
-  it('accepts individualsInvolved.patient selection', () => {
+  it('accepts individualsInvolved.patient selection', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.patient/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.patient/i })).toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /patient/i })).toBeChecked());
   });
-  it('accepts individualsInvolved.familyMember selection', () => {
+  it('accepts individualsInvolved.familyMember selection', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.familyMember/i })).toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /family Member/i })).toBeChecked());
   });
-  it('accepts individualsInvolved.adult selection', () => {
+  it('accepts individualsInvolved.adult selection', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.adult/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /adult/i })).toBeChecked());
   });
-  it('accepts individualsInvolved.child selection', () => {
+  it('accepts individualsInvolved.child selection', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.child/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /child/i })).toBeChecked());
   });
-  it('accepts individualsInvolved.staffMember selection', () => {
+  it('accepts individualsInvolved.staffMember selection', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.staffMember/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.staffMember/i })).toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /staff Member/i })).toBeChecked());
   });
-  it('accepts individualsInvolved.visitor selection', () => {
+  it('accepts individualsInvolved.visitor selection', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.visitor/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.visitor/i })).toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /visitor/i })).toBeChecked());
   });
-  it('accepts individualsInvolved.volunteer selection', () => {
+  it('accepts individualsInvolved.volunteer selection', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.volunteer/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.volunteer/i })).toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /volunteer/i })).toBeChecked());
   });
-  it('accepts individualsInvolved.other selection', () => {
+  it('accepts individualsInvolved.other selection', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.other/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.other/i })).toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /other/i })).toBeChecked());
   });
 
-  it('disables Adult and Child inputs until Family Member is checked', () => {
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).toBeDisabled();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).toBeDisabled();
-    userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeDisabled();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeDisabled();
+  it('disables Adult and Child inputs until Family Member is checked', async () => {
+    expect(screen.getByRole('checkbox', { name: /adult/i })).toBeDisabled();
+    expect(screen.getByRole('checkbox', { name: /child/i })).toBeDisabled();
+    userEvent.click(screen.getByTitle(/familyMember/i));
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /adult/i })).not.toBeDisabled());
+    expect(screen.getByRole('checkbox', { name: /child/i })).not.toBeDisabled();
   });
 
-  it('conditionally unchecks Adult and Child inputs when Family Member is unchecked', () => {
+  it('conditionally unchecks Adult and Child inputs when Family Member is unchecked', async () => {
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.adult/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.child/i));
     userEvent.click(screen.getByTitle(/individualsInvolved.familyMember/i));
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.adult/i })).not.toBeChecked();
-    expect(screen.getByRole('checkbox', { name: /individualsInvolved.child/i })).not.toBeChecked();
+    await waitFor(() => expect(screen.getByRole('checkbox', { name: /adult/i })).not.toBeChecked());
+    expect(screen.getByRole('checkbox', { name: /child/i })).not.toBeChecked();
   });
 
   // Type of Event
-  it('accepts typeOfEvent string', () => {
+  it('accepts typeOfEvent string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /type of event/i }), 'Adverse Drug Reaction, Medication Related');
-    expect(screen.getByRole('textbox', { name: /type of event/i })).toHaveValue('Adverse Drug Reaction, Medication Related');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /type of event/i })).toHaveValue('Adverse Drug Reaction, Medication Related'));
   });
 
   // Effect of this incident on the individual(s) involved
-  it('accepts effectOnIndividual selection', () => {
+  it('accepts effectOnIndividual selection', async () => {
     userEvent.selectOptions(screen.getByRole('combobox', { name: /effect of this incident on the individual\(s\) involved/i }), 'No Harm Sustained');
-    expect(screen.getByRole('combobox', { name: /effect of this incident on the individual\(s\) involved/i })).toHaveValue('No Harm Sustained');
+    await waitFor(() => expect(screen.getByRole('combobox', { name: /effect of this incident on the individual\(s\) involved/i })).toHaveValue('No Harm Sustained'));
   });
 
   // Witness info (3 witnesses)
-  it('accepts witness one name', () => {
+  it('accepts witness one name', async () => {
     userEvent.type(screen.getByTitle(/witnessOneName/i), 'Sir Jackman');
-    expect(screen.getByTitle(/witnessOneName/i)).toHaveValue('Sir Jackman');
+    await waitFor(() => expect(screen.getByTitle(/witnessOneName/i)).toHaveValue('Sir Jackman'));
   });
-  it('accepts witness one phone', () => {
+
+  it('accepts witness one phone', async () => {
     userEvent.type(screen.getByTitle(/witnessOnePhone/i), '719-526-6778');
-    expect(screen.getByTitle(/witnessOnePhone/i)).toHaveValue('719-526-6778');
+    await waitFor(() => expect(screen.getByTitle(/witnessOnePhone/i)).toHaveValue('719-526-6778'));
   });
-  it('accepts witness two name', () => {
+
+  it('accepts witness two name', async () => {
     userEvent.type(screen.getByTitle(/witnessTwoName/i), 'Hugh Jass');
-    expect(screen.getByTitle(/witnessTwoName/i)).toHaveValue('Hugh Jass');
+    await waitFor(() => expect(screen.getByTitle(/witnessTwoName/i)).toHaveValue('Hugh Jass'));
   });
-  it('accepts witness two phone', () => {
+
+  it('accepts witness two phone', async () => {
     userEvent.type(screen.getByTitle(/witnessTwoPhone/i), '910-585-8101');
-    expect(screen.getByTitle(/witnessTwoPhone/i)).toHaveValue('910-585-8101');
+    await waitFor(() => expect(screen.getByTitle(/witnessTwoPhone/i)).toHaveValue('910-585-8101'));
   });
-  it('accepts witness three name', () => {
+  it('accepts witness three name', async () => {
     userEvent.type(screen.getByTitle(/witnessThreeName/i), 'Chuck Norris');
-    expect(screen.getByTitle(/witnessThreeName/i)).toHaveValue('Chuck Norris');
+    await waitFor(() => expect(screen.getByTitle(/witnessThreeName/i)).toHaveValue('Chuck Norris'));
   });
-  it('accepts witness three phone', () => {
+  it('accepts witness three phone', async () => {
     userEvent.type(screen.getByTitle(/witnessThreePhone/i), '585-888-1101');
-    expect(screen.getByTitle(/witnessThreePhone/i)).toHaveValue('585-888-1101');
+    await waitFor(() => expect(screen.getByTitle(/witnessThreePhone/i)).toHaveValue('585-888-1101'));
   });
 
   // Departments Involved
-  it('accepts departmentsInvolved string', () => {
+  it('accepts departmentsInvolved string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /department\(s\) involved/i }), 'Ambulatory Care, Emergency Care');
-    expect(screen.getByRole('textbox', { name: /department\(s\) involved/i })).toHaveValue('Ambulatory Care, Emergency Care');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /department\(s\) involved/i })).toHaveValue('Ambulatory Care, Emergency Care'));
   });
 
   // Description of Incident
-  it('accepts incidentDescription string', () => {
+  it('accepts incidentDescription string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /description of incident/i }), 'Test text');
-    expect(screen.getByRole('textbox', { name: /description of incident/i })).toHaveValue('Test text');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /description of incident/i })).toHaveValue('Test text'));
   });
 
   // Preventative Actions Taken
-  it('accepts preventativeAction string', () => {
+  it('accepts preventativeAction string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /what actions, if any, could have been taken to prevent this incident from occurring?/i }), 'Test text');
-    expect(screen.getByRole('textbox', { name: /what actions, if any, could have been taken to prevent this incident from occurring?/i })).toHaveValue('Test text');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /what actions, if any, could have been taken to prevent this incident from occurring?/i })).toHaveValue('Test text'));
   });
 
   // Patient Info (4 Fields)
-  it('accepts patientInfo.patientName string', () => {
+  it('accepts patientInfo.patientName string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /patient name/i }), 'Chuck Norris');
-    expect(screen.getByRole('textbox', { name: /patient name/i })).toHaveValue('Chuck Norris');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /patient name/i })).toHaveValue('Chuck Norris'));
   });
-  it('accepts patientInfo.patientSocial string', () => {
+
+  it('accepts patientInfo.patientSocial string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /patient ssn/i }), '111-11-1111');
-    expect(screen.getByRole('textbox', { name: /patient ssn/i })).toHaveValue('111-11-1111');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /patient ssn/i })).toHaveValue('111-11-1111'));
   });
-  it('accepts patientInfo.patientPhone string', () => {
+
+  it('accepts patientInfo.patientPhone string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /patient telephone number/i }), '111-111-1111');
-    expect(screen.getByRole('textbox', { name: /patient telephone number/i })).toHaveValue('111-111-1111');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /patient telephone number/i })).toHaveValue('111-111-1111'));
   });
-  it('accepts patientInfo.patientAddress string', () => {
+
+  it('accepts patientInfo.patientAddress string', async () => {
     userEvent.type(screen.getByRole('textbox', { name: /patient address/i }), '123 Main St');
-    expect(screen.getByRole('textbox', { name: /patient address/i })).toHaveValue('123 Main St');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /patient address/i })).toHaveValue('123 Main St'));
   });
 
   // Button and alert tests
-  it('button is disabled until all required fields have text', () => {
+  it('button is disabled until all required fields have text', async () => {
     fillAllFields();
-    expect(screen.getByRole('button', { name: /submit/i })).not.toBeDisabled();
+    await waitFor(() => expect(screen.getByRole('button', { name: /submit/i })).not.toBeDisabled());
   });
   it('button submits all fields', async () => {
     fillAllFields();
@@ -304,12 +316,6 @@ describe('SirForm', () => {
     await waitFor(() => {
       expect(window.scrollTo).toHaveBeenCalledWith({ behavior: 'smooth', top: 0 });
     });
-    // const expectedY = 0;
-    // const expectedX = 0;
-    // const actualY = window.scrollY;
-    // const actualX = window.scrollX;
-    // expect(actualX).toBe(expectedX);
-    // expect(actualY).toBe(expectedY);
   });
   it('X button closes alert banner', async () => {
     fillAllFields();

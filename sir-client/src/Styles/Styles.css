@@ -552,6 +552,12 @@ p.disabled{
   align-items: center;
 }
 
+.bag-o-chips {
+  display: flex;
+  flex-flow: row wrap;
+  padding: 4px;
+}
+
 .chip-container {
   display: flex;
   flex-flow: row nowrap;

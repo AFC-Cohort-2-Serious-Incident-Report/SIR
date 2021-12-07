@@ -13,7 +13,7 @@ const CustomChip: FC<CustomChipProps> = ({ text, onClose }: CustomChipProps): Re
       className="chip-button"
       onClick={onClose}
       type="button"
-      data-testid="chip-close-button"
+      data-testid={`id-${text}`}
     >
       <img className="chip-close" src={ChipCloseImg} alt="chip-close-button" />
     </button>
@@ -25,8 +25,14 @@ type CustomChipsProps = {
 }
 
 const CustomChips: FC<CustomChipsProps> = ({ chips }: CustomChipsProps): ReactElement => (
-  <div className="chip-container">
-    {chips.map((c) => <CustomChip text={c.text} onClose={c.onClose} />)}
+  <div className="bag-o-chips">
+    {chips.map((c: CustomChipProps, i: number) => (
+      <CustomChip
+        key={i.toString()}
+        text={c.text}
+        onClose={c.onClose}
+      />
+    ))}
   </div>
 );
 

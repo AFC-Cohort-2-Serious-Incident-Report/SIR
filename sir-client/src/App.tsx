@@ -1,8 +1,7 @@
 import React from 'react';
 import './Styles/Styles.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import NavBar from './NavBar/NavBar';
-import ResponderView from './ResponderView/ResponderView';
+import ResponderView from './Views/ResponderView';
 import ReporterView from './Views/ReporterView';
 
 const App: React.FC = () => (
@@ -11,18 +10,7 @@ const App: React.FC = () => (
       <Routes>
         <Route path="/" element={<ReporterView />} />
         <Route path="/reporter" element={<ReporterView />} />
-        {/* TODO: Refactor responder into ResponderView like ReporterView. */}
-        <Route
-          path="/responder"
-          element={(
-            <div>
-              <header><NavBar isResponder /></header>
-              <div className="view-container">
-                <ResponderView />
-              </div>
-            </div>
-                    )}
-        />
+        <Route path="/responder" element={<ResponderView />} />
       </Routes>
     </BrowserRouter>
   </div>

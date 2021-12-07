@@ -2,7 +2,7 @@ import { render, screen, waitFor } from '@testing-library/react';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import userEvent from '@testing-library/user-event';
-import ResponderView from './ResponderView';
+import ResponderIncidentReports from './ResponderIncidentReports';
 import dataWithOne from '../Incident_Row_Test_Data.json';
 import testData from '../sir_test_data.json';
 
@@ -18,7 +18,7 @@ type IncidentRowEntries = {
   row: IncidentRowEntry[];
 }
 
-describe('ResponderView', () => {
+describe('ResponderIncidentReports', () => {
   describe('Responder Table', () => {
     const server = setupServer(
       rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
@@ -34,7 +34,7 @@ describe('ResponderView', () => {
 
     beforeAll(() => server.listen());
     beforeEach(() => {
-      render(<ResponderView />);
+      render(<ResponderIncidentReports />);
     });
     afterEach(() => server.resetHandlers());
     afterAll(() => server.close());
@@ -217,7 +217,7 @@ describe('ResponderView', () => {
     beforeAll(() => server.listen());
     afterAll(() => server.close());
     beforeEach(() => {
-      render(<ResponderView />);
+      render(<ResponderIncidentReports />);
     });
 
     it('should update record when detail view modal is saved', async () => {

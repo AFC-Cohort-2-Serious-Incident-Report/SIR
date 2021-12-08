@@ -222,7 +222,7 @@ const ResponderIncidentReports: FC = () => {
         {showErrorMessage && (
           <CustomAlert
             onClose={() => setShowErrorMessage(false)}
-            alertType={AlertType.WARNING}
+            alertType={AlertType.ERROR}
             text="Error Occurred While Retrieving Incident"
           />
         )}

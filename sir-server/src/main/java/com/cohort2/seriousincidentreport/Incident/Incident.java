@@ -41,17 +41,6 @@ public class Incident implements Serializable {
     @JoinColumn(name = "patient_id")
     private Patient patientInfo;
 
-    /*
-    @OneToOne(mappedBy = "incident", fetch = FetchType.LAZY,
-                    cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private Individuals individualsInvolved;
-
-    @OneToOne(mappedBy = "incident", fetch = FetchType.LAZY,
-      cascade = CascadeType.ALL)
-    @PrimaryKeyJoinColumn
-    private Patient patientInfo;
-*/
     private String typeOfEvent;
     private String effectOnIndividual;
     private String witnessOneName;

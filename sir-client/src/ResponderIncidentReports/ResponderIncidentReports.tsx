@@ -160,6 +160,7 @@ const ResponderIncidentReports: FC = () => {
   }, [sortMethod]);
 
   function handleIndividualsInvolved(report: IncidentData) {
+    if (report.individualsInvolved === null) return null;
     let count = 0;
     let firstTrueValue = '';
     // eslint-disable-next-line no-restricted-syntax

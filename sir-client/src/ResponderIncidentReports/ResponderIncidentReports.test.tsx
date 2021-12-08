@@ -182,6 +182,34 @@ describe('ResponderIncidentReports', () => {
     });
   });
 
+  describe('Search functionality', async () => {
+    const server = setupServer(
+      rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
+      rest.get(
+        '/api/incidents/1',
+        (
+          req,
+          res,
+          ctx,
+        ) => res(ctx.json(testData)),
+      ),
+    );
+
+    beforeAll(() => server.listen());
+    beforeEach(() => {
+      render(<ResponderIncidentReports />);
+    });
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+    it('searching location correctly shows results for location specified', async () => {
+      await waitFor(() => expect(screen.getByTestId('search-input')).toBeInTheDocument());
+      userEvent.type(screen.getByTestId('search-input'), testData.incidentLocation);
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
+      screen.getByTestId('search-input').dispatchEvent(event);
+      await waitFor(() => expect(screen.getAllByText(testData.incidentLocation)[1]).toBeInTheDocument());
+    });
+  });
+
   describe('Detailed View Modal Submission', () => {
     // const { content, ...pageableData } = dataWithOne;
     const updatedDataWithOne = { ...dataWithOne };

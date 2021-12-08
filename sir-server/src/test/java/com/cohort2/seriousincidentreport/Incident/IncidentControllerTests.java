@@ -288,7 +288,7 @@ class IncidentControllerTests {
                 {
                 "incidentDate": "2014-08-18",
                 "incidentTime": "21:11",
-                "incidentLocation": "Test location",
+                "incidentLocation": "SWF",
                 "eventType": "Actual Event / Incident",
                 "harmOrPotentialHarm": true,
                 "individualsInvolved": {
@@ -327,10 +327,10 @@ class IncidentControllerTests {
                 .andExpect(status().isOk())
                 .andReturn();
 
-        MvcResult result2 = this.mvc.perform(get("/api/incidents/search?query=Chuck Norris")
+        MvcResult result2 = this.mvc.perform(get("/api/incidents/search?query=SWF")
                 .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].patientInfo.patientName").value("Chuck Norris"))
+                .andExpect(jsonPath("$.content[0].incidentLocation").value("SWF"))
                 .andReturn();
 
 

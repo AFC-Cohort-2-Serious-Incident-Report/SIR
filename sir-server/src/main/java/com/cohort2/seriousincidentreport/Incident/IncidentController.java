@@ -41,7 +41,7 @@ public class IncidentController {
     public ResponseEntity<Iterable<Incident>> getIncidentsSearch(@RequestParam(defaultValue = "") String query, Pageable pageable) {
         Iterable<Incident> incidents = new ArrayList<Incident>();
         try {
-            incidents = this.repository.findAllByPatientInfo_PatientNameContaining(query, pageable);
+            incidents = this.repository.findAllByIncidentLocationContaining(query, pageable);
         } catch (Exception e) {
             return new ResponseEntity<Iterable<Incident>>(incidents, null, 503);
         } finally {

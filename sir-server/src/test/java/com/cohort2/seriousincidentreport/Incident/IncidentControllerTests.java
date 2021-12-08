@@ -279,4 +279,60 @@ class IncidentControllerTests {
         assertEquals("Test action", savedIncident.getPreventativeAction());
         assertEquals("{\"patientName\":\"Chuck Norris\",\"patientSocial\":\"125-57-4578\",\"patientPhone\":\"775-878-1257\",\"patientAddress\":\"123 Main Street, San Diego, CA 92109\"}", patientInfo);
     }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void testSearchIncidentByPatientName() throws Exception {
+        String contentString = """
+                {
+                "incidentDate": "2014-08-18",
+                "incidentTime": "21:11",
+                "incidentLocation": "Test location",
+                "eventType": "Actual Event / Incident",
+                "harmOrPotentialHarm": true,
+                "individualsInvolved": {
+                    "patient": true,
+                    "other": true,
+                    "familyMember": true,
+                    "adult": true,
+                    "child": true,
+                    "staffMember": true,
+                    "visitor": true,
+                    "volunteer":true
+                    },
+                "typeOfEvent": "Adverse Drug Reaction, Medication Related",
+                "effectOnIndividual": "Harm Sustained",
+                "witnessOneName": "Sir Jackman",
+                "witnessOnePhone": "719-526-6465",
+                "witnessTwoName": "Hugh Jass",
+                "witnessTwoPhone": "910-585-8101",
+                "witnessThreeName": "Chuck Norris",
+                "witnessThreePhone": "585-811-7777",
+                "departmentsInvolved": "Ambulatory Care, Emergency Care",
+                "incidentDescription": "Test description",
+                "preventativeAction": "Test action",
+                "patientInfo": {
+                    "patientName": "Chuck Norris",
+                    "patientSocial": "125-57-4578",
+                    "patientPhone": "775-878-1257",
+                    "patientAddress": "123 Main Street, San Diego, CA 92109"
+                    }
+                }
+                """;
+
+        MvcResult result = this.mvc.perform(post("/api/incidents")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(contentString))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        MvcResult result2 = this.mvc.perform(get("/api/incidents/search?query=Chuck Norris")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].patientInfo.patientName").value("Chuck Norris"))
+                .andReturn();
+
+
+    }
 }

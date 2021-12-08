@@ -44,7 +44,6 @@ public class Incident implements Serializable {
     @JoinColumn(name = "patient_id")
     private Patient patientInfo;
 
-    private String typeOfEvent;
     private String effectOnIndividual;
     private String witnessOneName;
     private String witnessOnePhone;

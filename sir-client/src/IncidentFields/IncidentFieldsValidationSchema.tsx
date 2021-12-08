@@ -16,8 +16,7 @@ const IncidentFieldsValidationSchema = Yup.object().shape({
     volunteer: Yup.boolean().notRequired(),
     other: Yup.boolean().notRequired(),
   }),
-  // TODO: how to validate this?
-  // typeOfEvent: Yup.array().of(Yup.string()).required('Required'),
+  typeOfEvent: Yup.array().of(Yup.string()).required('Required'),
   effectOnIndividual: Yup.string().required('Required'),
   witnessOneName: Yup.string().notRequired(),
   witnessOnePhone: Yup.string().notRequired(),

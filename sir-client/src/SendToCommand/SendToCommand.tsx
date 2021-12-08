@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import Dropdown, { Option } from 'react-dropdown';
 import CustomModal, { CustomModalSubmitProps } from '../Components/CustomModal';
 
@@ -54,14 +54,10 @@ const SendToCommand : React.FC<SendToCommandProps> = ({
       // Check if dropdown is selected
       const currentDropdown = dropDownRef.current as Dropdown;
       const dropdownState = currentDropdown.state as DropdownState;
-      console.log(currentDropdown.state);
-      console.log(dropdownState);
       if (dropdownState.selected.value !== '') {
-        console.log(`Sending to command: ${dropdownState.selected.value}`);
         onSubmit(dropdownState.selected.label);
       } else {
       // notify user to select a command
-        console.log("User didn't select a command");
       }
     },
   };

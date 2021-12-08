@@ -1,6 +1,7 @@
 package com.cohort2.seriousincidentreport.Patient;
 
 import com.cohort2.seriousincidentreport.Incident.Incident;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 
 import javax.persistence.*;
@@ -13,14 +14,12 @@ import javax.persistence.*;
 @Table
 public class Patient {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Getter(value = AccessLevel.NONE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @JsonIgnore
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "incident_id", nullable = true)
-    @Getter(value = AccessLevel.NONE)
-    @Setter(value = AccessLevel.NONE)
+    @OneToOne(mappedBy = "patientInfo")
+    @JsonIgnore
     private Incident incident;
 
     private String patientName;

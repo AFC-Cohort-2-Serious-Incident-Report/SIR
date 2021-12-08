@@ -12,6 +12,10 @@ type IncidentRowEntry = {
   incidentLocation: string;
   harmOrPotentialHarm: boolean;
   eventType: string;
+  individualsInvolved: {
+    patient: boolean, familyMember: boolean, adult: boolean, child: boolean,
+    staffMember: boolean, visitor: boolean, volunteer: boolean, other: boolean
+  }
 }
 
 type IncidentRowEntries = {
@@ -205,10 +209,10 @@ describe('ResponderIncidentReports', () => {
         ctx,
       ) => {
         const {
-          id, incidentDate, incidentLocation, harmOrPotentialHarm, eventType,
+          id, incidentDate, incidentLocation, harmOrPotentialHarm, eventType, individualsInvolved,
         } = req.body;
         receivedData = [{
-          id, incidentDate, incidentLocation, harmOrPotentialHarm, eventType,
+          id, incidentDate, incidentLocation, harmOrPotentialHarm, eventType, individualsInvolved,
         }];
         updatedDataWithOne.content = receivedData;
         return res(ctx.json(dataWithOne));
@@ -224,7 +228,7 @@ describe('ResponderIncidentReports', () => {
       expect(await screen.findByTestId('incident-date')).toHaveTextContent('03/27/2021');
       expect(screen.getByTestId('incident-location')).toHaveTextContent('Shouxihu');
       expect(screen.getByTestId('potential-harm')).toHaveTextContent('Yes');
-      expect(screen.getByTestId('event-type')).toHaveTextContent('visa');
+      expect(screen.getByTestId('incident-type')).toHaveTextContent('visa');
 
       userEvent.click(screen.getByRole('button', { name: /view/i }));
       userEvent.type(await screen.findByLabelText(/date of event/i), '1958-08-08');
@@ -236,7 +240,7 @@ describe('ResponderIncidentReports', () => {
       await waitFor(() => expect(screen.getByTestId('incident-date')).toHaveTextContent('1958-08-08'));
       expect(screen.getByTestId('incident-location')).toHaveTextContent('Test text');
       // expect(screen.getByTestId('potential-harm')).toHaveTextContent('No');
-      expect(screen.getByTestId('event-type')).toHaveTextContent('Actual Event / Incident');
+      expect(screen.getByTestId('incident-type')).toHaveTextContent('Actual Event / Incident');
     });
   });
 });

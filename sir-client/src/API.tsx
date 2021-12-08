@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
 const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
 
@@ -42,24 +42,34 @@ export type Incident = {
     patientInfo: Patient;
 }
 
+type PageableData = {
+    page: number,
+    size: number,
+    sort: string
+}
+
 // Shouldn't be needed now that pagination is implemented.
 // export const getAllIncidents = () => axios.get(`${API_HOST}/api/incidents`);
 
-export const getIncidents = (params?: any) => axios.get(`${API_HOST}/api/incidents`, {
-  params: {
-    size: 10,
-    page: 0,
-    sort: 'incidentDate,DESC',
-    ...params,
+export const getIncidents = (params?: PageableData): Promise<AxiosResponse> => axios.get(
+  `${API_HOST}/api/incidents`,
+  {
+    params: {
+      size: 10,
+      page: 0,
+      sort: 'incidentDate,DESC',
+      ...params,
+    },
   },
-});
+);
 
 export const getIncidentByID = async (id: number): Promise<Incident> => {
   const response = await axios.get(`${API_HOST}/api/incidents/${id}`);
   return response.data;
 };
 
-export const updateIncidentByID = (updatedIncident: Incident) => axios.patch(
+export const updateIncidentByID = (updatedIncident: Incident):
+    Promise<AxiosResponse> => axios.patch(
   `${API_HOST}/api/incidents/${updatedIncident.id}`,
   updatedIncident,
 );

@@ -338,4 +338,18 @@ describe('SirForm', () => {
       expect(value).toHaveValue('');
     }));
   });
+  // Form displays error banner if submission is not successful
+  it('Displays Error Alert Banner if submission is not successful', async () => {
+    window.scrollTo = jest.fn();
+    fillAllFields();
+    server.use(
+      rest.post('/api/incidents', (
+        req,
+        res,
+        ctx,
+      ) => res(ctx.status(400))),
+    );
+    userEvent.click(screen.getByRole('button', { name: /submit/i }));
+    expect(await screen.findByText(/Error Occurred While Submitting the Incident Report/i));
+  });
 });

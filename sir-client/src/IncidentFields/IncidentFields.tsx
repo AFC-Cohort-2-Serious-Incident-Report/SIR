@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { Field } from 'formik';
 
 type IncidentFieldProps = {
   setFieldValue: (field: string, newValue: boolean) => void
 }
 
-const IncidentFields = ({ setFieldValue }: IncidentFieldProps) => {
+const IncidentFields = ({ setFieldValue }: IncidentFieldProps): ReactElement => {
   const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
 
   const handleFamilyMemberCheck = () => {

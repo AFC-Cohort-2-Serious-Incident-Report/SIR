@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import IncidentFields from '../IncidentFields/IncidentFields';
 import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';
@@ -43,6 +43,7 @@ interface Values {
 
 const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [showSubmissionErrorMessage, setShowSubmissionErrorMessage] = useState(false);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
@@ -50,16 +51,21 @@ const SirForm: React.FC = () => {
   const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
 
   const handleSubmitClick = (values: Values) => {
-    console.log(values);
     axios.post(`${API_HOST}/api/incidents`, values)
-      .then((result) => console.log(values))
-      .then(() => setReportSubmitted(true));
-    // .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
+      .then(() => setReportSubmitted(true))
+      .catch(() => setShowSubmissionErrorMessage(true));
   };
 
   return (
     <>
       <div className="alert-container">
+        {showSubmissionErrorMessage && (
+          <CustomAlert
+            onClose={() => setShowSubmissionErrorMessage(false)}
+            alertType={AlertType.ERROR}
+            text="Error Occurred While Submitting the Incident Report"
+          />
+        )}
         {reportSubmitted && (
           <CustomAlert
             onClose={() => setReportSubmitted(false)}

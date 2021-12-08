@@ -1,4 +1,4 @@
-import React, {
+import {
   FC, useEffect, useRef, useState,
 } from 'react';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
@@ -37,7 +37,8 @@ const ResponderIncidentReports: FC = () => {
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
   const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
   const [showSentToCommandBanner, setShowSentToCommandBanner] = useState(false);
-  const [showUpdatedIncident, setShowUpdatedIncident] = useState(false);
+  const [showUpdatedIncidentBanner, setShowUpdatedIncidentBanner] = useState(false);
+  const [showErrorMessage, setShowErrorMessage] = useState(false);
   const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
   const [sortMethod, setSortMethod] = useState({
     sortBy: 'incidentDate',
@@ -130,10 +131,16 @@ const ResponderIncidentReports: FC = () => {
 
   const handleDetailViewClose = () => setFocusedID(null);
 
+  const handleDetailErrorClose = () => {
+    setFocusedID(null);
+    setShowErrorMessage(true);
+  };
+
   const handleDetailViewSubmit = (updatedIncident: Incident) => {
     updateIncidentByID(updatedIncident)
       .then(() => {
         setFocusedID(null);
+        setShowUpdatedIncidentBanner(true);
         updateTable();
       })
       .catch();
@@ -153,6 +160,7 @@ const ResponderIncidentReports: FC = () => {
   }, [sortMethod]);
 
   function handleIndividualsInvolved(report: IncidentData) {
+    if (report.individualsInvolved === null) return null;
     let count = 0;
     let firstTrueValue = '';
     // eslint-disable-next-line no-restricted-syntax
@@ -211,6 +219,13 @@ const ResponderIncidentReports: FC = () => {
   return (
     <div className="view-container">
       <div className="alert-container">
+        {showErrorMessage && (
+          <CustomAlert
+            onClose={() => setShowErrorMessage(false)}
+            alertType={AlertType.ERROR}
+            text="Error Occurred While Retrieving Incident"
+          />
+        )}
         {showSentToCommandBanner && (
           <CustomAlert
             onClose={() => setShowSentToCommandBanner(false)}
@@ -218,13 +233,20 @@ const ResponderIncidentReports: FC = () => {
             text={`Sent to ${selectedSendToCommander}`}
           />
         )}
+        {showUpdatedIncidentBanner && (
+        <CustomAlert
+          onClose={() => setShowUpdatedIncidentBanner(false)}
+          alertType={AlertType.SUCCESS}
+          text="Incident Successfully Updated"
+        />
+        )}
 
       </div>
       {focusedID && (
         <IncidentDetailView
-                    // todo change 1 to passed id
           id={focusedID}
           onClose={handleDetailViewClose}
+          onErrorClose={handleDetailErrorClose}
           onSubmitUpdate={handleDetailViewSubmit}
         />
       )}

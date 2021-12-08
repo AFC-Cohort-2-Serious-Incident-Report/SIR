@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { Field, Form, Formik } from 'formik';
+import { Form, Formik } from 'formik';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import IncidentFields from '../IncidentFields/IncidentFields';
 import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';
@@ -50,11 +50,8 @@ const SirForm: React.FC = () => {
   const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
 
   const handleSubmitClick = (values: Values) => {
-    console.log(values);
     axios.post(`${API_HOST}/api/incidents`, values)
-      .then((result) => console.log(values))
       .then(() => setReportSubmitted(true));
-    // .then(() => console.log(`Submitted report to ${API_HOST}/api/incidents`));
   };
 
   return (

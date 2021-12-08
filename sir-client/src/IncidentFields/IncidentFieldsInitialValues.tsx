@@ -1,6 +1,5 @@
 function convertDate(date: Date): string {
   const today = `${date.getUTCFullYear()}-${date.getUTCMonth() + 1}-${date.getUTCDate().toString().padStart(2, '0')}`;
-  console.log(`Today is: ${today}`);
   return today;
 }
 

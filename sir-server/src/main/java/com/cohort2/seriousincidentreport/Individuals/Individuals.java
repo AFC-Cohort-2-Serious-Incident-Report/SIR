@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Table
 public class Individuals {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @JsonIgnore
     private Long id;
 

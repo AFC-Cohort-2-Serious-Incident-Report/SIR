@@ -1,8 +1,7 @@
 import {
-  FC, ReactElement, useEffect, useState,
+  ReactElement, useEffect, useState,
 } from 'react';
-import { Form, Formik, useFormikContext } from 'formik';
-import { log } from 'util';
+import { Form, Formik } from 'formik';
 import CustomModal from '../Components/CustomModal';
 import { getIncidentByID, Incident } from '../API';
 import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';
@@ -11,20 +10,24 @@ import IncidentFields from '../IncidentFields/IncidentFields';
 type IncidentDetailViewProps = {
   id: number;
   onClose: () => void;
+  onErrorClose: () => void;
   onSubmitUpdate: (updatedIncident: Incident) => void;
 }
 
 const IncidentDetailView = ({
   id,
   onClose,
+  onErrorClose,
   onSubmitUpdate,
 }: IncidentDetailViewProps): ReactElement => {
   const [incident, setIncident] = useState<Incident | null>(null);
 
   useEffect(() => {
     getIncidentByID(id)
-      .then((results) => setIncident(results))
-      .catch();
+      .then((results) => {
+        setIncident(results);
+      })
+      .catch(() => onErrorClose());
   }, []);
 
   return (

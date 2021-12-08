@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 
 export type CustomModalSubmitProps = {
-  onSubmit: () => void;
+  onSubmit: () => void,
   text: string;
 }
 

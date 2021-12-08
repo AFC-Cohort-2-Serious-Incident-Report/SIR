@@ -47,7 +47,7 @@ export type Incident = {
 
 export const getIncidents = (params?: any) => axios.get(`${API_HOST}/api/incidents`, {
   params: {
-    size: 5,
+    size: 10,
     page: 0,
     sort: 'incidentDate,DESC',
     ...params,

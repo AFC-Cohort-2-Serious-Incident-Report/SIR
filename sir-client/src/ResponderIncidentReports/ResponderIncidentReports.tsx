@@ -24,20 +24,25 @@ type IncidentData = {
 }
 
 type PageData = {
-    size: number;
-    firstPage: boolean;
-    lastPage: boolean;
-    totalCount: number;
-    currentPage: number;
-    offset: number;
+  size: number;
+  firstPage: boolean;
+  lastPage: boolean;
+  totalCount: number;
+  currentPage: number;
+  offset: number;
 }
 
-const ResponderView: FC = () => {
+const ResponderIncidentReports: FC = () => {
   const [reports, setReports] = useState([]);
   const [selectedReports, setSelectedReports] = useState([] as IncidentData[]);
   const [showSendToCommandModal, setShowSendToCommandModal] = useState(false);
   const [showSentToCommandBanner, setShowSentToCommandBanner] = useState(false);
+  const [showUpdatedIncident, setShowUpdatedIncident] = useState(false);
   const [selectedSendToCommander, setSelectedSendToCommander] = useState('');
+  const [sortMethod, setSortMethod] = useState({
+    sortBy: 'incidentDate',
+    sortDirection: 'desc',
+  });
 
   const selectAllCheckbox = useRef<HTMLInputElement | null>(null);
   const [focusedID, setFocusedID] = useState<number | null>(null);
@@ -54,7 +59,6 @@ const ResponderView: FC = () => {
     getIncidents()
       .then((response) => {
         setReports(response.data.content);
-        console.log(response.data.content);
         setPageData({
           offset: response.data.pageable.offset,
           size: response.data.size,
@@ -105,14 +109,24 @@ const ResponderView: FC = () => {
     setSelectedSendToCommander(command);
   };
 
-  useEffect(() => {
-    const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
-    if (selectedReports.length > 0 && selectedReports.length < reports.length) {
-      currentSelectAllCheckbox.indeterminate = true;
-    } else {
-      currentSelectAllCheckbox.indeterminate = false;
-    }
-  }, [selectedReports]);
+  const navigatePage = (page?: number, size?: number) => {
+    getIncidents({
+      page: page || 0,
+      size: size || pageData.size,
+      sort: `${sortMethod.sortBy},${sortMethod.sortDirection}`,
+    })
+      .then((response) => {
+        setReports(response.data.content);
+        setPageData({
+          offset: response.data.pageable.offset,
+          size: response.data.size,
+          firstPage: response.data.first,
+          lastPage: response.data.last,
+          totalCount: response.data.totalElements,
+          currentPage: response.data.number,
+        });
+      });
+  };
 
   const handleDetailViewClose = () => setFocusedID(null);
 
@@ -124,6 +138,19 @@ const ResponderView: FC = () => {
       })
       .catch();
   };
+
+  useEffect(() => {
+    const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
+    if (selectedReports.length > 0 && selectedReports.length < reports.length) {
+      currentSelectAllCheckbox.indeterminate = true;
+    } else {
+      currentSelectAllCheckbox.indeterminate = false;
+    }
+  }, [selectedReports]);
+
+  useEffect(() => {
+    navigatePage(pageData.currentPage || 0, pageData.size || 10);
+  }, [sortMethod]);
 
   function handleIndividualsInvolved(report: IncidentData) {
     let count = 0;
@@ -157,12 +184,13 @@ const ResponderView: FC = () => {
           type="checkbox"
           name="selectRow"
           checked={selectedReports.includes(report)}
+          onChange={() => checkboxOnChangeHandler(report)}
         />
       </td>
       {/* THE TEST ID HERE REFERS TO COLUMN ON FIGMA, the data pulled is corresponds to data */}
       <td data-testid="incident-date">{report.incidentDate}</td>
       <td data-testid="incident-location">{report.incidentLocation}</td>
-      <td data-testid="incident_type">{report.eventType}</td>
+      <td data-testid="incident-type">{report.eventType}</td>
       <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
       <td data-testid="individuals-involved">{handleIndividualsInvolved(report)}</td>
       <td data-testid="event-type">{report.typeOfEvent}</td>
@@ -172,52 +200,36 @@ const ResponderView: FC = () => {
     </tr>
   ));
 
-  const navigatePage = (page?: number, size?: number) => {
-    getIncidents({
-      page: page || 0,
-      size: size || 5,
-    })
-      .then((response) => {
-        setReports(response.data.content);
-        setPageData({
-          offset: response.data.pageable.offset,
-          size: response.data.size,
-          firstPage: response.data.first,
-          lastPage: response.data.last,
-          totalCount: response.data.totalElements,
-          currentPage: response.data.number,
-        });
-      });
-  };
-
   return (
-    <>
+    <div className="view-container">
       <div className="alert-container">
         {showSentToCommandBanner && (
-        <CustomAlert
-          onClose={() => setShowSentToCommandBanner(false)}
-          alertType={AlertType.SUCCESS}
-          text={`Sent to ${selectedSendToCommander}`}
-        />
+          <CustomAlert
+            onClose={() => setShowSentToCommandBanner(false)}
+            alertType={AlertType.SUCCESS}
+            text={`Sent to ${selectedSendToCommander}`}
+          />
         )}
 
       </div>
       {focusedID && (
         <IncidentDetailView
                     // todo change 1 to passed id
-          id={1}
+          id={focusedID}
           onClose={handleDetailViewClose}
-          onSubmit={handleDetailViewSubmit}
+          onSubmitUpdate={handleDetailViewSubmit}
         />
       )}
       <div className="responder-view">
         <div className="table-left-align">
-          <h1 style={{ marginBottom: '40px', fontWeight: 'normal' }}>Incident Reports</h1>
-          <SendToCommand
-            showModal={showSendToCommandModal}
-            onSubmit={(command: string) => sendButtonHandler(command)}
-            closeModal={() => setShowSendToCommandModal(false)}
-          />
+          <h2>Incident Reports</h2>
+          {showSendToCommandModal
+                    && (
+                    <SendToCommand
+                      onSubmit={(command: string) => sendButtonHandler(command)}
+                      closeModal={() => setShowSendToCommandModal(false)}
+                    />
+                    )}
           <div>
             {(selectedReports.length > 0) ? (
               <div className="reports-selected-bar">
@@ -250,7 +262,23 @@ const ResponderView: FC = () => {
                     ref={selectAllCheckbox}
                   />
                 </th>
-                <th>Event Date</th>
+                <th
+                  onClick={() => {
+                    setSortMethod({
+                      sortBy: 'incidentDate',
+                      sortDirection: sortMethod.sortDirection === 'desc' ? 'asc' : 'desc',
+                    });
+                  }}
+                >
+                  Event Date
+                  {
+                    (sortMethod.sortBy === 'incidentDate')
+                      ? (
+                        <i className={sortMethod.sortDirection === 'asc' ? 'gg-chevron-up' : 'gg-chevron-down'} />
+                      )
+                      : null
+                  }
+                </th>
                 <th>Location</th>
                 <th>Incident Type</th>
                 <th>Harm</th>
@@ -274,8 +302,8 @@ const ResponderView: FC = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default ResponderView;
+export default ResponderIncidentReports;

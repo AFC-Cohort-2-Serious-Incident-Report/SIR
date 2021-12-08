@@ -195,7 +195,15 @@ const ResponderIncidentReports: FC = () => {
       <td data-testid="individuals-involved">{handleIndividualsInvolved(report)}</td>
       <td data-testid="event-type">{report.typeOfEvent}</td>
       <td>
-        <button type="button" onClick={() => setFocusedID(report.id)}>View</button>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setFocusedID(report.id);
+          }}
+        >
+          View
+        </button>
       </td>
     </tr>
   ));
@@ -252,7 +260,6 @@ const ResponderIncidentReports: FC = () => {
           <table>
             <thead>
               <tr>
-                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
                 <th>
                   <input
                     type="checkbox"

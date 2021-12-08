@@ -238,5 +238,39 @@ describe('ResponderIncidentReports', () => {
       // expect(screen.getByTestId('potential-harm')).toHaveTextContent('No');
       expect(screen.getByTestId('event-type')).toHaveTextContent('Actual Event / Incident');
     });
+
+    it('should display success banner when submission is completed successfully', async () => {
+      userEvent.click(await screen.findByRole('button', { name: /view/i }));
+      userEvent.type(await screen.findByRole('textbox', { name: /incident location/i }), 'Test text');
+      userEvent.click(screen.getByRole('button', { name: /save/i }));
+      expect(await screen.findByText(/incident successfully updated/i));
+      expect(await screen.findByTestId('incident-location')).toHaveTextContent('Test text');
+    });
+  });
+
+  describe('Detail View Error Handling', () => {
+    const server = setupServer(
+      rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
+      rest.get(
+        '/api/incidents/1',
+        (
+          req,
+          res,
+          ctx,
+        ) => res(ctx.status(400)),
+      ),
+    );
+
+    beforeAll(() => server.listen());
+    beforeEach(() => {
+      render(<ResponderIncidentReports />);
+    });
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+
+    it('should display error banner if error occurs', async () => {
+      userEvent.click(await screen.findByRole('button', { name: /view/i }));
+      expect(await screen.findByText(/error occurred while retrieving incident/i));
+    });
   });
 });

@@ -13,14 +13,13 @@ describe('Send To Command Modal', () => {
   beforeEach(() => {
     render(<SendToCommand
       onSubmit={handleSubmit}
-      showModal
       closeModal={closeModal}
     />);
   });
 
   it('renders components correctly', async () => {
     expect(screen.queryByText(/^send up to command$/i)).toBeInTheDocument();
-    expect(screen.getByTestId('close-button')).toBeInTheDocument();
+    expect(screen.getByTestId('modal-close-button')).toBeInTheDocument();
     expect(screen.getByTitle(/^command$/i)).toBeInTheDocument();
     expect(screen.getByText(/^select a command$/i)).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /send/i })).toBeInTheDocument();

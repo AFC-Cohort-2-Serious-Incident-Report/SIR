@@ -3,7 +3,6 @@ import { render, screen } from '@testing-library/react';
 import Pagination from './Pagination';
 
 type PageData = {
-  pages: number;
   size: number;
   firstPage: boolean;
   lastPage: boolean;
@@ -13,7 +12,6 @@ type PageData = {
 }
 
 const testPageData: PageData = {
-  pages: 3,
   size: 5,
   firstPage: true,
   lastPage: false,
@@ -24,7 +22,6 @@ const testPageData: PageData = {
 
 test('Pagination renders visually', async () => {
   render(<Pagination
-    pages={testPageData.pages}
     size={testPageData.size}
     firstPage={testPageData.firstPage}
     lastPage={testPageData.lastPage}

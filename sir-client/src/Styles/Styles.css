@@ -65,6 +65,16 @@ h2 {
   padding: 0;
 }
 
+h3 {
+  display: block;
+  position: relative;
+  font-size: 1rem;
+  font-weight: 600;
+  color: rgb(var(--color-muted-dark));
+  height: 25px;
+  padding-top: 1em;
+}
+
 h4 {
   font-size: 1.5rem;
   font-weight: 400;
@@ -228,8 +238,69 @@ table {
 }
 
 tr {
-  border-bottom: 1px solid lightgray;
-  line-height: 35px;
+  display: grid;
+  position: relative;
+  border-bottom: 1px solid rgba(var(--color-muted), 0.3);
+  line-height: 64px;
+  height: 64px;
+  font-size: 1.05rem;
+  cursor: pointer;
+  user-select: none;
+  transition: var(--transition-linear);
+  grid-template-columns: 70px minmax(120px, 180px) minmax(130px, 150px) minmax(230px, 250px) minmax(70px, 90px) 230px 120px minmax(100px, 1fr);
+}
+
+tr td {
+  transition: var(--transition-linear);
+}
+
+tr:hover td {
+  background-color: rgba(var(--color-muted), 0.15);
+}
+
+table tr td:first-of-type,
+table tr th:first-of-type {
+  padding-left: 16px;
+}
+
+table tr td:last-of-type,
+table tr th:last-of-type {
+  display: flex;
+  flex-direction: row-reverse;
+  align-items: center;
+}
+
+table tr td,
+table tr th {
+  height: 64px;
+  white-space: nowrap;
+}
+
+table thead tr th:nth-of-type(2) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  cursor: pointer;
+}
+
+table thead tr th:nth-of-type(2) i {
+  margin-left: 5px;
+}
+
+table tbody tr td:last-of-type button {
+  padding: 0;
+}
+
+.responder-view h2 {
+  margin: 0 0 40px 0;
+}
+
+.responder-view h3 {
+  height: 60px;
+  margin: 0;
+  padding: 0 0 0 16px;
+  line-height: 60px;
+  box-sizing: border-box;
 }
 
 .responder-view {
@@ -302,7 +373,6 @@ tr {
   box-sizing: border-box;
   position: relative;
 }
-
 
 .group.split {
   grid-template-columns: 1fr 1fr;
@@ -482,6 +552,29 @@ tr {
 .checkbox[parent] {
   padding-left: 32px;
 }
+p[data-indent="yes"]{
+  margin-left: 20px;
+}
+p {
+  display: flex;
+  flex-direction: row;
+  font-family: 'Public Sans', sans-serif;
+  margin: 10px 0px;
+  font-size: 16px;
+  gap: 10px;
+  align-items: center;
+}
+
+.box {
+  height: 18px;
+  width: 18px;
+  border-radius: 8px;
+}
+
+
+p.disabled{
+  opacity: 0.5;
+}
 
 /*TODO Is this used anywhere else than SirForm? It was refactored to label*/
 p[data-indent="yes"] {
@@ -505,7 +598,7 @@ p {
 .box {
   height: 18px;
   width: 18px;
-  border-radius: 1px;
+  border-radius: 8px;
   margin-right: 10px;
 }
 
@@ -552,7 +645,7 @@ p.disabled{
   padding: 0;
 }
 
-.modal-container > .modal-dialog hr.extra-spacing {
+.extra-spacing {
   margin-top: 140px;
 }
 
@@ -580,7 +673,9 @@ p.disabled{
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  padding: 30px 85px;
+  padding: 30px 85px 0px;
+  max-height: 678px;
+  overflow: scroll;
 }
 
 .modal-container > .modal-dialog .modal-content label {

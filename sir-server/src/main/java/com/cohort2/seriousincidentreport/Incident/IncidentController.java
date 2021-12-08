@@ -1,5 +1,6 @@
 package com.cohort2.seriousincidentreport.Incident;
 
+import com.cohort2.seriousincidentreport.Individuals.IndividualsRepository;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 @CrossOrigin
 public class IncidentController {
     private final IncidentRepository repository;
+    private final IndividualsRepository individualRepository;
 
     private static final Logger log = LoggerFactory.getLogger(IncidentController.class);
 
@@ -44,6 +46,21 @@ public class IncidentController {
             return new ResponseEntity<Iterable<Incident>>(incidents, null, 503);
         } finally {
             return new ResponseEntity<Iterable<Incident>>(incidents, null, 200);
+        }
+    }
+
+    @GetMapping("/{id}")
+    public Incident getSingleIncident(@PathVariable Long id){
+        return this.repository.findById(id).get();
+    }
+
+    @PatchMapping("/{id}")
+    public String updateSingleIncident(@PathVariable Long id, @RequestBody Incident updateIncident){
+        if(this.repository.existsById(id)){
+            this.repository.save(updateIncident);
+            return "Incident Updated";
+        } else {
+            return "No incident found at ID " + id;
         }
     }
 }

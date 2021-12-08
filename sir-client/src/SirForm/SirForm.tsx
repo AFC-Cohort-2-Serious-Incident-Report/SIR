@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Form, Formik } from 'formik';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
@@ -44,17 +44,44 @@ interface Values {
 const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
   const [showSubmissionErrorMessage, setShowSubmissionErrorMessage] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
+  let axiosPostPromise = { promise: { }, cancel: () => {} };
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
   // Example value: REACT_APP_API_HOST="http://3.134.135.195:3001"
   const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
 
+  const makeCancelable = (promise: Promise<Values>) => {
+    let hasCanceled = false;
+
+    const wrappedPromise = new Promise((resolve, reject) => {
+      promise.then(
+        // eslint-disable-next-line prefer-promise-reject-errors
+        (val) => (hasCanceled ? reject({ isCanceled: true }) : resolve(val)),
+        // eslint-disable-next-line prefer-promise-reject-errors
+        (error) => (hasCanceled ? reject({ isCanceled: true }) : reject(error)),
+      );
+    });
+    return {
+      promise: wrappedPromise,
+      cancel() {
+        hasCanceled = true;
+      },
+    };
+  };
   const handleSubmitClick = (values: Values) => {
-    axios.post(`${API_HOST}/api/incidents`, values)
-      .then(() => setReportSubmitted(true))
+    axiosPostPromise = makeCancelable(axios.post(`${API_HOST}/api/incidents`, values));
+    axiosPostPromise.promise.then(() => {
+      setReportSubmitted(true);
+    })
       .catch(() => setShowSubmissionErrorMessage(true));
   };
+
+  // eslint-disable-next-line consistent-return
+  useEffect(() => {
+    if (axiosPostPromise) return axiosPostPromise.cancel;
+  }, []);
 
   return (
     <>

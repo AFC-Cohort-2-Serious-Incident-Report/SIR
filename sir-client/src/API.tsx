@@ -28,7 +28,7 @@ export type Incident = {
     eventType: string;
     harmOrPotentialHarm: boolean;
     individualsInvolved: Individual;
-    typeOfEvent: string;
+    typeOfEvent: string[];
     effectOnIndividual: string;
     witnessOneName: string;
     witnessOnePhone: string;

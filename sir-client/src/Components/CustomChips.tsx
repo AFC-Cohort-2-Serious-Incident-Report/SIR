@@ -53,6 +53,7 @@ const CustomChips: FC<CustomChipsProps> = ({
           type="text"
           onChange={(e) => setNewChip(e.target.value)}
           data-testid="chip-input"
+          value={newChip}
         />
         <button
           onClick={(e) => addChip()}
@@ -65,7 +66,7 @@ const CustomChips: FC<CustomChipsProps> = ({
       {chips && chips.length > 0
         && (
         <div className="bag-o-chips">
-          {chips.map((c: string, i: number) => (
+          {chips && chips.length > 0 && chips.map((c: string, i: number) => (
             <CustomChip
               key={i.toString()}
               text={c}

@@ -2,7 +2,6 @@ import {
   FC, ReactElement, useEffect, useState,
 } from 'react';
 import { Form, Formik, useFormikContext } from 'formik';
-import { log } from 'util';
 import CustomModal from '../Components/CustomModal';
 import { getIncidentByID, Incident } from '../API';
 import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';
@@ -44,7 +43,12 @@ const IncidentDetailView = ({
                 onModalSubmit={{ onSubmit: handleSubmit, text: 'SAVE' }}
                 modalTitle="Incident Report"
                 // TODO : Replace empty div with loading indicator
-                modalContent={<IncidentFields setFieldValue={setFieldValue} />}
+                modalContent={(
+                  <IncidentFields
+                    setFieldValue={setFieldValue}
+                    typeOfEvent={incident.typeOfEvent}
+                  />
+)}
               />
             </Form>
           );

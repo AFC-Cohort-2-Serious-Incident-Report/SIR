@@ -21,7 +21,7 @@ afterAll(() => server.close());
 
 describe('IncidentDetailView', () => {
   beforeEach(() => {
-    render(<IncidentDetailView id={1} onClose={() => null} onSubmit={() => null} />);
+    render(<IncidentDetailView id={1} onClose={() => null} onSubmitUpdate={() => null} />);
   });
 
   it('renders inside of modal with incident detail properties', async () => {
@@ -53,7 +53,8 @@ describe('IncidentDetailView', () => {
     expect(screen.getByRole('checkbox', { name: /visitor/i })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: /volunteer/i })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: /other/i })).toBeChecked();
-    expect(screen.getByRole('textbox', { name: /type of event/i })).toHaveValue(testData.typeOfEvent);
+    expect(screen.getByTestId(/id-adverse drug reaction/i)).toBeInTheDocument();
+    expect(screen.getByTestId(/id-medication related/i)).toBeInTheDocument();
     expect(screen.getByRole('combobox', {
       name: /effect of this incident on the individual\(s\) involved/i,
     })).toHaveValue(testData.effectOnIndividual);

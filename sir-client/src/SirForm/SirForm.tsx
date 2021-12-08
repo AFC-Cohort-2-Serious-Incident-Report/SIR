@@ -43,6 +43,7 @@ interface Values {
 
 const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [showSubmissionErrorMessage, setShowSubmissionErrorMessage] = useState(false);
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
@@ -51,12 +52,20 @@ const SirForm: React.FC = () => {
 
   const handleSubmitClick = (values: Values) => {
     axios.post(`${API_HOST}/api/incidents`, values)
-      .then(() => setReportSubmitted(true));
+      .then(() => setReportSubmitted(true))
+      .catch(() => setShowSubmissionErrorMessage(true));
   };
 
   return (
     <>
       <div className="alert-container">
+        {showSubmissionErrorMessage && (
+          <CustomAlert
+            onClose={() => setShowSubmissionErrorMessage(false)}
+            alertType={AlertType.ERROR}
+            text="Error Occurred While Submitting the Incident Report"
+          />
+        )}
         {reportSubmitted && (
           <CustomAlert
             onClose={() => setReportSubmitted(false)}

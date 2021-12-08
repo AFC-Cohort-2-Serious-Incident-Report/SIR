@@ -1,7 +1,7 @@
 import {
-  FC, ReactElement, useEffect, useState,
+  ReactElement, useEffect, useState,
 } from 'react';
-import { Form, Formik, useFormikContext } from 'formik';
+import { Form, Formik } from 'formik';
 import CustomModal from '../Components/CustomModal';
 import { getIncidentByID, Incident } from '../API';
 import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';

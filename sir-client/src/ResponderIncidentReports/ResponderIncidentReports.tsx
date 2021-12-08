@@ -5,7 +5,11 @@ import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import SendToCommand from '../SendToCommand/SendToCommand';
 import Pagination from '../Components/Pagination';
 import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
-import { getIncidents, Incident, updateIncidentByID } from '../API';
+import {
+  Incident,
+  updateIncidentByID,
+  getIncidents, Individual,
+} from '../API';
 
 type IncidentData = {
   id: number,
@@ -15,7 +19,8 @@ type IncidentData = {
   harmOrPotentialHarm: boolean,
   incidentDescription: string,
   eventType: string,
-  individualsInvolved: string
+  individualsInvolved: Individual,
+  typeOfEvent: string
 }
 
 type PageData = {
@@ -154,6 +159,28 @@ const ResponderIncidentReports: FC = () => {
     navigatePage(pageData.currentPage || 0, pageData.size || 10);
   }, [sortMethod]);
 
+  function handleIndividualsInvolved(report: IncidentData) {
+    let count = 0;
+    let firstTrueValue = '';
+    // eslint-disable-next-line no-restricted-syntax
+    for (const [key, value] of Object.entries(report.individualsInvolved)) {
+      if (count === 0) {
+        if (value === true) {
+          firstTrueValue = key;
+          count += 1;
+        }
+      } else if (value === true) {
+        count += 1;
+      }
+      // else console.log(`${key} is false`);
+    }
+    if (firstTrueValue === 'familyMember') { firstTrueValue = 'family Member'; }
+    if (firstTrueValue === 'staffMember') { firstTrueValue = 'staff Member'; }
+    firstTrueValue = firstTrueValue.charAt(0).toUpperCase() + firstTrueValue.slice(1);
+    if (count === 1) { return firstTrueValue; }
+    return `${firstTrueValue}, +${count - 1}`;
+  }
+
   const renderIncidentRows = reports.map((report: IncidentData) => (
     <tr
       key={report.id}
@@ -167,14 +194,23 @@ const ResponderIncidentReports: FC = () => {
           onChange={() => checkboxOnChangeHandler(report)}
         />
       </td>
+      {/* THE TEST ID HERE REFERS TO COLUMN ON FIGMA, the data pulled is corresponds to data */}
       <td data-testid="incident-date">{report.incidentDate}</td>
       <td data-testid="incident-location">{report.incidentLocation}</td>
-      {/* <td>{report.incidentDescription}</td> */}
+      <td data-testid="incident-type">{report.eventType}</td>
       <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
-      {/* <td>{report.individualsInvolved}</td> */}
-      <td data-testid="event-type">{report.eventType}</td>
+      <td data-testid="individuals-involved">{handleIndividualsInvolved(report)}</td>
+      <td data-testid="event-type">{report.typeOfEvent}</td>
       <td>
-        <button type="button" onClick={() => setFocusedID(report.id)}>View</button>
+        <button
+          type="button"
+          onClick={(e) => {
+            e.stopPropagation();
+            setFocusedID(report.id);
+          }}
+        >
+          View
+        </button>
       </td>
     </tr>
   ));
@@ -245,7 +281,6 @@ const ResponderIncidentReports: FC = () => {
           <table>
             <thead>
               <tr>
-                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
                 <th>
                   <input
                     type="checkbox"
@@ -273,7 +308,7 @@ const ResponderIncidentReports: FC = () => {
                   }
                 </th>
                 <th>Location</th>
-                {/* <th>Incident Type</th> */}
+                <th>Incident Type</th>
                 <th>Harm</th>
                 <th>Individual(s) Involved</th>
                 <th>Event Type</th>

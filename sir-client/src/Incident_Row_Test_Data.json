@@ -4,7 +4,10 @@
     "incidentDate": "03/27/2021",
     "incidentLocation": "Shouxihu",
     "eventType": "visa",
-    "harmOrPotentialHarm": true
+    "harmOrPotentialHarm": true,
+    "individualsInvolved": {"patient": true, "familyMember": true, "adult": true, "child": true,
+      "staffMember": true, "visitor": true, "volunteer": true, "other": true
+    }
   }],
   "pageable": {
     "sort": {

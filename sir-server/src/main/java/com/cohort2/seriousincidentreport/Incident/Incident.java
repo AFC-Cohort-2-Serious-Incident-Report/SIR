@@ -12,6 +12,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 @Entity
 @Getter
@@ -36,6 +37,8 @@ public class Incident implements Serializable {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "individuals_id")
     private Individuals individualsInvolved;
+    @ElementCollection
+    private List<String> typeOfEvent;
 
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "patient_id")

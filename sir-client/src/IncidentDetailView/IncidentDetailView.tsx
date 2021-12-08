@@ -47,7 +47,12 @@ const IncidentDetailView = ({
                 onModalSubmit={{ onSubmit: handleSubmit, text: 'SAVE' }}
                 modalTitle="Incident Report"
                 // TODO : Replace empty div with loading indicator
-                modalContent={<IncidentFields setFieldValue={setFieldValue} />}
+                modalContent={(
+                  <IncidentFields
+                    setFieldValue={setFieldValue}
+                    typeOfEvent={incident.typeOfEvent}
+                  />
+)}
               />
             </Form>
           );

@@ -1,11 +1,13 @@
 import React, { ReactElement, useState } from 'react';
 import { Field } from 'formik';
+import CustomChips from '../Components/CustomChips';
 
 type IncidentFieldProps = {
-  setFieldValue: (field: string, newValue: boolean) => void
+  setFieldValue: (field: string, newValue: any) => void;
+  typeOfEvent: string[];
 }
 
-const IncidentFields = ({ setFieldValue }: IncidentFieldProps): ReactElement => {
+const IncidentFields = ({ setFieldValue, typeOfEvent }: IncidentFieldProps) => {
   const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
 
   const handleFamilyMemberCheck = () => {
@@ -162,7 +164,10 @@ const IncidentFields = ({ setFieldValue }: IncidentFieldProps): ReactElement => 
       </div>
       <div className="group">
         <label htmlFor="typeOfEvent">Type of Event</label>
-        <Field type="text" id="typeOfEvent" name="typeOfEvent" title="typeOfEvent" />
+        <CustomChips
+          chips={typeOfEvent}
+          updateChips={(newChips) => setFieldValue('typeOfEvent', newChips)}
+        />
       </div>
       <div className="group">
         <label htmlFor="effectOnIndividual">

@@ -606,6 +606,43 @@ p.disabled{
   opacity: 0.5;
 }
 
+.bag-o-chips {
+    display: flex;
+    flex-flow: row wrap;
+    padding: 4px;
+}
+
+.chip-container {
+    display: flex;
+    flex-flow: row nowrap;
+    border-radius: 16px;
+    align-items: center;
+    justify-content: center;
+    background: #C7C7C9;
+    width: auto;
+    padding: 0 4px;
+    margin: 4px;
+}
+
+.chip-container > .chip-button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+    line-height: unset;
+    padding: 4px;
+    margin: 2px;
+}
+
+.chip-container > .chip-text {
+    font-family: "Public Sans";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 13px;
+    line-height: 18px;
+    margin: 0 2px 0 10px;
+}
+
 .modal-container {
   display: flex;
   position: fixed;

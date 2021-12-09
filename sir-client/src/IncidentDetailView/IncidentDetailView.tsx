@@ -51,6 +51,7 @@ const IncidentDetailView = ({
                   <IncidentFields
                     setFieldValue={setFieldValue}
                     typeOfEvent={values.typeOfEvent}
+                    departmentsInvolved={values.departmentsInvolved}
                   />
 )}
               />

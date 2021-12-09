@@ -24,7 +24,7 @@ const IncidentFieldsValidationSchema = Yup.object().shape({
   witnessTwoPhone: Yup.string().notRequired(),
   witnessThreeName: Yup.string().notRequired(),
   witnessThreePhone: Yup.string().notRequired(),
-  departmentsInvolved: Yup.string().required('Required'),
+  departmentsInvolved: Yup.array().of(Yup.string()).required('Required'),
   incidentDescription: Yup.string().required('Required'),
   preventativeAction: Yup.string().required('Required'),
   patientInfo: Yup.object().shape({

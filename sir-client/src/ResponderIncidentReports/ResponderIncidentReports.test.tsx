@@ -18,10 +18,6 @@ type IncidentRowEntry = {
     }
 }
 
-type IncidentRowEntries = {
-    row: IncidentRowEntry[];
-}
-
 describe('ResponderIncidentReports', () => {
   describe('Responder Table', () => {
     const server = setupServer(
@@ -263,8 +259,8 @@ describe('ResponderIncidentReports', () => {
       userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'No');
       expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[0]}`)).toBeInTheDocument();
       expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[1]}`)).toBeInTheDocument();
-      userEvent.type(await screen.getByTestId('chip-input'), 'Doritos');
-      userEvent.click(screen.getByTestId('add-chip-button'));
+      userEvent.type(await screen.getByTestId('chip-input-type-of-event'), 'Doritos');
+      userEvent.click(screen.getByTestId('add-chip-button-type-of-event'));
       expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[0]}`)).toBeInTheDocument();
       expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[1]}`)).toBeInTheDocument();
       expect(screen.getByTestId('id-Doritos')).toBeInTheDocument();

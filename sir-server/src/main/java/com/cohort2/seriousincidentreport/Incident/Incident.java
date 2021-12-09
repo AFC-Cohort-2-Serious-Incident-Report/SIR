@@ -51,7 +51,10 @@ public class Incident implements Serializable {
     private String witnessTwoPhone;
     private String witnessThreeName;
     private String witnessThreePhone;
-    private String departmentsInvolved;
+
+    @ElementCollection
+    private List<String> departmentsInvolved;
+
     private String incidentDescription;
     private String preventativeAction;
 

@@ -67,6 +67,7 @@ const SirForm: React.FC = () => {
                 <IncidentFields
                   setFieldValue={(field, newValue) => formik.setFieldValue(field, newValue)}
                   typeOfEvent={values.typeOfEvent}
+                  departmentsInvolved={values.departmentsInvolved}
                 />
                 <div className="group flex">
                   <button

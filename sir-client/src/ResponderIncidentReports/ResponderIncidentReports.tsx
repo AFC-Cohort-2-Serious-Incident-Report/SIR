@@ -1,4 +1,4 @@
-import {
+import React, {
   FC, useEffect, useRef, useState,
 } from 'react';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
@@ -8,7 +8,7 @@ import IncidentDetailView from '../IncidentDetailView/IncidentDetailView';
 import {
   Incident,
   updateIncidentByID,
-  getIncidents, Individual,
+  getIncidents, Individual, searchIncidents,
 } from '../API';
 
 type IncidentData = {
@@ -146,6 +146,26 @@ const ResponderIncidentReports: FC = () => {
       .catch();
   };
 
+  const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key !== 'Enter') return;
+    searchIncidents(e.currentTarget.value, {
+      page: 0,
+      size: pageData.size,
+      sort: `${sortMethod.sortBy},${sortMethod.sortDirection}`,
+    })
+      .then((response) => {
+        setReports(response.data.content);
+        setPageData({
+          offset: response.data.pageable.offset,
+          size: response.data.size,
+          firstPage: response.data.first,
+          lastPage: response.data.last,
+          totalCount: response.data.totalElements,
+          currentPage: response.data.number,
+        });
+      });
+  };
+
   useEffect(() => {
     const currentSelectAllCheckbox = selectAllCheckbox.current as HTMLInputElement;
     if (selectedReports.length > 0 && selectedReports.length < reports.length) {
@@ -277,7 +297,22 @@ const ResponderIncidentReports: FC = () => {
                 </button>
               </div>
             )
-              : <h3>Reports</h3>}
+              : (
+                <div className="reports-bar">
+                  <h3>Reports</h3>
+                  <div className="search">
+                    <input
+                      type="text"
+                      placeholder="Search by location..."
+                      spellCheck="false"
+                      name="search"
+                      data-testid="search-input"
+                      onKeyUp={(e) => handleSearch(e)}
+                    />
+                    <i className="gg-search" />
+                  </div>
+                </div>
+              )}
           </div>
           <table>
             <thead>

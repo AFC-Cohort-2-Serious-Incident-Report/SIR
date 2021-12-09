@@ -235,7 +235,6 @@ const ResponderIncidentReports: FC = () => {
       <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
       <td data-testid="individuals-involved">{handleIndividualsInvolved(report)}</td>
       <td data-testid="event-type">{handleTypeOfEvent(report.typeOfEvent)}</td>
-      {/* <td data-testid="event-type">{report.typeOfEvent}</td> */}
       <td>
         <button
           type="button"

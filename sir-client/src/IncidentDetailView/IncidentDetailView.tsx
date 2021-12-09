@@ -24,10 +24,10 @@ const IncidentDetailView = ({
   const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
-    getIncidentByID(id).then((results: any) => {
+    getIncidentByID(id).then((results: Incident) => {
       if (isMounted) setIncident(results);
     })
-      .catch((error) => onErrorClose());
+      .catch(() => onErrorClose());
     return () => setIsMounted(false);
   }, []);
 

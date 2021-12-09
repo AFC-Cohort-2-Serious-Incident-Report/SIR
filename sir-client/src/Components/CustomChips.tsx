@@ -56,7 +56,7 @@ const CustomChips: FC<CustomChipsProps> = ({
           value={newChip}
         />
         <button
-          onClick={(e) => addChip()}
+          onClick={() => addChip()}
           type="button"
           data-testid="add-chip-button"
           className="chip-add-button"

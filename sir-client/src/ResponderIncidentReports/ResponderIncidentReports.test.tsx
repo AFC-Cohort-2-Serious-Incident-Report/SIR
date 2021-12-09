@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import ResponderIncidentReports from './ResponderIncidentReports';
 import dataWithOne from '../Incident_Row_Test_Data.json';
 import testData from '../sir_test_data.json';
+import { searchIncidents } from '../API';
 
 type IncidentRowEntry = {
   id: number;
@@ -52,9 +53,9 @@ describe('ResponderIncidentReports', () => {
       expect(screen.getByRole('checkbox', { checked: false }));
       expect(screen.getByText(/^Event Date/i)).toBeInTheDocument();
       expect(screen.getByText(/^Location/i)).toBeInTheDocument();
-      // expect(screen.getByText(/^Incident Type/i)).toBeInTheDocument();
+      expect(screen.getByText(/^Incident Type/i)).toBeInTheDocument();
       expect(screen.getByText(/^Harm/i)).toBeInTheDocument();
-      // expect(screen.getByText('Individual(s) Involved')).toBeInTheDocument();
+      expect(screen.getByText('Individual(s) Involved')).toBeInTheDocument();
       expect(screen.getByText(/^Event Type/i)).toBeInTheDocument();
       expect(screen.getByText(/^details/i)).toBeInTheDocument();
     });
@@ -179,6 +180,34 @@ describe('ResponderIncidentReports', () => {
       userEvent.click(screen.getByText(/battalion commander/i));
       userEvent.click(screen.getByRole('button', { name: /^send$/i }));
       await waitFor(() => expect(screen.getByText(/sent to battalion commander/i)));
+    });
+  });
+
+  describe('Search functionality', async () => {
+    const server = setupServer(
+      rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
+      rest.get(
+        '/api/incidents/1',
+        (
+          req,
+          res,
+          ctx,
+        ) => res(ctx.json(testData)),
+      ),
+    );
+
+    beforeAll(() => server.listen());
+    beforeEach(() => {
+      render(<ResponderIncidentReports />);
+    });
+    afterEach(() => server.resetHandlers());
+    afterAll(() => server.close());
+    it('searching location correctly shows results for location specified', async () => {
+      await waitFor(() => expect(screen.getByTestId('search-input')).toBeInTheDocument());
+      userEvent.type(screen.getByTestId('search-input'), 'Shouxihu');
+      const event = new KeyboardEvent('keydown', { key: 'Enter' });
+      screen.getByTestId('search-input').dispatchEvent(event);
+      await waitFor(() => expect(screen.getByText('Shouxihu')).toBeInTheDocument());
     });
   });
 

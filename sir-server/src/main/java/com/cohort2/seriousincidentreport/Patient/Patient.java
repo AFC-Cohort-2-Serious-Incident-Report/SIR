@@ -15,7 +15,6 @@ import javax.persistence.*;
 public class Patient {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
 
     @OneToOne(mappedBy = "patientInfo")

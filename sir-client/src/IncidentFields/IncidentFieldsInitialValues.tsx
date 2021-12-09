@@ -19,7 +19,7 @@ const IncidentFieldsInitialValues = {
     volunteer: false,
     other: false,
   },
-  typeOfEvent: '',
+  typeOfEvent: [],
   effectOnIndividual: 'No Harm Sustained',
   witnessOneName: '',
   witnessOnePhone: '',

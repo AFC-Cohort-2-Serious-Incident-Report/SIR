@@ -198,7 +198,7 @@ const ResponderIncidentReports: FC = () => {
     if (firstTrueValue === 'familyMember') { firstTrueValue = 'family Member'; }
     if (firstTrueValue === 'staffMember') { firstTrueValue = 'staff Member'; }
     firstTrueValue = firstTrueValue.charAt(0).toUpperCase() + firstTrueValue.slice(1);
-    if (count === 1) { return firstTrueValue; }
+    if (count <= 1) { return firstTrueValue; }
     return `${firstTrueValue}, +${count - 1}`;
   }
 

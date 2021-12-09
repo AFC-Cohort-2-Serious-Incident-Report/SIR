@@ -7,7 +7,8 @@
     "harmOrPotentialHarm": true,
     "individualsInvolved": {"patient": true, "familyMember": true, "adult": true, "child": true,
       "staffMember": true, "visitor": true, "volunteer": true, "other": true
-    }
+    },
+    "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"]
   }],
   "pageable": {
     "sort": {

@@ -2,7 +2,6 @@ import {
   ReactElement, useEffect, useState,
 } from 'react';
 import { Form, Formik } from 'formik';
-import { AxiosResponse } from 'axios';
 import CustomModal from '../Components/CustomModal';
 import { getIncidentByID, Incident } from '../API';
 import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';
@@ -41,14 +40,19 @@ const IncidentDetailView = ({
         onSubmit={onSubmitUpdate}
       >
         {(formik) => {
-          const { setFieldValue, handleSubmit } = formik;
+          const { setFieldValue, handleSubmit, values } = formik;
           return (
             <Form>
               <CustomModal
                 onModalClose={onClose}
                 onModalSubmit={{ onSubmit: handleSubmit, text: 'SAVE' }}
                 modalTitle="Incident Report"
-                modalContent={<IncidentFields setFieldValue={setFieldValue} />}
+                modalContent={(
+                  <IncidentFields
+                    setFieldValue={setFieldValue}
+                    typeOfEvent={values.typeOfEvent}
+                  />
+)}
               />
             </Form>
           );

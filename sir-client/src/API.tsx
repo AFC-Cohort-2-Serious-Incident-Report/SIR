@@ -28,7 +28,7 @@ export type Incident = {
     eventType: string;
     harmOrPotentialHarm: boolean;
     individualsInvolved: Individual;
-    typeOfEvent: string;
+    typeOfEvent: string[];
     effectOnIndividual: string;
     witnessOneName: string;
     witnessOnePhone: string;
@@ -53,6 +53,21 @@ type PageableData = {
 
 export const getIncidents = (params?: PageableData): Promise<AxiosResponse> => axios.get(
   `${API_HOST}/api/incidents`,
+  {
+    params: {
+      size: 10,
+      page: 0,
+      sort: 'incidentDate,DESC',
+      ...params,
+    },
+  },
+);
+
+export const searchIncidents = (
+  query?: string,
+  params?: PageableData,
+): Promise<AxiosResponse> => axios.get(
+  `${API_HOST}/api/incidents/search?query=${query}`,
   {
     params: {
       size: 10,

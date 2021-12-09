@@ -5,41 +5,7 @@ import CustomAlert, { AlertType } from '../Components/CustomAlert';
 import IncidentFields from '../IncidentFields/IncidentFields';
 import IncidentFieldsValidationSchema from '../IncidentFields/IncidentFieldsValidationSchema';
 import IncidentFieldsInitialValues from '../IncidentFields/IncidentFieldsInitialValues';
-
-interface Values {
-    incidentDate: string;
-    incidentTime: string;
-    incidentLocation: string;
-    eventType: string;
-    harmOrPotentialHarm: boolean;
-    individualsInvolved: {
-        patient: boolean,
-        familyMember: boolean,
-        adult: boolean,
-        child: boolean,
-        staffMember: boolean,
-        visitor: boolean,
-        volunteer: boolean,
-        other: boolean
-    };
-    typeOfEvent: string;
-    effectOnIndividual: string;
-    witnessOneName: string;
-    witnessOnePhone: string;
-    witnessTwoName: string;
-    witnessTwoPhone: string;
-    witnessThreeName: string;
-    witnessThreePhone: string;
-    departmentsInvolved: string;
-    incidentDescription: string;
-    preventativeAction: string;
-    patientInfo: {
-        patientName: string,
-        patientSocial: string,
-        patientPhone: string,
-        patientAddress: string,
-    };
-}
+import { Incident } from '../API';
 
 const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
@@ -52,7 +18,8 @@ const SirForm: React.FC = () => {
   // Example value: REACT_APP_API_HOST="http://3.134.135.195:3001"
   const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
 
-  const handleSubmitClick = (values: Values) => {
+  const handleSubmitClick = (values: Incident) => {
+    console.log(values);
     axios.post(`${API_HOST}/api/incidents`, values)
       .then(() => {
         if (isMounted) setReportSubmitted(true);
@@ -94,12 +61,13 @@ const SirForm: React.FC = () => {
         >
           {(formik) => {
             const {
-              isValid, dirty,
+              isValid, dirty, values,
             } = formik;
             return (
               <Form title="sir-form">
                 <IncidentFields
                   setFieldValue={(field, newValue) => formik.setFieldValue(field, newValue)}
+                  typeOfEvent={values.typeOfEvent}
                 />
                 <div className="group flex">
                   <button

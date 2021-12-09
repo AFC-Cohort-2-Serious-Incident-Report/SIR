@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +25,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static org.springframework.web.servlet.function.RequestPredicates.contentType;
 
 
 @SpringBootTest
@@ -123,7 +121,7 @@ class IncidentControllerTests {
                                     "volunteer": false,
                                     "other": true
                                     },
-                                "typeOfEvent": "Adverse Drug Reaction, Medication Related",
+                                "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"],
                                 "effectOnIndividual": "Harm Sustained",
                                 "witnessOneName": "Sir Jackman",
                                 "witnessOnePhone": "719-526-6465",
@@ -163,7 +161,8 @@ class IncidentControllerTests {
         assertEquals("Actual Event / Incident", savedIncident.getEventType());
         assertTrue(savedIncident.isHarmOrPotentialHarm());
         assertEquals("{\"patient\":true,\"familyMember\":false,\"adult\":false,\"child\":false,\"staffMember\":false,\"visitor\":false,\"volunteer\":false,\"other\":true}", individualsInvolved);
-        assertEquals("Adverse Drug Reaction, Medication Related", savedIncident.getTypeOfEvent());
+        assertEquals("Adverse Drug Reaction", savedIncident.getTypeOfEvent().get(0));
+        assertEquals("Medication Related", savedIncident.getTypeOfEvent().get(1));
         assertEquals("Harm Sustained", savedIncident.getEffectOnIndividual());
         assertEquals("Sir Jackman", savedIncident.getWitnessOneName());
         assertEquals("719-526-6465", savedIncident.getWitnessOnePhone());
@@ -214,7 +213,7 @@ class IncidentControllerTests {
                     "visitor": true,
                     "volunteer":true
                     },
-                "typeOfEvent": "Adverse Drug Reaction, Medication Related",
+                "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"],
                 "effectOnIndividual": "Harm Sustained",
                 "witnessOneName": "Sir Jackman",
                 "witnessOnePhone": "719-526-6465",
@@ -266,7 +265,8 @@ class IncidentControllerTests {
         assertEquals("Actual Event / Incident", savedIncident.getEventType());
         assertTrue(savedIncident.isHarmOrPotentialHarm());
         assertEquals("{\"patient\":true,\"familyMember\":true,\"adult\":true,\"child\":true,\"staffMember\":true,\"visitor\":true,\"volunteer\":true,\"other\":true}", individualsInvolved);
-        assertEquals("Adverse Drug Reaction, Medication Related", savedIncident.getTypeOfEvent());
+        assertEquals("Adverse Drug Reaction", savedIncident.getTypeOfEvent().get(0));
+        assertEquals("Medication Related", savedIncident.getTypeOfEvent().get(1));
         assertEquals("Harm Sustained", savedIncident.getEffectOnIndividual());
         assertEquals("Sir Jackman", savedIncident.getWitnessOneName());
         assertEquals("719-526-6465", savedIncident.getWitnessOnePhone());
@@ -278,5 +278,61 @@ class IncidentControllerTests {
         assertEquals("Test description", savedIncident.getIncidentDescription());
         assertEquals("Test action", savedIncident.getPreventativeAction());
         assertEquals("{\"patientName\":\"Chuck Norris\",\"patientSocial\":\"125-57-4578\",\"patientPhone\":\"775-878-1257\",\"patientAddress\":\"123 Main Street, San Diego, CA 92109\"}", patientInfo);
+    }
+
+    @Transactional
+    @Rollback
+    @Test
+    public void testSearchIncidentByPatientName() throws Exception {
+        String contentString = """
+                {
+                "incidentDate": "2014-08-18",
+                "incidentTime": "21:11",
+                "incidentLocation": "SWF",
+                "eventType": "Actual Event / Incident",
+                "harmOrPotentialHarm": true,
+                "individualsInvolved": {
+                    "patient": true,
+                    "other": true,
+                    "familyMember": true,
+                    "adult": true,
+                    "child": true,
+                    "staffMember": true,
+                    "visitor": true,
+                    "volunteer":true
+                    },
+                "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"],
+                "effectOnIndividual": "Harm Sustained",
+                "witnessOneName": "Sir Jackman",
+                "witnessOnePhone": "719-526-6465",
+                "witnessTwoName": "Hugh Jass",
+                "witnessTwoPhone": "910-585-8101",
+                "witnessThreeName": "Chuck Norris",
+                "witnessThreePhone": "585-811-7777",
+                "departmentsInvolved": "Ambulatory Care, Emergency Care",
+                "incidentDescription": "Test description",
+                "preventativeAction": "Test action",
+                "patientInfo": {
+                    "patientName": "Chuck Norris",
+                    "patientSocial": "125-57-4578",
+                    "patientPhone": "775-878-1257",
+                    "patientAddress": "123 Main Street, San Diego, CA 92109"
+                    }
+                }
+                """;
+
+        MvcResult result = this.mvc.perform(post("/api/incidents")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(contentString))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        MvcResult result2 = this.mvc.perform(get("/api/incidents/search?query=SWF")
+                .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.content[0].incidentLocation").value("SWF"))
+                .andReturn();
+
+
     }
 }

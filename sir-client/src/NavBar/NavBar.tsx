@@ -7,7 +7,11 @@ type NavBarProps = {
 
 const NavBar = ({ isResponder }: NavBarProps): ReactElement => (
   <div className="navbar">
-    <div className="logo" data-testid="swfLogo" />
+    <Link
+      className="logo"
+      data-testid="swfLogo"
+      to="/"
+    />
     <div className="links">
       <Link to="/reporter" className={isResponder ? 'unfocused' : 'focused'}>Reporter</Link>
       <Link to="/responder" className={isResponder ? 'focused' : 'unfocused'}>Responder</Link>

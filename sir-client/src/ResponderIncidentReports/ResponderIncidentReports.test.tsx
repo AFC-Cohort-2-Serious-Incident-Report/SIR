@@ -178,7 +178,7 @@ describe('ResponderIncidentReports', () => {
     });
   });
 
-  describe('Search functionality', async () => {
+  describe('Search functionality', () => {
     const server = setupServer(
       rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
       rest.get(
@@ -207,7 +207,6 @@ describe('ResponderIncidentReports', () => {
   });
 
   describe('Detailed View Modal Submission', () => {
-    // const { content, ...pageableData } = dataWithOne;
     const updatedDataWithOne = { ...dataWithOne };
     let receivedData: IncidentRowEntry[];
     let numOfCalls = 0;

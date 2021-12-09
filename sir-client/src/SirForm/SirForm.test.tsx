@@ -363,6 +363,7 @@ describe('SirForm', () => {
       expect(value).toHaveValue('');
     }));
   });
+
   // Form displays error banner if submission is not successful
   it('Displays Error Alert Banner if submission is not successful', async () => {
     window.scrollTo = jest.fn();

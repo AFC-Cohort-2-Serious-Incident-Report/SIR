@@ -21,7 +21,14 @@ afterAll(() => server.close());
 
 describe('IncidentDetailView', () => {
   beforeEach(() => {
-    render(<IncidentDetailView id={1} onClose={() => null} onSubmitUpdate={() => null} />);
+    render(
+      <IncidentDetailView
+        id={1}
+        onClose={() => null}
+        onSubmitUpdate={() => null}
+        onErrorClose={() => null}
+      />,
+    );
   });
 
   it('renders inside of modal with incident detail properties', async () => {
@@ -75,5 +82,9 @@ describe('IncidentDetailView', () => {
       name: /patient telephone number/i,
     })).toHaveValue(testData.patientInfo.patientPhone);
     expect(screen.getByRole('textbox', { name: /patient address/i })).toHaveValue(testData.patientInfo.patientAddress);
+    expect(screen.getByTestId('chip-input')).toBeInTheDocument();
+    expect(screen.getByTestId('add-chip-button')).toBeInTheDocument();
+    expect(screen.getByTestId(`id-${testData.typeOfEvent[0]}`)).toBeInTheDocument();
+    expect(screen.getByTestId(`id-${testData.typeOfEvent[1]}`)).toBeInTheDocument();
   });
 });

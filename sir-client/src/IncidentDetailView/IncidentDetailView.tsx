@@ -39,7 +39,7 @@ const IncidentDetailView = ({
         onSubmit={onSubmitUpdate}
       >
         {(formik) => {
-          const { setFieldValue, handleSubmit } = formik;
+          const { setFieldValue, handleSubmit, values } = formik;
           return (
             <Form>
               <CustomModal
@@ -50,7 +50,7 @@ const IncidentDetailView = ({
                 modalContent={(
                   <IncidentFields
                     setFieldValue={setFieldValue}
-                    typeOfEvent={incident.typeOfEvent}
+                    typeOfEvent={values.typeOfEvent}
                   />
 )}
               />

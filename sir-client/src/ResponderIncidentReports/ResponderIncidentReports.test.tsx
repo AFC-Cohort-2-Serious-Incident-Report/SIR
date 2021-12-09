@@ -8,19 +8,19 @@ import testData from '../sir_test_data.json';
 import { searchIncidents } from '../API';
 
 type IncidentRowEntry = {
-  id: number;
-  incidentDate: string;
-  incidentLocation: string;
-  harmOrPotentialHarm: boolean;
-  eventType: string;
-  individualsInvolved: {
-    patient: boolean, familyMember: boolean, adult: boolean, child: boolean,
-    staffMember: boolean, visitor: boolean, volunteer: boolean, other: boolean
-  }
+    id: number;
+    incidentDate: string;
+    incidentLocation: string;
+    harmOrPotentialHarm: boolean;
+    eventType: string;
+    individualsInvolved: {
+        patient: boolean, familyMember: boolean, adult: boolean, child: boolean,
+        staffMember: boolean, visitor: boolean, volunteer: boolean, other: boolean
+    }
 }
 
 type IncidentRowEntries = {
-  row: IncidentRowEntry[];
+    row: IncidentRowEntry[];
 }
 
 describe('ResponderIncidentReports', () => {
@@ -258,14 +258,23 @@ describe('ResponderIncidentReports', () => {
       expect(screen.getByTestId('incident-location')).toHaveTextContent('Shouxihu');
       expect(screen.getByTestId('potential-harm')).toHaveTextContent('Yes');
       expect(screen.getByTestId('incident-type')).toHaveTextContent('visa');
-
       userEvent.click(screen.getByRole('button', { name: /view/i }));
       userEvent.type(await screen.findByLabelText(/date of event/i), '1958-08-08');
       userEvent.type(screen.getByRole('textbox', { name: /incident location/i }), 'Test text');
       userEvent.selectOptions(screen.getByRole('combobox', { name: /incident type/i }), 'Actual Event / Incident');
       userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'No');
+      expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[0]}`)).toBeInTheDocument();
+      expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[1]}`)).toBeInTheDocument();
+      userEvent.type(await screen.getByTestId('chip-input'), 'Doritos');
+      userEvent.click(screen.getByTestId('add-chip-button'));
+      expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[0]}`)).toBeInTheDocument();
+      expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[1]}`)).toBeInTheDocument();
+      expect(screen.getByTestId('id-Doritos')).toBeInTheDocument();
+      userEvent.click(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[1]}`));
+      expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[0]}`)).toBeInTheDocument();
+      expect(screen.queryByTestId(`id-${dataWithOne.content[0].typeOfEvent[1]}`)).not.toBeInTheDocument();
+      expect(screen.getByTestId('id-Doritos')).toBeInTheDocument();
       userEvent.click(screen.getByRole('button', { name: /save/i }));
-
       await waitFor(() => expect(screen.getByTestId('incident-date')).toHaveTextContent('1958-08-08'));
       expect(screen.getByTestId('incident-location')).toHaveTextContent('Test text');
       // expect(screen.getByTestId('potential-harm')).toHaveTextContent('No');

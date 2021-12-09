@@ -39,7 +39,7 @@ const IncidentDetailView = ({
         onSubmit={onSubmitUpdate}
       >
         {(formik) => {
-          const { setFieldValue, handleSubmit } = formik;
+          const { setFieldValue, handleSubmit, values } = formik;
           return (
             <Form>
               <CustomModal
@@ -47,7 +47,12 @@ const IncidentDetailView = ({
                 onModalSubmit={{ onSubmit: handleSubmit, text: 'SAVE' }}
                 modalTitle="Incident Report"
                 // TODO : Replace empty div with loading indicator
-                modalContent={<IncidentFields setFieldValue={setFieldValue} />}
+                modalContent={(
+                  <IncidentFields
+                    setFieldValue={setFieldValue}
+                    typeOfEvent={values.typeOfEvent}
+                  />
+)}
               />
             </Form>
           );

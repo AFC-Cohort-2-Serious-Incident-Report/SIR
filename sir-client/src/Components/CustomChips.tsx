@@ -59,8 +59,9 @@ const CustomChips: FC<CustomChipsProps> = ({
           onClick={(e) => addChip()}
           type="button"
           data-testid="add-chip-button"
+          className="chip-add-button"
         >
-          Add
+          <i className="gg-math-plus" />
         </button>
       </div>
       {chips && chips.length > 0

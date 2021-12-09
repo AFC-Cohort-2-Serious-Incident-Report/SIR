@@ -60,7 +60,6 @@ describe('IncidentDetailView', () => {
     expect(screen.getByRole('checkbox', { name: /visitor/i })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: /volunteer/i })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: /other/i })).toBeChecked();
-    expect(screen.getByRole('textbox', { name: /event type/i })).toHaveValue(testData.typeOfEvent);
     expect(screen.getByTestId(/id-adverse drug reaction/i)).toBeInTheDocument();
     expect(screen.getByTestId(/id-medication related/i)).toBeInTheDocument();
     expect(screen.getByRole('combobox', {

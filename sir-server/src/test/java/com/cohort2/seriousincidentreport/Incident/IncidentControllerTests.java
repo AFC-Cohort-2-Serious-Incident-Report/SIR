@@ -301,7 +301,7 @@ class IncidentControllerTests {
                     "visitor": true,
                     "volunteer":true
                     },
-                "typeOfEvent": "Adverse Drug Reaction, Medication Related",
+                "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"],
                 "effectOnIndividual": "Harm Sustained",
                 "witnessOneName": "Sir Jackman",
                 "witnessOnePhone": "719-526-6465",

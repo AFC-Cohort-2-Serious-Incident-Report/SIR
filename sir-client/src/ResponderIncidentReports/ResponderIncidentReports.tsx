@@ -15,7 +15,6 @@ type IncidentData = {
   id: number,
   incidentDate: string,
   incidentLocation: string,
-  incidentType: string,
   harmOrPotentialHarm: boolean,
   incidentDescription: string,
   eventType: string,
@@ -88,8 +87,8 @@ const ResponderIncidentReports: FC = () => {
 
   const checkboxOnChangeHandler = async (report: IncidentData) => {
     let newSelectReports: IncidentData[] = [];
-    if (selectedReports.includes(report)) {
-      newSelectReports = selectedReports.filter((current) => report !== current);
+    if (selectedReports.find((selectedReport) => selectedReport.id === report.id)) {
+      newSelectReports = selectedReports.filter((current) => report.id !== current.id);
     } else {
       newSelectReports = [...selectedReports, report];
     }
@@ -212,7 +211,7 @@ const ResponderIncidentReports: FC = () => {
         <input
           type="checkbox"
           name="selectRow"
-          checked={selectedReports.includes(report)}
+          checked={!!selectedReports.find((selectedReport) => selectedReport.id === report.id)}
           onChange={() => checkboxOnChangeHandler(report)}
         />
       </td>

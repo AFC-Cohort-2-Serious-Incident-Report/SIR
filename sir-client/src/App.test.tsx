@@ -7,10 +7,11 @@ test('renders reporter and responder links with reporter focused', async () => {
   // render App
   render(<App />);
   // assert App loads with default nav elements
-  expect(screen.getByRole('link', { name: /Reporter/i })).toBeInTheDocument();
-  expect(screen.getByRole('link', { name: /Responder/i })).toBeInTheDocument();
-  expect(screen.getByTestId('swfLogo')).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /Submit a Report/i })).toBeInTheDocument();
+  expect(screen.getByRole('link', { name: /View Reports/i })).toBeInTheDocument();
+  await userEvent.click(screen.getByRole('link', { name: /Submit a Report/i }));
   // assert screen.getByRole('link', { name: /Reporter/i }) is focused
+  expect(screen.getByTestId('swfLogo')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: /Reporter/i })).toHaveClass('focused');
   expect(screen.getByRole('link', { name: /Responder/i })).toHaveClass('unfocused');
   expect(screen.getByRole('heading', { name: /Incident Report Form/i })).toBeInTheDocument();

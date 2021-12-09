@@ -1,4 +1,4 @@
-import React, { ReactElement, useState } from 'react';
+import React, { useState } from 'react';
 import { Field } from 'formik';
 import CustomChips from '../Components/CustomChips';
 
@@ -40,7 +40,7 @@ const IncidentFields = ({ setFieldValue, typeOfEvent }: IncidentFieldProps) => {
       </div>
       <div className="group split">
         <div className="group">
-          <label htmlFor="eventType">Event Type</label>
+          <label htmlFor="eventType">Incident Type</label>
           <Field type="select" as="select" id="eventType" name="eventType">
             <option value="Actual Event / Incident">Actual Event / Incident</option>
             <option value="Not Actual Event / Incident">
@@ -163,7 +163,7 @@ const IncidentFields = ({ setFieldValue, typeOfEvent }: IncidentFieldProps) => {
         </div>
       </div>
       <div className="group">
-        <label htmlFor="typeOfEvent">Type of Event</label>
+        <label htmlFor="typeOfEvent">Event Type</label>
         <CustomChips
           chips={typeOfEvent}
           updateChips={(newChips) => setFieldValue('typeOfEvent', newChips)}

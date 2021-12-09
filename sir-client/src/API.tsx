@@ -63,6 +63,21 @@ export const getIncidents = (params?: PageableData): Promise<AxiosResponse> => a
   },
 );
 
+export const searchIncidents = (
+  query?: string,
+  params?: PageableData,
+): Promise<AxiosResponse> => axios.get(
+  `${API_HOST}/api/incidents/search?query=${query}`,
+  {
+    params: {
+      size: 10,
+      page: 0,
+      sort: 'incidentDate,DESC',
+      ...params,
+    },
+  },
+);
+
 export const getIncidentByID = async (id: number): Promise<Incident> => {
   const response = await axios.get(`${API_HOST}/api/incidents/${id}`);
   return response.data;

@@ -43,7 +43,7 @@ function fillAllFields() {
   // Location of Event
   userEvent.type(screen.getByRole('textbox', { name: /incident location/i }), 'Test text');
   // Event Type
-  userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
+  userEvent.selectOptions(screen.getByRole('combobox', { name: /incident type/i }), 'Actual Event / Incident');
   // Harm or Potential Harm
   userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'Yes');
   // Individuals Involved
@@ -93,7 +93,7 @@ describe('SirForm', () => {
     // Location of Event
     expect(screen.getByRole('textbox', { name: /incident location/i })).toBeInTheDocument();
     // Event Type
-    expect(screen.getByRole('combobox', { name: /event type/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /incident type/i })).toBeInTheDocument();
     // Harm or Potential Harm
     expect(screen.getByRole('combobox', { name: /harm or potential harm/i })).toHaveValue('false');
     // Individuals Involved
@@ -158,8 +158,8 @@ describe('SirForm', () => {
 
   // Event Type
   it('accepts eventType selection', async () => {
-    userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
-    await waitFor(() => expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event / Incident'));
+    userEvent.selectOptions(screen.getByRole('combobox', { name: /incident type/i }), 'Actual Event / Incident');
+    await waitFor(() => expect(screen.getByRole('combobox', { name: /incident type/i })).toHaveValue('Actual Event / Incident'));
   });
 
   // Harm or Potential Harm

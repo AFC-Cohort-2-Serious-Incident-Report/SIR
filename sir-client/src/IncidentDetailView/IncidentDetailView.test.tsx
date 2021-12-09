@@ -47,8 +47,8 @@ describe('IncidentDetailView', () => {
     expect(await screen.findByLabelText(/date of event/i)).toHaveValue(testData.incidentDate);
     expect(screen.getByLabelText(/time of event/i)).toHaveValue(testData.incidentTime);
     expect(screen.getByRole('textbox', { name: /incident location/i })).toHaveValue(testData.incidentLocation);
-    expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue(testData.eventType);
-    expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue(testData.eventType);
+    expect(screen.getByRole('combobox', { name: /incident type/i })).toHaveValue(testData.eventType);
+    expect(screen.getByRole('combobox', { name: /incident type/i })).toHaveValue(testData.eventType);
     expect(screen.getByRole('combobox', {
       name: /harm or potential harm/i,
     })).toHaveValue(testData.harmOrPotentialHarm.toString());
@@ -60,6 +60,7 @@ describe('IncidentDetailView', () => {
     expect(screen.getByRole('checkbox', { name: /visitor/i })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: /volunteer/i })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: /other/i })).toBeChecked();
+    expect(screen.getByRole('textbox', { name: /event type/i })).toHaveValue(testData.typeOfEvent);
     expect(screen.getByTestId(/id-adverse drug reaction/i)).toBeInTheDocument();
     expect(screen.getByTestId(/id-medication related/i)).toBeInTheDocument();
     expect(screen.getByRole('combobox', {

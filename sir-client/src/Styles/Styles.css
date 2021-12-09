@@ -247,11 +247,12 @@ tr {
   cursor: pointer;
   user-select: none;
   transition: var(--transition-linear);
-  grid-template-columns: 70px minmax(120px, 180px) minmax(130px, 150px) minmax(230px, 250px) minmax(70px, 90px) 230px 120px minmax(100px, 1fr);
+  grid-template-columns: 70px minmax(120px, 180px) minmax(130px, 150px) minmax(230px, 250px) minmax(70px, 90px) 230px minmax(120px, 1fr) 100px;
 }
 
 tr td {
   transition: var(--transition-linear);
+  overflow: hidden;
 }
 
 tr:hover td {
@@ -287,8 +288,9 @@ table thead tr th:nth-of-type(2) i {
   margin-left: 5px;
 }
 
+table tr th:last-of-type,
 table tbody tr td:last-of-type button {
-  padding: 0;
+  padding: 0 16px 0 0;
 }
 
 .responder-view h2 {
@@ -854,6 +856,43 @@ input {
   letter-spacing: 0.46px;
   border: 1px solid #5D6A18;
   right: 16px;
+}
+
+.reports-bar {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  height: 60px;
+  width: 100%;
+  align-items: center;
+}
+
+.reports-bar .search {
+  display: flex;
+  position: relative;
+  flex-direction: row;
+  height: 60px;
+  margin: 0 16px 0 auto;
+  padding: 0 16px 0 0;
+  box-sizing: border-box;
+  align-items: center;
+  justify-content: space-between;
+  background-color: rgba(var(--background-color-2), 0.3);
+  border-radius: 4px;
+}
+
+.reports-bar .search input[type="text"] {
+  color: rgb(var(--color-primary));
+  width: 270px;
+  outline: none;
+  border: none;
+  box-shadow: none;
+  background-color: transparent;
+  margin: 0;
+}
+
+.reports-bar input[type="text"]:first-of-type {
+  margin-left: auto;
 }
 
 .pagination {

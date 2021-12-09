@@ -995,6 +995,19 @@ input {
   animation: 0.8s ease scaleUp-2 forwards 0.3s, 20s ease pulse-2 infinite 1.1s both;
 }
 
+.splash .logo {
+  display: block;
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: 200px;
+  height: 200px;
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-image: url('https://res.cloudinary.com/uplusion23/image/upload/v1637359283/SFLogo.png');
+}
+
 .splash .left {
   display: flex;
   position: relative;
@@ -1019,6 +1032,7 @@ input {
   position: relative;
   font-size: 5.5rem;
   animation: 0.7s ease slideIn both 0.1s;
+  margin: 0 0 0 10px;
 }
 
 .splash .left > span > b::after {

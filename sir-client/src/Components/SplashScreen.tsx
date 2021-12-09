@@ -2,6 +2,7 @@ const SplashScreen: React.FC = () => (
   <div className="splash">
     <div className="circle" />
     <div className="circle-2" />
+    <div className="logo" />
     <div className="left">
       <span>
         A

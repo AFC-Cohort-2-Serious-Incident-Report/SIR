@@ -50,6 +50,7 @@ const IncidentDetailView = ({
                 modalContent={(
                   <IncidentFields
                     setFieldValue={setFieldValue}
+                    isFamilyMemberChecked={values.individualsInvolved.familyMember}
                     typeOfEvent={values.typeOfEvent}
                     departmentsInvolved={values.departmentsInvolved}
                   />

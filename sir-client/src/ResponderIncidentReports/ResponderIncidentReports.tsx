@@ -20,7 +20,7 @@ type IncidentData = {
   incidentDescription: string,
   eventType: string,
   individualsInvolved: Individual,
-  typeOfEvent: string
+  typeOfEvent: string[]
 }
 
 type PageData = {
@@ -203,6 +203,18 @@ const ResponderIncidentReports: FC = () => {
     return `${firstTrueValue}, +${count - 1}`;
   }
 
+  const handleTypeOfEvent = (typeOfEvent: string[]) => {
+    if (typeOfEvent.length === 0) return '';
+
+    let output = typeOfEvent[0];
+
+    if (typeOfEvent.length > 1) {
+      output += `, +${typeOfEvent.length - 1}`;
+    }
+
+    return output;
+  };
+
   const renderIncidentRows = reports.map((report: IncidentData) => (
     <tr
       key={report.id}
@@ -222,7 +234,8 @@ const ResponderIncidentReports: FC = () => {
       <td data-testid="incident-type">{report.eventType}</td>
       <td data-testid="potential-harm">{report.harmOrPotentialHarm ? 'Yes' : 'No'}</td>
       <td data-testid="individuals-involved">{handleIndividualsInvolved(report)}</td>
-      <td data-testid="event-type">{report.typeOfEvent}</td>
+      <td data-testid="event-type">{handleTypeOfEvent(report.typeOfEvent)}</td>
+      {/* <td data-testid="event-type">{report.typeOfEvent}</td> */}
       <td>
         <button
           type="button"

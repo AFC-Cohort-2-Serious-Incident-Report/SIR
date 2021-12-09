@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 const SplashScreen: React.FC = () => (
   <div className="splash">
     <div className="circle" />
@@ -10,8 +12,8 @@ const SplashScreen: React.FC = () => (
         incident report.
       </span>
       <div className="controls">
-        <a href="/reporter">Submit a Report</a>
-        <a href="/responder">View Reports</a>
+        <Link to="/reporter">Submit a Report</Link>
+        <Link to="/responder">View Reports</Link>
       </div>
       <span className="credits">
         Made with

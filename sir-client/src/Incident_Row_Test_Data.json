@@ -2,6 +2,7 @@
   "content": [{
     "id": 1,
     "incidentDate": "03/27/2021",
+    "incidentTime":"21:12",
     "incidentLocation": "Shouxihu",
     "eventType": "visa",
     "harmOrPotentialHarm": true,

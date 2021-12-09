@@ -27,7 +27,7 @@ const IncidentFieldsInitialValues = {
   witnessTwoPhone: '',
   witnessThreeName: '',
   witnessThreePhone: '',
-  departmentsInvolved: '',
+  departmentsInvolved: [],
   incidentDescription: '',
   preventativeAction: '',
   patientInfo: {

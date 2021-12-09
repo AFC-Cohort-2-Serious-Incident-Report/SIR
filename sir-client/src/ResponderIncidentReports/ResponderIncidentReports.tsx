@@ -68,7 +68,8 @@ const ResponderIncidentReports: FC = () => {
           totalCount: response.data.totalElements,
           currentPage: response.data.number,
         });
-      });
+      })
+      .catch(() => undefined);
   };
 
   useEffect(() => {
@@ -126,7 +127,8 @@ const ResponderIncidentReports: FC = () => {
           totalCount: response.data.totalElements,
           currentPage: response.data.number,
         });
-      });
+      })
+      .catch(() => undefined);
   };
 
   const handleDetailViewClose = () => setFocusedID(null);
@@ -143,7 +145,7 @@ const ResponderIncidentReports: FC = () => {
         setShowUpdatedIncidentBanner(true);
         updateTable();
       })
-      .catch();
+      .catch(() => undefined);
   };
 
   const handleSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -193,7 +195,6 @@ const ResponderIncidentReports: FC = () => {
       } else if (value === true) {
         count += 1;
       }
-      // else console.log(`${key} is false`);
     }
     if (firstTrueValue === 'familyMember') { firstTrueValue = 'family Member'; }
     if (firstTrueValue === 'staffMember') { firstTrueValue = 'staff Member'; }

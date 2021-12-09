@@ -26,7 +26,10 @@
   "witnessTwoPhone": "910-585-8101",
   "witnessThreeName": "Chuck Norris",
   "witnessThreePhone": "585-811-7777",
-  "departmentsInvolved": "Ambulatory Care, Emergency Care",
+  "departmentsInvolved": [
+    "Ambulatory Care",
+    "Emergency Care"
+  ],
   "incidentDescription": "Test description",
   "preventativeAction": "Test action",
   "patientInfo": {

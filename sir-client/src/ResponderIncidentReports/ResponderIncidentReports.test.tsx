@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event';
 import ResponderIncidentReports from './ResponderIncidentReports';
 import dataWithOne from '../Incident_Row_Test_Data.json';
 import testData from '../sir_test_data.json';
-import { searchIncidents } from '../API';
 
 type IncidentRowEntry = {
     id: number;
@@ -17,10 +16,6 @@ type IncidentRowEntry = {
         patient: boolean, familyMember: boolean, adult: boolean, child: boolean,
         staffMember: boolean, visitor: boolean, volunteer: boolean, other: boolean
     }
-}
-
-type IncidentRowEntries = {
-    row: IncidentRowEntry[];
 }
 
 describe('ResponderIncidentReports', () => {
@@ -183,7 +178,7 @@ describe('ResponderIncidentReports', () => {
     });
   });
 
-  describe('Search functionality', async () => {
+  describe('Search functionality', () => {
     const server = setupServer(
       rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
       rest.get(
@@ -212,7 +207,6 @@ describe('ResponderIncidentReports', () => {
   });
 
   describe('Detailed View Modal Submission', () => {
-    // const { content, ...pageableData } = dataWithOne;
     const updatedDataWithOne = { ...dataWithOne };
     let receivedData: IncidentRowEntry[];
     let numOfCalls = 0;
@@ -265,8 +259,8 @@ describe('ResponderIncidentReports', () => {
       userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'No');
       expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[0]}`)).toBeInTheDocument();
       expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[1]}`)).toBeInTheDocument();
-      userEvent.type(await screen.getByTestId('chip-input'), 'Doritos');
-      userEvent.click(screen.getByTestId('add-chip-button'));
+      userEvent.type(await screen.getByTestId('chip-input-type-of-event'), 'Doritos');
+      userEvent.click(screen.getByTestId('add-chip-button-type-of-event'));
       expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[0]}`)).toBeInTheDocument();
       expect(screen.getByTestId(`id-${dataWithOne.content[0].typeOfEvent[1]}`)).toBeInTheDocument();
       expect(screen.getByTestId('id-Doritos')).toBeInTheDocument();

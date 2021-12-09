@@ -30,7 +30,6 @@ const initialValuesMinusObjects = {
   witnessTwoPhone: '',
   witnessThreeName: '',
   witnessThreePhone: '',
-  departmentsInvolved: '',
   incidentDescription: '',
   preventativeAction: '',
 };
@@ -56,8 +55,8 @@ function fillAllFields() {
   userEvent.click(screen.getByTitle(/individualsInvolved.volunteer/i));
   userEvent.click(screen.getByTitle(/individualsInvolved.other/i));
   // Type of Event
-  userEvent.type(screen.getByTestId('chip-input'), 'Medication Related');
-  userEvent.click(screen.getByTestId('add-chip-button'));
+  userEvent.type(screen.getByTestId('chip-input-type-of-event'), 'Medication Related');
+  userEvent.click(screen.getByTestId('add-chip-button-type-of-event'));
   // Effect of this incident on the individual(s) involved
   userEvent.selectOptions(screen.getByRole('combobox', { name: /effect of this incident on the individual\(s\) involved/i }), 'No Harm Sustained');
   // Witness Info
@@ -68,7 +67,8 @@ function fillAllFields() {
   userEvent.type(screen.getByTitle(/witnessThreeName/i), 'Chuck Norris');
   userEvent.type(screen.getByTitle(/witnessThreePhone/i), '585-888-1101');
   // Departments Involved
-  userEvent.type(screen.getByRole('textbox', { name: /department\(s\) involved/i }), 'Ambulatory Care, Emergency Care');
+  userEvent.type(screen.getByTestId('chip-input-departments-involved'), 'Ambulatory Care');
+  userEvent.click(screen.getByTestId('add-chip-button-departments-involved'));
   // Description of Incident
   userEvent.type(screen.getByRole('textbox', { name: /description of incident/i }), 'Test text');
   // Preventative Actions Taken
@@ -107,8 +107,8 @@ describe('SirForm', () => {
     expect(screen.getByRole('checkbox', { name: /other/i })).not.toBeChecked();
 
     // Type of Event
-    expect(screen.getByTestId('chip-input')).toBeInTheDocument();
-    expect(screen.getByTestId('add-chip-button')).toBeInTheDocument();
+    expect(screen.getByTestId('chip-input-type-of-event')).toBeInTheDocument();
+    expect(screen.getByTestId('add-chip-button-type-of-event')).toBeInTheDocument();
 
     // Effect of this incident on the individual(s) involved
     expect(screen.getByRole('combobox', { name: /effect of this incident on the individual\(s\) involved/i })).toBeInTheDocument();
@@ -120,7 +120,8 @@ describe('SirForm', () => {
     expect(screen.getByTitle(/witnessThreeName/i)).toBeInTheDocument();
     expect(screen.getByTitle(/witnessThreePhone/i)).toBeInTheDocument();
     // Departments Involved
-    expect(screen.getByRole('textbox', { name: /department\(s\) involved/i })).toBeInTheDocument();
+    expect(screen.getByTestId('chip-input-departments-involved')).toBeInTheDocument();
+    expect(screen.getByTestId('add-chip-button-departments-involved')).toBeInTheDocument();
     // Description of Event
     expect(screen.getByRole('textbox', { name: /description of incident/i })).toBeInTheDocument();
     // Preventative Actions Taken
@@ -223,12 +224,12 @@ describe('SirForm', () => {
 
   // Type of Event
   it('add and remove multiple typeOfEvent with chips rendering', async () => {
-    userEvent.type(screen.getByTestId('chip-input'), 'Adverse Drug Reaction');
-    userEvent.click(screen.getByTestId('add-chip-button'));
+    userEvent.type(screen.getByTestId('chip-input-type-of-event'), 'Adverse Drug Reaction');
+    userEvent.click(screen.getByTestId('add-chip-button-type-of-event'));
     await waitFor(() => expect(screen.getByTestId(/id-adverse drug reaction/i)).toBeInTheDocument());
-    expect(screen.getByTestId('chip-input')).toHaveValue('');
-    userEvent.type(screen.getByTestId('chip-input'), 'Fried Potato Overdose');
-    userEvent.click(screen.getByTestId('add-chip-button'));
+    expect(screen.getByTestId('chip-input-type-of-event')).toHaveValue('');
+    userEvent.type(screen.getByTestId('chip-input-type-of-event'), 'Fried Potato Overdose');
+    userEvent.click(screen.getByTestId('add-chip-button-type-of-event'));
     await waitFor(() => expect(screen.getByTestId(/id-fried potato overdose/i)).toBeInTheDocument());
     userEvent.click(screen.getByTestId(/id-adverse drug reaction/i));
     await waitFor(() => expect(screen.queryByTestId(/id-adverse drug reaction/i)).not.toBeInTheDocument());
@@ -271,8 +272,16 @@ describe('SirForm', () => {
 
   // Departments Involved
   it('accepts departmentsInvolved string', async () => {
-    userEvent.type(screen.getByRole('textbox', { name: /department\(s\) involved/i }), 'Ambulatory Care, Emergency Care');
-    await waitFor(() => expect(screen.getByRole('textbox', { name: /department\(s\) involved/i })).toHaveValue('Ambulatory Care, Emergency Care'));
+    userEvent.type(screen.getByTestId('chip-input-departments-involved'), 'Ambulatory Care');
+    userEvent.click(screen.getByTestId('add-chip-button-departments-involved'));
+    await waitFor(() => expect(screen.getByTestId(/id-ambulatory care/i)).toBeInTheDocument());
+    expect(screen.getByTestId('chip-input-departments-involved')).toHaveValue('');
+    userEvent.type(screen.getByTestId('chip-input-departments-involved'), 'Emergency Care');
+    userEvent.click(screen.getByTestId('add-chip-button-departments-involved'));
+    await waitFor(() => expect(screen.getByTestId(/id-emergency care/i)).toBeInTheDocument());
+    expect(screen.getByTestId('chip-input-departments-involved')).toHaveValue('');
+    userEvent.click(screen.getByTestId(/id-ambulatory care/i));
+    await waitFor(() => expect(screen.queryByTestId(/id-ambulatory care/i)).not.toBeInTheDocument());
   });
 
   // Description of Incident
@@ -342,7 +351,8 @@ describe('SirForm', () => {
     userEvent.click(screen.getByRole('button', { name: /submit/i }));
     await waitFor(() => (expect(screen.getByTitle('sir-form')).toHaveFormValues(initialValuesMinusObjects)));
 
-    expect(screen.getByTestId('chip-input')).toHaveValue('');
+    expect(screen.getByTestId('chip-input-type-of-event')).toHaveValue('');
+    expect(screen.getByTestId('chip-input-departments-involved')).toHaveValue('');
     expect(screen.queryByAltText('chip-close-button')).not.toBeInTheDocument();
 
     await waitFor(() => (expect(screen.queryByAltText('chip-close-button')).not.toBeInTheDocument()));
@@ -353,6 +363,7 @@ describe('SirForm', () => {
       expect(value).toHaveValue('');
     }));
   });
+
   // Form displays error banner if submission is not successful
   it('Displays Error Alert Banner if submission is not successful', async () => {
     window.scrollTo = jest.fn();

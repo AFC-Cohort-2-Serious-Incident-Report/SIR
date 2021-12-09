@@ -21,14 +21,12 @@ afterAll(() => server.close());
 
 describe('IncidentDetailView', () => {
   beforeEach(() => {
-    render(
-      <IncidentDetailView
-        id={1}
-        onClose={() => null}
-        onSubmitUpdate={() => null}
-        onErrorClose={() => null}
-      />,
-    );
+    render(<IncidentDetailView
+      id={1}
+      onClose={() => null}
+      onSubmitUpdate={() => null}
+      onErrorClose={() => null}
+    />);
   });
 
   it('renders inside of modal with incident detail properties', async () => {
@@ -71,7 +69,10 @@ describe('IncidentDetailView', () => {
     expect(screen.getByTitle(/witnessTwoPhone/i)).toHaveValue(testData.witnessTwoPhone);
     expect(screen.getByTitle(/witnessThreeName/i)).toHaveValue(testData.witnessThreeName);
     expect(screen.getByTitle(/witnessThreePhone/i)).toHaveValue(testData.witnessThreePhone);
-    expect(screen.getByRole('textbox', { name: /department\(s\) involved/i })).toHaveValue(testData.departmentsInvolved);
+    expect(screen.getByTestId('chip-input-departments-involved')).toBeInTheDocument();
+    expect(screen.getByTestId('add-chip-button-departments-involved')).toBeInTheDocument();
+    expect(screen.getByTestId(`id-${testData.departmentsInvolved[0]}`)).toBeInTheDocument();
+    expect(screen.getByTestId(`id-${testData.departmentsInvolved[1]}`)).toBeInTheDocument();
     expect(screen.getByRole('textbox', { name: /description of incident/i })).toHaveValue(testData.incidentDescription);
     expect(screen.getByRole('textbox', {
       name: /what actions, if any, could have been taken to prevent this incident from occurring?/i,
@@ -82,8 +83,8 @@ describe('IncidentDetailView', () => {
       name: /patient telephone number/i,
     })).toHaveValue(testData.patientInfo.patientPhone);
     expect(screen.getByRole('textbox', { name: /patient address/i })).toHaveValue(testData.patientInfo.patientAddress);
-    expect(screen.getByTestId('chip-input')).toBeInTheDocument();
-    expect(screen.getByTestId('add-chip-button')).toBeInTheDocument();
+    expect(screen.getByTestId('chip-input-type-of-event')).toBeInTheDocument();
+    expect(screen.getByTestId('add-chip-button-type-of-event')).toBeInTheDocument();
     expect(screen.getByTestId(`id-${testData.typeOfEvent[0]}`)).toBeInTheDocument();
     expect(screen.getByTestId(`id-${testData.typeOfEvent[1]}`)).toBeInTheDocument();
   });

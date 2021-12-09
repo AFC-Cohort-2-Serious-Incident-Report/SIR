@@ -1,13 +1,18 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { Field } from 'formik';
 import CustomChips from '../Components/CustomChips';
 
 type IncidentFieldProps = {
-  setFieldValue: (field: string, newValue: any) => void;
-  typeOfEvent: string[];
+    setFieldValue: (field: string, newValue: string | boolean | Array<string>) => void;
+    typeOfEvent: string[];
+    departmentsInvolved: string[];
 }
 
-const IncidentFields = ({ setFieldValue, typeOfEvent }: IncidentFieldProps) => {
+const IncidentFields = ({
+  setFieldValue,
+  typeOfEvent,
+  departmentsInvolved,
+}: IncidentFieldProps): ReactElement => {
   const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
 
   const handleFamilyMemberCheck = () => {
@@ -166,6 +171,7 @@ const IncidentFields = ({ setFieldValue, typeOfEvent }: IncidentFieldProps) => {
         <label htmlFor="typeOfEvent">Event Type</label>
         <CustomChips
           chips={typeOfEvent}
+          fieldName="type-of-event"
           updateChips={(newChips) => setFieldValue('typeOfEvent', newChips)}
         />
       </div>
@@ -225,11 +231,10 @@ const IncidentFields = ({ setFieldValue, typeOfEvent }: IncidentFieldProps) => {
       </div>
       <div className="group">
         <label htmlFor="departmentsInvolved">Department(s) Involved in this Incident</label>
-        <Field
-          type="text"
-          id="departmentsInvolved"
-          name="departmentsInvolved"
-          title="departmentsInvolved"
+        <CustomChips
+          chips={departmentsInvolved}
+          fieldName="departments-involved"
+          updateChips={(newChips) => setFieldValue('departmentsInvolved', newChips)}
         />
       </div>
       <div className="group">

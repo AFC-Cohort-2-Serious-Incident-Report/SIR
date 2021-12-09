@@ -21,13 +21,14 @@ const IncidentDetailView = ({
   onSubmitUpdate,
 }: IncidentDetailViewProps): ReactElement => {
   const [incident, setIncident] = useState<Incident | null>(null);
+  const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
-    getIncidentByID(id)
-      .then((results) => {
-        setIncident(results);
-      })
+    getIncidentByID(id).then((results: Incident) => {
+      if (isMounted) setIncident(results);
+    })
       .catch(() => onErrorClose());
+    return () => setIsMounted(false);
   }, []);
 
   return (
@@ -46,11 +47,11 @@ const IncidentDetailView = ({
                 onModalClose={onClose}
                 onModalSubmit={{ onSubmit: handleSubmit, text: 'SAVE' }}
                 modalTitle="Incident Report"
-                // TODO : Replace empty div with loading indicator
                 modalContent={(
                   <IncidentFields
                     setFieldValue={setFieldValue}
                     typeOfEvent={values.typeOfEvent}
+                    departmentsInvolved={values.departmentsInvolved}
                   />
 )}
               />

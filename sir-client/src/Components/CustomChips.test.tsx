@@ -11,7 +11,7 @@ describe('CustomChip', () => {
   const chips = [firstChipText, secondChipText, thirdChipText];
 
   beforeEach(() => {
-    render(<CustomChips chips={chips} updateChips={updateChipFn} />);
+    render(<CustomChips chips={chips} fieldName="type-of-event" updateChips={updateChipFn} />);
   });
 
   it('calls passed updateChips function when X button is clicked in chip component', () => {
@@ -27,8 +27,8 @@ describe('CustomChip', () => {
 
   it('calls updateChips function when a chip is added', () => {
     const newChipText = 'New Chip Text';
-    userEvent.type(screen.getByTestId('chip-input'), newChipText);
-    userEvent.click(screen.getByTestId('add-chip-button'));
+    userEvent.type(screen.getByTestId('chip-input-type-of-event'), newChipText);
+    userEvent.click(screen.getByTestId('add-chip-button-type-of-event'));
     expect(updateChipFn).toHaveBeenCalled();
   });
 });

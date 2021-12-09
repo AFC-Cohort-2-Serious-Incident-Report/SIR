@@ -129,7 +129,7 @@ class IncidentControllerTests {
                                 "witnessTwoPhone": "910-585-8101",
                                 "witnessThreeName": "Chuck Norris",
                                 "witnessThreePhone": "585-811-7777",
-                                "departmentsInvolved": "Ambulatory Care, Emergency Care",
+                                "departmentsInvolved": ["Ambulatory Care", "Emergency Care"],
                                 "incidentDescription": "Test description",
                                 "preventativeAction": "Test action",
                                 "patientInfo": {
@@ -170,7 +170,8 @@ class IncidentControllerTests {
         assertEquals("910-585-8101", savedIncident.getWitnessTwoPhone());
         assertEquals("Chuck Norris", savedIncident.getWitnessThreeName());
         assertEquals("585-811-7777", savedIncident.getWitnessThreePhone());
-        assertEquals("Ambulatory Care, Emergency Care", savedIncident.getDepartmentsInvolved());
+        assertEquals("Ambulatory Care", savedIncident.getDepartmentsInvolved().get(0));
+        assertEquals("Emergency Care", savedIncident.getDepartmentsInvolved().get(1));
         assertEquals("Test description", savedIncident.getIncidentDescription());
         assertEquals("Test action", savedIncident.getPreventativeAction());
         assertEquals("{\"patientName\":\"Chuck Norris\",\"patientSocial\":\"125-57-4578\",\"patientPhone\":\"775-878-1257\",\"patientAddress\":\"123 Main Street, San Diego, CA 92109\"}", patientInfo);
@@ -221,7 +222,7 @@ class IncidentControllerTests {
                 "witnessTwoPhone": "910-585-8101",
                 "witnessThreeName": "Chuck Norris",
                 "witnessThreePhone": "585-811-7777",
-                "departmentsInvolved": "Ambulatory Care, Emergency Care",
+                "departmentsInvolved": ["Ambulatory Care", "Emergency Care"],
                 "incidentDescription": "Test description",
                 "preventativeAction": "Test action",
                 "patientInfo": {
@@ -274,7 +275,8 @@ class IncidentControllerTests {
         assertEquals("910-585-8101", savedIncident.getWitnessTwoPhone());
         assertEquals("Chuck Norris", savedIncident.getWitnessThreeName());
         assertEquals("585-811-7777", savedIncident.getWitnessThreePhone());
-        assertEquals("Ambulatory Care, Emergency Care", savedIncident.getDepartmentsInvolved());
+        assertEquals("Ambulatory Care", savedIncident.getDepartmentsInvolved().get(0));
+        assertEquals("Emergency Care", savedIncident.getDepartmentsInvolved().get(1));
         assertEquals("Test description", savedIncident.getIncidentDescription());
         assertEquals("Test action", savedIncident.getPreventativeAction());
         assertEquals("{\"patientName\":\"Chuck Norris\",\"patientSocial\":\"125-57-4578\",\"patientPhone\":\"775-878-1257\",\"patientAddress\":\"123 Main Street, San Diego, CA 92109\"}", patientInfo);
@@ -309,7 +311,7 @@ class IncidentControllerTests {
                 "witnessTwoPhone": "910-585-8101",
                 "witnessThreeName": "Chuck Norris",
                 "witnessThreePhone": "585-811-7777",
-                "departmentsInvolved": "Ambulatory Care, Emergency Care",
+                "departmentsInvolved": ["Ambulatory Care", "Emergency Care"],
                 "incidentDescription": "Test description",
                 "preventativeAction": "Test action",
                 "patientInfo": {

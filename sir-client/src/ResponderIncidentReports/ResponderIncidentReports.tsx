@@ -223,6 +223,7 @@ const ResponderIncidentReports: FC = () => {
         <input
           type="checkbox"
           name="selectRow"
+          data-testid={`select-row-${report.id}`}
           checked={!!selectedReports.find((selectedReport) => selectedReport.id === report.id)}
           onChange={() => checkboxOnChangeHandler(report)}
         />

@@ -39,10 +39,20 @@ const Pagination: React.FC<paginationProps> = ({
       {`${offset + 1}-${offset + size} of ${totalCount}`}
     </span>
     <div className="page-controls">
-      <button type="button" disabled={firstPage} onClick={() => navigatePage(currentPage - 1, size)}>
+      <button
+        type="button"
+        disabled={firstPage}
+        onClick={() => navigatePage(currentPage - 1, size)}
+        data-testid="last-page-arrow"
+      >
         <i className="gg-chevron-left" />
       </button>
-      <button type="button" disabled={lastPage} onClick={() => navigatePage(currentPage + 1, size)}>
+      <button
+        type="button"
+        disabled={lastPage}
+        onClick={() => navigatePage(currentPage + 1, size)}
+        data-testid="next-page-arrow"
+      >
         <i className="gg-chevron-right" />
       </button>
     </div>

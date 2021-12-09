@@ -5,6 +5,7 @@ import userEvent from '@testing-library/user-event';
 import ResponderIncidentReports from './ResponderIncidentReports';
 import dataWithOne from '../Incident_Row_Test_Data.json';
 import testData from '../sir_test_data.json';
+import testDataMany from '../sir_test_data_many.json';
 
 type IncidentRowEntry = {
     id: number;
@@ -303,29 +304,46 @@ describe('ResponderIncidentReports', () => {
     });
   });
 
-  describe('Detail View Error Handling', () => {
-    const server = setupServer(
-      rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
-      rest.get(
-        '/api/incidents/1',
-        (
-          req,
-          res,
-          ctx,
-        ) => res(ctx.status(400)),
-      ),
+  describe('Checkbox Checked State Persists Across Pages', () => {
+    const server2 = setupServer(
+      rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(testDataMany))),
     );
 
-    beforeAll(() => server.listen());
+    beforeAll(() => server2.listen());
     beforeEach(() => {
       render(<ResponderIncidentReports />);
     });
-    afterEach(() => server.resetHandlers());
-    afterAll(() => server.close());
+    afterEach(() => server2.resetHandlers());
+    afterAll(() => server2.close());
 
-    it('should display error banner if error occurs', async () => {
-      userEvent.click(await screen.findByRole('button', { name: /view/i }));
-      expect(await screen.findByText(/error occurred while retrieving incident/i));
+    it('it should remain selected', async () => {
+      await waitFor(() => expect(screen.getByText('2022-03-27')).toBeInTheDocument());
+      userEvent.click((screen.getByTestId(`select-row-${testDataMany.content[0].id}`)));
+      expect(screen.getByTestId(`select-row-${testDataMany.content[0].id}`)).toBeChecked();
+      userEvent.click(await screen.findByTestId('next-page-arrow'));
+      await waitFor(() => expect(screen.getByText('2022-03-24')).toBeInTheDocument());
+      expect(screen.getByTestId(`select-row-${testDataMany.content[10].id}`)).not.toBeChecked();
+      userEvent.click(await screen.findByTestId('last-page-arrow'));
+      await waitFor(() => expect(screen.getByText('2022-03-27')).toBeInTheDocument());
+      expect(screen.getByTestId(`select-row-${testDataMany.content[0].id}`)).toBeChecked();
+    });
+
+    it('it should remain unselected', async () => {
+      await waitFor(() => expect(screen.getByText('2022-03-27')).toBeInTheDocument());
+      userEvent.click((screen.getByTestId(`select-row-${testDataMany.content[0].id}`)));
+      expect(screen.getByTestId(`select-row-${testDataMany.content[0].id}`)).toBeChecked();
+      userEvent.click(await screen.findByTestId('next-page-arrow'));
+      await waitFor(() => expect(screen.getByText('2022-03-24')).toBeInTheDocument());
+      expect(screen.getByTestId(`select-row-${testDataMany.content[10].id}`)).not.toBeChecked();
+      userEvent.click(await screen.findByTestId('last-page-arrow'));
+      await waitFor(() => expect(screen.getByText('2022-03-27')).toBeInTheDocument());
+      expect(screen.getByTestId(`select-row-${testDataMany.content[0].id}`)).toBeChecked();
+      userEvent.click((screen.getByTestId(`select-row-${testDataMany.content[0].id}`)));
+      userEvent.click(await screen.findByTestId('next-page-arrow'));
+      await waitFor(() => expect(screen.getByText('2022-03-24')).toBeInTheDocument());
+      expect(screen.getByTestId(`select-row-${testDataMany.content[10].id}`)).not.toBeChecked();
+      userEvent.click(await screen.findByTestId('last-page-arrow'));
+      expect(screen.getByTestId(`select-row-${testDataMany.content[0].id}`)).not.toBeChecked();
     });
   });
 });

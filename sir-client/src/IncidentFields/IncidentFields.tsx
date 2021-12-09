@@ -4,16 +4,18 @@ import CustomChips from '../Components/CustomChips';
 
 type IncidentFieldProps = {
     setFieldValue: (field: string, newValue: string | boolean | Array<string>) => void;
+    isFamilyMemberChecked?: boolean;
     typeOfEvent: string[];
     departmentsInvolved: string[];
 }
 
 const IncidentFields = ({
   setFieldValue,
+  isFamilyMemberChecked,
   typeOfEvent,
   departmentsInvolved,
 }: IncidentFieldProps): ReactElement => {
-  const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
+  const [familyMemberCheck, setFamilyMemberCheck] = useState(isFamilyMemberChecked);
 
   const handleFamilyMemberCheck = () => {
     setFamilyMemberCheck(!familyMemberCheck);
@@ -293,6 +295,10 @@ const IncidentFields = ({
       </div>
     </>
   );
+};
+
+IncidentFields.defaultProps = {
+  isFamilyMemberChecked: false,
 };
 
 export default IncidentFields;

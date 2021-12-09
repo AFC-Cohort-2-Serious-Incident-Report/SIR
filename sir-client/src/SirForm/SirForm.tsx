@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { Form, Formik } from 'formik';
 import CustomAlert, { AlertType } from '../Components/CustomAlert';
@@ -9,7 +9,9 @@ import { Incident } from '../API';
 
 const SirForm: React.FC = () => {
   const [reportSubmitted, setReportSubmitted] = useState(false);
+  const [isMounted, setIsMounted] = useState(true);
   const [showSubmissionErrorMessage, setShowSubmissionErrorMessage] = useState(false);
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
 
   // Set the back end address and port from environment variable REACT_APP_API_HOST if it is set,
   // otherwise, use the proxy settings in package.json.
@@ -17,11 +19,16 @@ const SirForm: React.FC = () => {
   const API_HOST = process.env.REACT_APP_API_HOST ? process.env.REACT_APP_API_HOST : '';
 
   const handleSubmitClick = (values: Incident) => {
-    console.log(values);
     axios.post(`${API_HOST}/api/incidents`, values)
-      .then(() => setReportSubmitted(true))
-      .catch(() => setShowSubmissionErrorMessage(true));
+      .then(() => {
+        if (isMounted) setReportSubmitted(true);
+      })
+      .catch(() => {
+        if (isMounted) setShowSubmissionErrorMessage(true);
+      });
   };
+
+  useEffect(() => () => setIsMounted(false), []);
 
   return (
     <>

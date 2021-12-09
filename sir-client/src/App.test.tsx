@@ -4,8 +4,6 @@ import userEvent from '@testing-library/user-event';
 import App from './App';
 
 test('renders reporter and responder links with reporter focused', async () => {
-  // TODO - test here for each respective title once title story happens - JP
-
   // render App
   render(<App />);
   // assert App loads with default nav elements

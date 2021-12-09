@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { Field } from 'formik';
 import CustomChips from '../Components/CustomChips';
 
 type IncidentFieldProps = {
-  setFieldValue: (field: string, newValue: any) => void;
+  setFieldValue: (field: string, newValue: string | boolean | Array<string>) => void;
   typeOfEvent: string[];
 }
 
-const IncidentFields = ({ setFieldValue, typeOfEvent }: IncidentFieldProps) => {
+const IncidentFields = ({ setFieldValue, typeOfEvent }: IncidentFieldProps): ReactElement => {
   const [familyMemberCheck, setFamilyMemberCheck] = useState(false);
 
   const handleFamilyMemberCheck = () => {

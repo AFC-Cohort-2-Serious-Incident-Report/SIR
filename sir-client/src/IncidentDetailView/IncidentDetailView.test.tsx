@@ -24,7 +24,7 @@ describe('IncidentDetailView', () => {
     render(<IncidentDetailView
       id={1}
       onClose={() => null}
-      onSubmit={() => null}
+      onSubmitUpdate={() => null}
       onErrorClose={() => null}
     />);
   });

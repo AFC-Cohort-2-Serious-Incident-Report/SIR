@@ -183,7 +183,6 @@ describe('ResponderIncidentReports', () => {
   });
 
   describe('Detailed View Modal Submission', () => {
-    // const { content, ...pageableData } = dataWithOne;
     const updatedDataWithOne = { ...dataWithOne };
     let receivedData: IncidentRowEntry[];
     let numOfCalls = 0;

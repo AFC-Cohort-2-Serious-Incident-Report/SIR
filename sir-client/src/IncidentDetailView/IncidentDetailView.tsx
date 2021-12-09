@@ -15,26 +15,6 @@ type IncidentDetailViewProps = {
   onSubmitUpdate: (updatedIncident: Incident) => void;
 }
 
-const makeCancelable = (promise: Promise<Incident>) => {
-  let hasCanceled = false;
-
-  const wrappedPromise = new Promise((resolve, reject) => {
-    promise.then(
-      // eslint-disable-next-line prefer-promise-reject-errors
-      (val) => (hasCanceled ? reject({ isCanceled: true }) : resolve(val)),
-      // eslint-disable-next-line prefer-promise-reject-errors
-      (error) => (hasCanceled ? reject({ isCanceled: true }) : reject(error)),
-    );
-  });
-
-  return {
-    promise: wrappedPromise,
-    cancel() {
-      hasCanceled = true;
-    },
-  };
-};
-
 const IncidentDetailView = ({
   id,
   onClose,
@@ -42,15 +22,14 @@ const IncidentDetailView = ({
   onSubmitUpdate,
 }: IncidentDetailViewProps): ReactElement => {
   const [incident, setIncident] = useState<Incident | null>(null);
-  let axiosGetPromise;
+  const [isMounted, setIsMounted] = useState(true);
 
   useEffect(() => {
-    axiosGetPromise = makeCancelable(getIncidentByID(id));
-    axiosGetPromise.promise.then((results: any) => {
-      setIncident(results);
+    getIncidentByID(id).then((results: any) => {
+      if (isMounted) setIncident(results);
     })
-      .catch(() => onErrorClose());
-    return axiosGetPromise.cancel;
+      .catch((error) => onErrorClose());
+    return () => setIsMounted(false);
   }, []);
 
   return (
@@ -69,7 +48,6 @@ const IncidentDetailView = ({
                 onModalClose={onClose}
                 onModalSubmit={{ onSubmit: handleSubmit, text: 'SAVE' }}
                 modalTitle="Incident Report"
-                // TODO : Replace empty div with loading indicator
                 modalContent={<IncidentFields setFieldValue={setFieldValue} />}
               />
             </Form>

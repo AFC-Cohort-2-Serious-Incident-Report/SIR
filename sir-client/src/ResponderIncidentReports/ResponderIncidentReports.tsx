@@ -68,7 +68,8 @@ const ResponderIncidentReports: FC = () => {
           totalCount: response.data.totalElements,
           currentPage: response.data.number,
         });
-      });
+      })
+      .catch((error) => console.log(error));
   };
 
   useEffect(() => {
@@ -126,7 +127,8 @@ const ResponderIncidentReports: FC = () => {
           totalCount: response.data.totalElements,
           currentPage: response.data.number,
         });
-      });
+      })
+      .catch((error) => undefined);
   };
 
   const handleDetailViewClose = () => setFocusedID(null);
@@ -143,7 +145,7 @@ const ResponderIncidentReports: FC = () => {
         setShowUpdatedIncidentBanner(true);
         updateTable();
       })
-      .catch();
+      .catch((error) => undefined);
   };
 
   useEffect(() => {

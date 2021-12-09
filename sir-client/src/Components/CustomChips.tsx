@@ -22,11 +22,13 @@ const CustomChip: FC<CustomChipProps> = ({ text, onClose }: CustomChipProps): Re
 
 type CustomChipsProps = {
     chips: string[];
+    fieldName: string;
     updateChips: (chips: string[]) => void;
 }
 
 const CustomChips: FC<CustomChipsProps> = ({
   chips,
+  fieldName,
   updateChips,
 }: CustomChipsProps): ReactElement => {
   const [newChip, setNewChip] = React.useState<string>('');
@@ -52,13 +54,13 @@ const CustomChips: FC<CustomChipsProps> = ({
         <input
           type="text"
           onChange={(e) => setNewChip(e.target.value)}
-          data-testid="chip-input"
+          data-testid={`chip-input-${fieldName}`}
           value={newChip}
         />
         <button
           onClick={(e) => addChip()}
           type="button"
-          data-testid="add-chip-button"
+          data-testid={`add-chip-button-${fieldName}`}
           className="chip-add-button"
         >
           <i className="gg-math-plus" />

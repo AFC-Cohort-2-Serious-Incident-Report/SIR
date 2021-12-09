@@ -36,7 +36,7 @@ export type Incident = {
     witnessTwoPhone: string;
     witnessThreeName: string;
     witnessThreePhone: string;
-    departmentsInvolved: string;
+    departmentsInvolved: string[];
     incidentDescription: string;
     preventativeAction: string;
     patientInfo: Patient;

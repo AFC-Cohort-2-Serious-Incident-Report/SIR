@@ -1,5 +1,7 @@
-import { render, screen, waitFor } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import {
+  fireEvent, render, screen, waitFor,
+} from '@testing-library/react';
+import userEvent, { specialChars } from '@testing-library/user-event';
 import { setupServer } from 'msw/node';
 import { rest } from 'msw';
 import SirForm from './SirForm';
@@ -235,6 +237,11 @@ describe('SirForm', () => {
     await waitFor(() => expect(screen.queryByTestId(/id-adverse drug reaction/i)).not.toBeInTheDocument());
   });
 
+  it('adds a new Chip by pressing the ENTER key', async () => {
+    userEvent.type(screen.getByTestId('chip-input-type-of-event'), 'DUI{enter}');
+    await waitFor(() => expect(screen.getByTestId(/id-DUI/i)).toBeInTheDocument());
+  });
+
   // Effect of this incident on the individual(s) involved
   it('accepts effectOnIndividual selection', async () => {
     userEvent.selectOptions(screen.getByRole('combobox', { name: /effect of this incident on the individual\(s\) involved/i }), 'No Harm Sustained');
@@ -282,6 +289,11 @@ describe('SirForm', () => {
     expect(screen.getByTestId('chip-input-departments-involved')).toHaveValue('');
     userEvent.click(screen.getByTestId(/id-ambulatory care/i));
     await waitFor(() => expect(screen.queryByTestId(/id-ambulatory care/i)).not.toBeInTheDocument());
+  });
+
+  it('creates a new Chip from pressing the Enter key', async () => {
+    userEvent.type(screen.getByTestId('chip-input-departments-involved'), `Death${specialChars.enter}`);
+    await waitFor(() => expect(screen.getByTestId(/id-death/i)).toBeInTheDocument());
   });
 
   // Description of Incident

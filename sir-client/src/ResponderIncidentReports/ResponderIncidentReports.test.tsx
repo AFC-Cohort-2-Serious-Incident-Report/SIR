@@ -15,7 +15,8 @@ type IncidentRowEntry = {
     individualsInvolved: {
         patient: boolean, familyMember: boolean, adult: boolean, child: boolean,
         staffMember: boolean, visitor: boolean, volunteer: boolean, other: boolean
-    }
+    };
+    typeOfEvent: string[];
 }
 
 describe('ResponderIncidentReports', () => {
@@ -53,6 +54,12 @@ describe('ResponderIncidentReports', () => {
       expect(screen.getByText('Individual(s) Involved')).toBeInTheDocument();
       expect(screen.getByText(/^Event Type/i)).toBeInTheDocument();
       expect(screen.getByText(/^details/i)).toBeInTheDocument();
+    });
+
+    it('should render report data in table', async () => {
+      await waitFor(() => expect(screen.getByText('03/27/2021')).toBeInTheDocument());
+      // expect(screen.getByText(/Adverse Drug Reaction/)).toBeInTheDocument();
+      expect(screen.getByText('Adverse Drug Reaction, +1')).toBeInTheDocument();
     });
 
     it('should render json for responder', async () => {
@@ -232,10 +239,22 @@ describe('ResponderIncidentReports', () => {
         ctx,
       ) => {
         const {
-          id, incidentDate, incidentLocation, harmOrPotentialHarm, eventType, individualsInvolved,
+          id,
+          incidentDate,
+          incidentLocation,
+          harmOrPotentialHarm,
+          eventType,
+          individualsInvolved,
+          typeOfEvent,
         } = req.body;
         receivedData = [{
-          id, incidentDate, incidentLocation, harmOrPotentialHarm, eventType, individualsInvolved,
+          id,
+          incidentDate,
+          incidentLocation,
+          harmOrPotentialHarm,
+          eventType,
+          individualsInvolved,
+          typeOfEvent,
         }];
         updatedDataWithOne.content = receivedData;
         return res(ctx.json(dataWithOne));

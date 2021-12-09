@@ -38,7 +38,7 @@ const IncidentFields = ({ setFieldValue }: IncidentFieldProps): ReactElement => 
       </div>
       <div className="group split">
         <div className="group">
-          <label htmlFor="eventType">Event Type</label>
+          <label htmlFor="eventType">Incident Type</label>
           <Field type="select" as="select" id="eventType" name="eventType">
             <option value="Actual Event / Incident">Actual Event / Incident</option>
             <option value="Not Actual Event / Incident">
@@ -161,7 +161,7 @@ const IncidentFields = ({ setFieldValue }: IncidentFieldProps): ReactElement => 
         </div>
       </div>
       <div className="group">
-        <label htmlFor="typeOfEvent">Type of Event</label>
+        <label htmlFor="typeOfEvent">Event Type</label>
         <Field type="text" id="typeOfEvent" name="typeOfEvent" title="typeOfEvent" />
       </div>
       <div className="group">

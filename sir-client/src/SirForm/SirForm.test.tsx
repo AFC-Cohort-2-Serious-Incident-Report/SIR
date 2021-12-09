@@ -44,7 +44,7 @@ function fillAllFields() {
   // Location of Event
   userEvent.type(screen.getByRole('textbox', { name: /incident location/i }), 'Test text');
   // Event Type
-  userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
+  userEvent.selectOptions(screen.getByRole('combobox', { name: /incident type/i }), 'Actual Event / Incident');
   // Harm or Potential Harm
   userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'Yes');
   // Individuals Involved
@@ -57,7 +57,7 @@ function fillAllFields() {
   userEvent.click(screen.getByTitle(/individualsInvolved.volunteer/i));
   userEvent.click(screen.getByTitle(/individualsInvolved.other/i));
   // Type of Event
-  userEvent.type(screen.getByRole('textbox', { name: /type of event/i }), 'Adverse Drug Reaction, Medication Related');
+  userEvent.type(screen.getByRole('textbox', { name: /event type/i }), 'Adverse Drug Reaction, Medication Related');
   // Effect of this incident on the individual(s) involved
   userEvent.selectOptions(screen.getByRole('combobox', { name: /effect of this incident on the individual\(s\) involved/i }), 'No Harm Sustained');
   // Witness Info
@@ -93,7 +93,7 @@ describe('SirForm', () => {
     // Location of Event
     expect(screen.getByRole('textbox', { name: /incident location/i })).toBeInTheDocument();
     // Event Type
-    expect(screen.getByRole('combobox', { name: /event type/i })).toBeInTheDocument();
+    expect(screen.getByRole('combobox', { name: /incident type/i })).toBeInTheDocument();
     // Harm or Potential Harm
     expect(screen.getByRole('combobox', { name: /harm or potential harm/i })).toHaveValue('false');
     // Individuals Involved
@@ -106,7 +106,7 @@ describe('SirForm', () => {
     expect(screen.getByRole('checkbox', { name: /volunteer/i })).not.toBeChecked();
     expect(screen.getByRole('checkbox', { name: /other/i })).not.toBeChecked();
     // Type of Event
-    expect(screen.getByRole('textbox', { name: /type of event/i })).toBeInTheDocument();
+    expect(screen.getByRole('textbox', { name: /event type/i })).toBeInTheDocument();
     // Effect of this incident on the individual(s) involved
     expect(screen.getByRole('combobox', { name: /effect of this incident on the individual\(s\) involved/i })).toBeInTheDocument();
     // Witness Info
@@ -155,8 +155,8 @@ describe('SirForm', () => {
 
   // Event Type
   it('accepts eventType selection', async () => {
-    userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
-    await waitFor(() => expect(screen.getByRole('combobox', { name: /event type/i })).toHaveValue('Actual Event / Incident'));
+    userEvent.selectOptions(screen.getByRole('combobox', { name: /incident type/i }), 'Actual Event / Incident');
+    await waitFor(() => expect(screen.getByRole('combobox', { name: /incident type/i })).toHaveValue('Actual Event / Incident'));
   });
 
   // Harm or Potential Harm
@@ -220,8 +220,8 @@ describe('SirForm', () => {
 
   // Type of Event
   it('accepts typeOfEvent string', async () => {
-    userEvent.type(screen.getByRole('textbox', { name: /type of event/i }), 'Adverse Drug Reaction, Medication Related');
-    await waitFor(() => expect(screen.getByRole('textbox', { name: /type of event/i })).toHaveValue('Adverse Drug Reaction, Medication Related'));
+    userEvent.type(screen.getByRole('textbox', { name: /event type/i }), 'Adverse Drug Reaction, Medication Related');
+    await waitFor(() => expect(screen.getByRole('textbox', { name: /event type/i })).toHaveValue('Adverse Drug Reaction, Medication Related'));
   });
 
   // Effect of this incident on the individual(s) involved

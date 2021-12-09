@@ -262,7 +262,7 @@ describe('ResponderIncidentReports', () => {
       userEvent.click(screen.getByRole('button', { name: /view/i }));
       userEvent.type(await screen.findByLabelText(/date of event/i), '1958-08-08');
       userEvent.type(screen.getByRole('textbox', { name: /incident location/i }), 'Test text');
-      userEvent.selectOptions(screen.getByRole('combobox', { name: /event type/i }), 'Actual Event / Incident');
+      userEvent.selectOptions(screen.getByRole('combobox', { name: /incident type/i }), 'Actual Event / Incident');
       userEvent.selectOptions(screen.getByRole('combobox', { name: /harm or potential harm/i }), 'No');
       userEvent.click(screen.getByRole('button', { name: /save/i }));
 

@@ -15,7 +15,6 @@ import javax.persistence.*;
 public class Individuals {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonIgnore
     private Long id;
 
     @OneToOne(mappedBy = "individualsInvolved")

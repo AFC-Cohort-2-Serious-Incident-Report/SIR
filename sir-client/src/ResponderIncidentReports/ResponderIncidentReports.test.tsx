@@ -5,7 +5,6 @@ import userEvent from '@testing-library/user-event';
 import ResponderIncidentReports from './ResponderIncidentReports';
 import dataWithOne from '../Incident_Row_Test_Data.json';
 import testData from '../sir_test_data.json';
-import { searchIncidents } from '../API';
 
 type IncidentRowEntry = {
     id: number;
@@ -183,7 +182,7 @@ describe('ResponderIncidentReports', () => {
     });
   });
 
-  describe('Search functionality', async () => {
+  describe('Search functionality', () => {
     const server = setupServer(
       rest.get('/api/incidents', (req, res, ctx) => res(ctx.json(dataWithOne))),
       rest.get(

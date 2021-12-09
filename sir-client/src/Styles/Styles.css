@@ -615,6 +615,7 @@ input {
   display: flex;
   flex-flow: row nowrap;
   align-items: center;
+  background: white;
   box-sizing: border-box;
   position: relative;
   width: 100%;

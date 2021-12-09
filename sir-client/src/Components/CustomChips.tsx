@@ -48,6 +48,12 @@ const CustomChips: FC<CustomChipsProps> = ({
     }
   };
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (['Enter'].includes(event.key)) {
+      addChip();
+    }
+  };
+
   return (
     <div className="box-o-chips">
       <div className="chips-factory">
@@ -56,6 +62,7 @@ const CustomChips: FC<CustomChipsProps> = ({
           onChange={(e) => setNewChip(e.target.value)}
           data-testid={`chip-input-${fieldName}`}
           value={newChip}
+          onKeyDown={(evt) => handleKeyDown(evt)}
         />
         <button
           onClick={() => addChip()}

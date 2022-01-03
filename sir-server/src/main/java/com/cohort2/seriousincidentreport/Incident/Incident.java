@@ -3,10 +3,7 @@ package com.cohort2.seriousincidentreport.Incident;
 import com.cohort2.seriousincidentreport.Individuals.Individuals;
 import com.cohort2.seriousincidentreport.Patient.Patient;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -17,6 +14,7 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Table

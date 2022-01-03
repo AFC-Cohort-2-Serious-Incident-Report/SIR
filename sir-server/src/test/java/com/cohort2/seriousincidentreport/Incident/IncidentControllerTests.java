@@ -1,31 +1,30 @@
 package com.cohort2.seriousincidentreport.Incident;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
+import org.json.JSONException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.boot.test.context.SpringBootTest;
-
+import org.skyscreamer.jsonassert.JSONAssert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.Rollback;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
-import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockHttpServletRequestBuilder;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import javax.transaction.Transactional;
-
+import java.io.UnsupportedEncodingException;
+import java.util.Collections;
 import java.util.Optional;
+import java.util.function.Supplier;
+import java.util.stream.IntStream;
 
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static com.cohort2.seriousincidentreport.Incident.IncidentTestCases.*;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -33,308 +32,123 @@ class IncidentControllerTests {
 
     @Autowired
     MockMvc mvc;
-
     @Autowired
     IncidentRepository repository;
+    @Autowired
+    InterfaceControllerRequests requests;
+    @Autowired
+    ObjectMapper mapper;
 
-    Incident incident1 = new Incident();
-    Incident incident2 = new Incident();
-    Incident incident3 = new Incident();
+    Incident[] initialIncidents;
+    Supplier<Incident> defaultTestCase;
+    String defaultTestCaseJSON;
 
     @BeforeEach
     @Transactional
     @Rollback
     public void setUp() {
-        incident1.setIncidentLocation("location1");
-        incident1.setIncidentDescription("description1");
-        incident1.setPreventativeAction("action1");
+        defaultTestCase = swfIncident;
+        defaultTestCaseJSON = swfIncidentJSON;
 
-        incident2.setIncidentLocation("location2");
-        incident2.setIncidentDescription("description2");
-        incident2.setPreventativeAction("action2");
-
-        incident3.setIncidentLocation("location3");
-        incident3.setIncidentDescription("description3");
-        incident3.setPreventativeAction("action3");
-
-        repository.save(incident1);
-        repository.save(incident2);
-        repository.save(incident3);
-
+        initialIncidents = IntStream.rangeClosed(1, 3)
+                .mapToObj(i -> defaultTestCase.get())
+                .map(repository::save)
+                .toArray(Incident[]::new);
     }
 
     @Transactional
     @Rollback
     @Test
     public void testGetSIRLists() throws Exception {
-        //Setup
-        MockHttpServletRequestBuilder request = get("/api/incidents")
-                .accept(MediaType.APPLICATION_JSON);
-
-        ResultActions perform = this.mvc.perform(request);
-
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.[0].id", equalTo(incident1.getId().intValue())))
-                .andExpect(jsonPath("$.content.[0].incidentLocation", equalTo(incident1.getIncidentLocation())))
-                .andExpect(jsonPath("$.content.[0].incidentDescription", equalTo(incident1.getIncidentDescription())))
-                .andExpect(jsonPath("$.content.[0].preventativeAction", equalTo(incident1.getPreventativeAction())))
-                .andExpect(jsonPath("$.content.length()", equalTo(3)));
-
+        requests.performGetAllIncidentsRequest()
+                .andExpect(status().isOk())
+                .andExpect(contentMatchesAllSavedIncidents());
     }
 
     @Transactional
     @Rollback
     @Test
     public void getDetailedIncident() throws Exception {
-        //setup
-        MockHttpServletRequestBuilder request = get("/api/incidents/" + incident1.getId())
-                .accept(MediaType.APPLICATION_JSON);
-
-        ResultActions perform = this.mvc.perform(request);
-
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath("$.incidentLocation", equalTo(incident1.getIncidentLocation())));
+        requests.performGETRequestForDetailedIncident(initialIncidents[0].getId())
+                .andExpect(status().isOk())
+                .andExpect(content().json(defaultTestCaseJSON));
     }
 
     @Transactional
     @Rollback
     @Test
     public void updateSingleIncident() throws Exception {
-        //setup
-        MvcResult result = this.mvc.perform(patch("/api/incidents/" + incident1.getId())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("""
-                                {
-                                "id": %d,
-                                "incidentDate": "2014-08-18",
-                                "incidentTime": "21:11",
-                                "incidentLocation": "Test location",
-                                "eventType": "Actual Event / Incident",
-                                "harmOrPotentialHarm": true,
-                                "individualsInvolved": {
-                                    "patient": true,
-                                    "familyMember": false,
-                                    "adult": false,
-                                    "child": false,
-                                    "staffMember": false,
-                                    "visitor": false,
-                                    "volunteer": false,
-                                    "other": true
-                                    },
-                                "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"],
-                                "effectOnIndividual": "Harm Sustained",
-                                "witnessOneName": "Sir Jackman",
-                                "witnessOnePhone": "719-526-6465",
-                                "witnessTwoName": "Hugh Jass",
-                                "witnessTwoPhone": "910-585-8101",
-                                "witnessThreeName": "Chuck Norris",
-                                "witnessThreePhone": "585-811-7777",
-                                "departmentsInvolved": ["Ambulatory Care", "Emergency Care"],
-                                "incidentDescription": "Test description",
-                                "preventativeAction": "Test action",
-                                "patientInfo": {
-                                    "patientName": "Chuck Norris",
-                                    "patientSocial": "125-57-4578",
-                                    "patientPhone": "775-878-1257",
-                                    "patientAddress": "123 Main Street, San Diego, CA 92109"
-                                    }
-                                }
-                                """.formatted(incident1.getId()))).andExpect(status().isOk())
-                .andExpect(content().string("Incident Updated"))
-                .andReturn();
+        requests.performPATCHRequestOnIncident(initialIncidents[0].getId(), singleIncidentWithIDJSON(initialIncidents[0].getId()))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Incident Updated"));
 
-        Optional<Incident> newEntry = repository.findById((long) incident1.getId());
-        assertTrue(newEntry.isPresent());
-
-        final var savedIncident = newEntry.get();
-
-        ObjectMapper objectMapper1 = new ObjectMapper();
-        String individualsInvolved = objectMapper1.writeValueAsString(savedIncident.getIndividualsInvolved());
-
-        ObjectMapper objectMapper2 = new ObjectMapper();
-        String patientInfo = objectMapper2.writeValueAsString(savedIncident.getPatientInfo());
-
-
-        assertEquals("2014-08-18", savedIncident.getIncidentDate().toString());
-        assertEquals("21:11", savedIncident.getIncidentTime().toString());
-        assertEquals("Test location", savedIncident.getIncidentLocation());
-        assertEquals("Actual Event / Incident", savedIncident.getEventType());
-        assertTrue(savedIncident.isHarmOrPotentialHarm());
-        assertEquals("{\"patient\":true,\"familyMember\":false,\"adult\":false,\"child\":false,\"staffMember\":false,\"visitor\":false,\"volunteer\":false,\"other\":true}", individualsInvolved);
-        assertEquals("Adverse Drug Reaction", savedIncident.getTypeOfEvent().get(0));
-        assertEquals("Medication Related", savedIncident.getTypeOfEvent().get(1));
-        assertEquals("Harm Sustained", savedIncident.getEffectOnIndividual());
-        assertEquals("Sir Jackman", savedIncident.getWitnessOneName());
-        assertEquals("719-526-6465", savedIncident.getWitnessOnePhone());
-        assertEquals("Hugh Jass", savedIncident.getWitnessTwoName());
-        assertEquals("910-585-8101", savedIncident.getWitnessTwoPhone());
-        assertEquals("Chuck Norris", savedIncident.getWitnessThreeName());
-        assertEquals("585-811-7777", savedIncident.getWitnessThreePhone());
-        assertEquals("Ambulatory Care", savedIncident.getDepartmentsInvolved().get(0));
-        assertEquals("Emergency Care", savedIncident.getDepartmentsInvolved().get(1));
-        assertEquals("Test description", savedIncident.getIncidentDescription());
-        assertEquals("Test action", savedIncident.getPreventativeAction());
-        assertEquals("{\"patientName\":\"Chuck Norris\",\"patientSocial\":\"125-57-4578\",\"patientPhone\":\"775-878-1257\",\"patientAddress\":\"123 Main Street, San Diego, CA 92109\"}", patientInfo);
+        savedRecordMatchesPATCHJSON(initialIncidents[0].getId());
     }
 
     @Test
     @Transactional
     @Rollback
     void shouldReturnNumberOfEntriesInPagination() throws Exception {
-        final var request = get("/api/incidents?size=2&page=1");
-
-        mvc.perform(request)
+        requests.performGETRequestWithPageableData(2, 1)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content.length()").value(1))
-                .andExpect(jsonPath("$.content.[0].id", equalTo(incident3.getId().intValue())))
-                .andExpect(jsonPath("$.content.[0].incidentLocation", equalTo(incident3.getIncidentLocation())))
-                .andExpect(jsonPath("$.content.[0].incidentDescription", equalTo(incident3.getIncidentDescription())))
-                .andExpect(jsonPath("$.content.[0].preventativeAction", equalTo(incident3.getPreventativeAction())));
+                .andExpect(contentMatchesIncidents(Collections.singleton(initialIncidents[2])));
     }
 
     @Transactional
     @Rollback
     @Test
     public void testPostSeriousIncidentReportObject() throws Exception {
-        //Setup
-        String contentString = """
-                {
-                "incidentDate": "2014-08-18",
-                "incidentTime": "21:11",
-                "incidentLocation": "Test location",
-                "eventType": "Actual Event / Incident",
-                "harmOrPotentialHarm": true,
-                "individualsInvolved": {
-                    "patient": true,
-                    "other": true,
-                    "familyMember": true,
-                    "adult": true,
-                    "child": true,
-                    "staffMember": true,
-                    "visitor": true,
-                    "volunteer":true
-                    },
-                "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"],
-                "effectOnIndividual": "Harm Sustained",
-                "witnessOneName": "Sir Jackman",
-                "witnessOnePhone": "719-526-6465",
-                "witnessTwoName": "Hugh Jass",
-                "witnessTwoPhone": "910-585-8101",
-                "witnessThreeName": "Chuck Norris",
-                "witnessThreePhone": "585-811-7777",
-                "departmentsInvolved": ["Ambulatory Care", "Emergency Care"],
-                "incidentDescription": "Test description",
-                "preventativeAction": "Test action",
-                "patientInfo": {
-                    "patientName": "Chuck Norris",
-                    "patientSocial": "125-57-4578",
-                    "patientPhone": "775-878-1257",
-                    "patientAddress": "123 Main Street, San Diego, CA 92109"
-                    }
-                }
-                """;
-
-        //Execution
-        MvcResult result = this.mvc.perform(post("/api/incidents")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(contentString))
-
-                //Assertion
+        MvcResult result = requests.performPOSTRequest(defaultTestCaseJSON)
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.incidentDate").value("2014-08-18"))
-                .andExpect(jsonPath("$.incidentTime").value("21:11"))
+                .andExpect(content().json(defaultTestCaseJSON))
                 .andReturn();
 
-        var responseBody = result.getResponse().getContentAsString();
-        int newEntryID = JsonPath.parse(responseBody).read("$.id");
-        Optional<Incident> newEntry = repository.findById((long) newEntryID);
-        assertTrue(newEntry.isPresent());
-
-        final var savedIncident = newEntry.get();
-
-        ObjectMapper objectMapper1 = new ObjectMapper();
-        String individualsInvolved = objectMapper1.writeValueAsString(savedIncident.getIndividualsInvolved());
-
-        ObjectMapper objectMapper2 = new ObjectMapper();
-        String patientInfo = objectMapper2.writeValueAsString(savedIncident.getPatientInfo());
-
-
-        assertEquals("2014-08-18", savedIncident.getIncidentDate().toString());
-        assertEquals("21:11", savedIncident.getIncidentTime().toString());
-        assertEquals("Test location", savedIncident.getIncidentLocation());
-        assertEquals("Actual Event / Incident", savedIncident.getEventType());
-        assertTrue(savedIncident.isHarmOrPotentialHarm());
-        assertEquals("{\"patient\":true,\"familyMember\":true,\"adult\":true,\"child\":true,\"staffMember\":true,\"visitor\":true,\"volunteer\":true,\"other\":true}", individualsInvolved);
-        assertEquals("Adverse Drug Reaction", savedIncident.getTypeOfEvent().get(0));
-        assertEquals("Medication Related", savedIncident.getTypeOfEvent().get(1));
-        assertEquals("Harm Sustained", savedIncident.getEffectOnIndividual());
-        assertEquals("Sir Jackman", savedIncident.getWitnessOneName());
-        assertEquals("719-526-6465", savedIncident.getWitnessOnePhone());
-        assertEquals("Hugh Jass", savedIncident.getWitnessTwoName());
-        assertEquals("910-585-8101", savedIncident.getWitnessTwoPhone());
-        assertEquals("Chuck Norris", savedIncident.getWitnessThreeName());
-        assertEquals("585-811-7777", savedIncident.getWitnessThreePhone());
-        assertEquals("Ambulatory Care", savedIncident.getDepartmentsInvolved().get(0));
-        assertEquals("Emergency Care", savedIncident.getDepartmentsInvolved().get(1));
-        assertEquals("Test description", savedIncident.getIncidentDescription());
-        assertEquals("Test action", savedIncident.getPreventativeAction());
-        assertEquals("{\"patientName\":\"Chuck Norris\",\"patientSocial\":\"125-57-4578\",\"patientPhone\":\"775-878-1257\",\"patientAddress\":\"123 Main Street, San Diego, CA 92109\"}", patientInfo);
+        savedRecordMatchesPOSTJSON(result);
     }
 
     @Transactional
     @Rollback
     @Test
     public void testSearchIncidentByPatientName() throws Exception {
-        String contentString = """
-                {
-                "incidentDate": "2014-08-18",
-                "incidentTime": "21:11",
-                "incidentLocation": "SWF",
-                "eventType": "Actual Event / Incident",
-                "harmOrPotentialHarm": true,
-                "individualsInvolved": {
-                    "patient": true,
-                    "other": true,
-                    "familyMember": true,
-                    "adult": true,
-                    "child": true,
-                    "staffMember": true,
-                    "visitor": true,
-                    "volunteer":true
-                    },
-                "typeOfEvent": ["Adverse Drug Reaction", "Medication Related"],
-                "effectOnIndividual": "Harm Sustained",
-                "witnessOneName": "Sir Jackman",
-                "witnessOnePhone": "719-526-6465",
-                "witnessTwoName": "Hugh Jass",
-                "witnessTwoPhone": "910-585-8101",
-                "witnessThreeName": "Chuck Norris",
-                "witnessThreePhone": "585-811-7777",
-                "departmentsInvolved": ["Ambulatory Care", "Emergency Care"],
-                "incidentDescription": "Test description",
-                "preventativeAction": "Test action",
-                "patientInfo": {
-                    "patientName": "Chuck Norris",
-                    "patientSocial": "125-57-4578",
-                    "patientPhone": "775-878-1257",
-                    "patientAddress": "123 Main Street, San Diego, CA 92109"
-                    }
-                }
-                """;
-
-        MvcResult result = this.mvc.perform(post("/api/incidents")
-                .contentType(MediaType.APPLICATION_JSON)
-                .content(contentString))
+        requests.performGETRequestWithQuery("SWF")
                 .andExpect(status().isOk())
-                .andReturn();
+                .andExpect(jsonPath("$.content.length()").value(3));
+    }
 
-        MvcResult result2 = this.mvc.perform(get("/api/incidents/search?query=SWF")
-                .accept(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.content[0].incidentLocation").value("SWF"))
-                .andReturn();
+    private ResultMatcher contentMatchesAllSavedIncidents() throws JsonProcessingException {
+        return content().json(mapper.writeValueAsString(
+                new PageableResponseWithList(repository.findAll())));
+    }
 
+    private ResultMatcher contentMatchesIncidents(Iterable<Incident> incidents) throws JsonProcessingException {
+        return content().json(mapper.writeValueAsString(
+                new PageableResponseWithList(incidents)));
+    }
 
+    private void savedRecordMatchesPATCHJSON(Long savedID) throws JSONException, JsonProcessingException {
+        final Incident savedIncident = getIncidentByID(savedID);
+        JSONAssert.assertEquals(singleIncidentWithIDJSON(savedID), mapper.writeValueAsString(savedIncident), true);
+    }
+
+    private void savedRecordMatchesPOSTJSON(MvcResult result) throws UnsupportedEncodingException, JSONException, JsonProcessingException {
+        int newEntryID = parseResultsForIncidentID(result);
+        final Incident savedIncident = getIncidentByID((long) newEntryID);
+
+        JSONAssert.assertEquals(defaultTestCaseJSON, mapper.writeValueAsString(savedIncident), false);
+    }
+
+    private int parseResultsForIncidentID(MvcResult result) throws UnsupportedEncodingException {
+        var responseBody = result.getResponse().getContentAsString();
+        return JsonPath.parse(responseBody).read("$.id");
+    }
+
+    private Incident getIncidentByID(Long savedID) {
+        Optional<Incident> savedIncidentQuery = repository.findById(savedID);
+        assertTrue(savedIncidentQuery.isPresent());
+
+        return savedIncidentQuery.get();
+    }
+
+    private record PageableResponseWithList(Iterable<Incident> content) {
     }
 }
